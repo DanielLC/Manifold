@@ -1,0 +1,147 @@
+\documentclass[12pt]{amsart}
+\usepackage{a4}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{verbatim}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\newcommand{\ignore}[1]{}
+\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
+\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
+\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
+\begin{document}
+
+Finding the direction and distance from one point to another in $H^2$:
+
+Given points $\textbf{x} = (x_1,x_2)$ and $\textbf{y} = (y_1,y_2)$,
+
+Let $\textbf{c}$ be the center of the circle, and $r$ be the radius. We know $c_2 = 0, \|\textbf{x}-\textbf{c}\| = \|\textbf{y}-\textbf{c}\| = r$.
+
+$(x_1-c_1)^2+{x_2}^2 = (y_1-c_1)^2+{y_2}^2 = r^2$
+
+$= {x_1}^2-2x_1c_1+c_1^2+{x_2}^2 = {y_1}^2-2y_1c_1+c_1^2+{y_2}^2$
+
+${x_1}^2-2x_1c_1+{x_2}^2 = {y_1}^2-2y_1c_1+{y_2}^2$
+
+$2(x_1-y_1)c_1 = {x_1}^2+{x'_2}^2-{y_1}^2-{y_2}^2$
+
+$c_1 = \frac{({x_1}^2+{x_2}^2)-({y_1}^2+{y_2}^2)}{2(x_1-y_1)}$
+
+$= \frac{\|\textbf{x}\|^2-\|\textbf{y}\|^2}{2(x_1-y_1)}$
+
+The direction is tangent the circle, which means that its a right angle from the direction to $\textbf{c}$, which works out to is $\mat{0}{-1}{1}{0}(\textbf{c}-\textbf{x})$. Setting $x_1 = c_2 = 0$, this becomes $\mat{0}{-1}{1}{0}\vect{c_1}{-x_2} = \vect{x_2}{c_1}$. We then normalize this to $\frac{(x_2,c_1)}{\sqrt{{x_2}^2+c_1^2}}$.
+
+The distance can be calculated using the angle it moves across. Assuming it moves counterclockwise:
+
+$\int_{\theta_1}^{\theta_2} \frac{\sqrt{(\frac{d}{d\theta}r\sin\theta)^2+(\frac{d}{d\theta}r\cos\theta)^2}}{r\sin\theta} d\theta$
+
+$= \int_{\theta_1}^{\theta_2} \frac{\sqrt{(r\cos\theta)^2+(-r\sin\theta)^2}}{r\sin\theta} d\theta$
+
+$= \int_{\theta_1}^{\theta_2} \frac{r}{r\sin\theta} d\theta$
+
+$= \int_{\theta_1}^{\theta_2} \csc\theta d\theta$
+
+$= -\ln\left|\frac{\csc\theta_2+\cot\theta_2}{\csc\theta_1+\cot\theta_1}\right|$
+
+$= \ln\left|\frac{\csc\theta_1+\cot\theta_1}{\csc\theta_2+\cot\theta_2}\right|$
+
+$\csc\theta_1 = \frac{r}{x_2}, \cot\theta_1 = \frac{x_1-c_1}{x_2}, \csc\theta_2 = \frac{r}{y_2}, \cot\theta_2 = \frac{y_1-c_1}{y_2}$
+
+$\ln\left|\frac{\frac{r}{x_2}+\frac{x_1-c_1}{x_2}}{\frac{r}{y_2}+\frac{y_1-c_1}{y_2}}\right|$
+
+$= \ln\left|\frac{\frac{r+x_1-c_1}{x_2}}{\frac{r+y_1-c_1}{y_2}}\right|$
+
+$= \ln\left|\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}\right|$
+
+Since $x_1$ and $y_1$ are within the circle, we know $|r| \geq |x_1-c_1|, |r| \geq |y_1-c_1|$, and we already know $x_2$ and $y_2 > 0$, so $\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)} \geq 0$. Thus, we may remove the absolute value.
+
+$= \ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}$
+
+If it moves clockwise, it comes out to $-\ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)} = \ln\frac{x_2(r+y_1-c_1)}{y_2(r+x_1-c_1)}$. In general, it's $\left|\ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}\right|$.
+
+Of course, none of this works if the two points share the same first two coordinates. In that case, the problem is easier. The direction is $(0,1)$, and the distance is $\int_{x_3}^{y_3} \frac{1}{t} dt = \ln\frac{y_3}{x_3}$. This gives a vector of $(0,\ln\frac{y_3}{x_3})$.
+
+\bigskip
+
+Finding the point a given distance in a given direction from another:
+
+\bigskip
+
+Given initial point $\textbf{x} = (x_1,x_2)$ and vector $\textbf{z} = (z_1,z_2)$,
+
+Since the geodesic is a circle, the center of the circle is on a line perpendicular to the tangent vector.
+
+The tangent line is $\textbf{x}+t\textbf{z}$, so the center of the circle is on $\textbf{x}+t\mat{0}{-1}{1}{0}\textbf{z} = (x_1-tz_2,x_2+tz_1)$.
+
+This intersects with the $x$ axis when $x_2+tz_1 = 0$.
+
+$t = -\frac{x_2}{z_1}$
+
+$c_1 = x_1-tz_2$
+
+$= x_1+\frac{x_2z_2}{z_1}$
+
+%In the special case of $z_1 = 0$
+
+And as before, $c_2 = 0$.
+
+$r = \|\textbf{x}-\textbf{c}\|$
+
+If were letting $x_1 = 0$, that's just $r^2 = c_1^2+{x_2}^2$.
+
+Now that we have the circle, its just a matter of finding the point at the right distance.
+
+Let $d = \ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}$
+
+$e^d = \frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}$
+
+$x_2(r+y_1-c_1)e^d = y_2(r+x_1-c_1)$
+
+${x_2}^2(r+y_1-c_1)^2e^{2d} = {y_2}^2(r+x_1-c_1)^2$
+
+$= [r^2-(y_1-c_1)^2](r+x_1-c_1)^2$
+
+$= [r-(y_1-c_1)][r+(y_1-c_1)](r+x_1-c_1)^2$
+
+$= (r-y_1+c_1)(r+y_1-c_1)(r+x_1-c_1)^2$
+
+Since $y_0 > 0$ and $r^2 = |\textbf{y}-\textbf{c}|$, it must be the case that $|y_1-c_1| < r$ so $r+y_1-c_1 \neq 0$ and can be safely canceled out.
+
+${x_2}^2(r+y_1-c_1)e^{2d} = (r-y_1+c_1)(r+x_1-c_1)^2$
+
+$y_1[{x_2}^2e^{2d}+(r+x_1-c_1)^2] = (r+c_1)(r+x_1-c_1)^2-{x_2}^2(r-c_1)e^{2d}$
+
+$y_1 = \frac{(r+c_1)(r+x_1-c_1)^2-{x_2}^2(r-c_1)e^{2d}}{{x_2}^2e^{2d}+(r+x_1-c_1)^2}$
+
+Now that we know $y_1$, we can easily find $y_2$ with $y_2 = \sqrt{r^2-({y_1}-c_1)^2}$.
+
+We will also need to find the change in orientation.
+
+Let $\theta_0$ be the initial angle and $\theta_1$ be the final angle.
+
+$\sin \theta_0 = \frac{x_2-c_2}{r}$
+
+$= \frac{x_2}{r}$
+
+$\cos \theta_0 = \frac{x_1-c_1}{r}$
+
+$= -\frac{c_1}{r}$
+
+Similarly, $\sin \theta_1 = \frac{y_2}{r}, \cos \theta_1 = \frac{y_1-c_1}{r}$.
+
+We can simply take $\theta_1-\theta_0$ as the angle, but this will require trigonometry to get the angle, and then trigonometry later to do the rotation with it. It may be more optimal to just calculate $\sin \Delta\theta$ and $\cos \Delta\theta$ using angle sums.
+
+$\sin(\theta_1-\theta_0) = \sin\theta_1 \cos\theta_0 - \cos\theta_1 \sin\theta_1$
+
+$\cos(\theta_1-\theta_0) = \cos\theta_0 \cos\theta_1 - \sin\theta_0 \sin\theta_1$
+
+If $z_0 = 0$ so the vector is pointing straight up or down, we have:
+
+$z_2 = \ln\frac{y_2}{x_2}$
+
+$e^{z_2} = \frac{y_2}{x_2}$
+
+$y_2 = x_2e^{z_2}$
+
+Clearly, $y_1$ remains constant and there is no rotation.
+
+\end{document}

@@ -1,0 +1,91 @@
+\documentclass[12pt]{amsart}
+\usepackage{a4}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{verbatim}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\newcommand{\ignore}[1]{}
+\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
+\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
+\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
+%\newcommand{\matd}[16]{\left(\begin{array}{ccc} #1 & #2 & #3 & #4 \\#5 & #6 & #7 & #8 \\#9 & #10 & #11 & #12 \\#13 & #14 & #15 & #16 \end{array} \right)}
+\begin{document}
+
+Consider a point $x$ on a $3$-surface $U$ that is a surface of revolution and a vector $v$ in the tangent space $U_x$.
+
+Consider the component $v_0$ of $v$ along $S^2$.
+
+Consider the great circle made by extending $x$ to a geodesic in the direction of $v_0$.
+
+We can reflect across this great circle on all the spherical cross-sections of $U$.
+
+By symmetry, the geodesic made by extending $x$ in the $v$ direction must stay on this slice of $U$.
+
+This reduces finding the geodesic on a $3$-surface of revolution to finding one on a $2$-surface.
+
+\bigskip
+
+Finding the vectors from a point:
+
+\bigskip
+
+Rather than mapping a sphere to $\mathbb{R}^2$, we can embed it in $\mathbb{R}^3$.
+
+Given points $\textbf{x}, \textbf{y} \in S^2 \times \mathbb{R}$,
+
+Let $\textbf{v} =$ the normalization of the projection of $\textbf{y}_1$ perpendicular to $\textbf{x}_1$.
+
+Let $\theta =$ the angle between $\textbf{x}$ and $\textbf{y} = \arccos\left<\textbf{x},\textbf{y}\right>$
+
+Now we take the points $\textbf{x}' = (0,x_4)$ and $\textbf{y}' = (\theta, y_4)$ in the two-dimensional version.
+
+Let $\textbf{z}'$ be a vector between them.
+
+Let the $S^2$ component of $\textbf{z}$ be $z'_0\textbf{v}$ and the $\textbf{R}$ component be $z'_1$.
+
+$\textbf{z}$ is a vector between the two points.
+
+\bigskip
+
+Finding a point from a vector:
+
+\bigskip
+
+Given point $\textbf{x}$ and vector $\textbf{z}$,
+
+Let $\textbf{x}' = (0,x_2), \textbf{z}' = (\|\textbf{z}_1\|,z_2)$.
+
+Let $\textbf{v} = \|\textbf{z}_1\|$.
+
+Find $\textbf{y}'$ with the two-dimensional version.
+
+$\textbf{y} = (\textbf{x}_1\cos y'_1+\textbf{v}\sin y'_1, y'_2)$.
+
+In order to find the rotation, we must work in a more relevant basis. We can do this by commuting with the appropriate matrix.
+
+$\textbf{e}_1 \mapsto \textbf{e}_1, \textbf{v} \mapsto \textbf{e}_2, \textbf{x}_1 \mapsto \textbf{e}_3, \textbf{x}_1 \times \textbf{v} \mapsto \textbf{e}_4$
+
+$(\textbf{e}_1, \textbf{v},\textbf{x}_1,(\textbf{x}_1 \times \textbf{v}))^{-1}$
+
+$= (\textbf{e}_1, \textbf{v},\textbf{x}_1,(\textbf{x}_1 \times \textbf{v}))^T$, since it's a rotation matrix.
+
+First, we use the rotation of the two-dimensional version to find the rotation between $\textbf{e}_1$ and $\textbf{v}$.
+
+%$\mat{\cos\theta}{-\sin\theta}{\sin\theta}{\cos\theta}$
+
+$\left(\begin{array}{cccc} \cos\theta & -\sin\theta & 0 & 0 \\ \sin\theta & \cos\theta & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)$
+
+Next, we have to deal with the fact that the $S^2$ component rotates.
+
+Let $\phi = y'_2-x'_2$.
+
+$$\left(\begin{array}{cccc} 1 & 0 & 0 & 0 \\ 0 & \cos\phi & -\sin\phi & 0 \\ 0 & \sin\phi & \cos\phi & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)$$
+
+Putting this all together, we get:
+
+$$(\textbf{e}_1,\textbf{z},\textbf{x},(\textbf{x} \times \textbf{z}))
+\left(\begin{array}{cccc} 1 & 0 & 0 & 0 \\ 0 & \cos\phi & -\sin\phi & 0 \\ 0 & \sin\phi & \cos\phi & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)
+\left(\begin{array}{cccc} 1 & 0 & 0 & 0 \\ 0 & \cos\phi & -\sin\phi & 0 \\ 0 & \sin\phi & \cos\phi & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)
+(\textbf{e}_1,\textbf{z},\textbf{x},(\textbf{x} \times \textbf{z}))^T$$
+
+\end{document}

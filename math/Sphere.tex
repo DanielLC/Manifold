@@ -1,0 +1,71 @@
+\documentclass[12pt]{amsart}
+\usepackage{a4}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{verbatim}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\newcommand{\ignore}[1]{}
+\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
+\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
+\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
+\begin{document}
+
+$y_0 = a\sin(x_0-\theta_0), y_1 = a\sin(x_1-\theta_0)$
+
+$\frac{y_1}{y_0} = \frac{\sin(x_1-\theta_0)}{\sin(x_0-\theta_0)}$
+
+???
+
+$(x',y',z') = (\cos y \cos x, \cos y \sin x, \sin y)$
+
+???
+
+Instead of mapping to $\mathbb{R}^3$, as we did for other surfaces, we can simply embed into $\mathbb{R}^4$.
+
+%Given points $(x_1,x_2,x_3,x_4), (y_1,y_2,y_3,y_4)$,
+
+Given points $\textbf{x}, \textbf{y}$,
+
+They are almost always not equal or antipodal.
+
+Let $\textbf{y}'$ be a renormalized form of $\textbf{y}-\left<\textbf{x},\textbf{y}\right>$.
+
+The geodesic is $\textbf{x}\cos\theta+\textbf{y}'\sin\theta$.
+
+The direction is $\textbf{y}'$.
+
+The distance is $\arccos\left<\textbf{x},\textbf{y}\right>$.
+
+The vector is $\arccos\left<\textbf{x},\textbf{y}\right>\textbf{y}'$.
+
+If we're dealing with a $2$-sphere:
+
+We have a rotation of $\arccos\left<\textbf{x},\textbf{y}\right>$ around the axis $\textbf{x} \times \textbf{y}'$.
+
+This gives the quaternion $\left<\textbf{x},\textbf{y}\right>(\textbf{x} \times \textbf{y}')$.
+
+We then convert this to a rotation matrix with:
+
+$$Q = \begin{bmatrix}
+    1 - 2 y^2 - 2 z^2 & 2 x y - 2 z w & 2 x z + 2 y w \\
+    2 x y + 2 z w & 1 - 2 x^2 - 2 z^2 & 2 y z - 2 x w \\
+    2 x z - 2 y w & 2 y z + 2 x w & 1 - 2 x^2 - 2 y^2
+\end{bmatrix}$$
+
+???
+
+If we're not dealing with a $2$-sphere, it gets more complex.
+
+Let $\textbf{u}, \textbf{v}$ be unit vectors that are linearly independant with $\textbf{x}, \textbf{y}$. You can pick them at random since this will almost certainly be true, 
+
+???
+
+Given a point $\textbf{x}$ and a vector $\textbf{v}$,
+
+$\textbf{y} = \textbf{x}\cos|\textbf{v}|+\frac{\textbf{v}}{|\textbf{v}|}\sin|\textbf{v}|$
+
+$\textbf{y}' = \frac{\textbf{v}}{|\textbf{v}|}$
+
+The rotation matrix can be found as before.
+
+\end{document}

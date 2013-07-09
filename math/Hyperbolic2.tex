@@ -1,0 +1,49 @@
+\documentclass[12pt]{amsart}
+\usepackage{a4}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{verbatim}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\newcommand{\ignore}[1]{}
+\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
+\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
+\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
+\begin{document}
+
+Finding the direction and distance from one point to another in $H^3$:
+
+Given points $\textbf{x} = (x_1,x_2,x_3)$ and $\textbf{y} = (y_1,y_2,y_3)$, the first step is to find the plane that intersects both of them and intersects the $xy$-plane at a right angle. This way, it can be reduced to a problem in $H^2$. We let $y_4 = \sqrt{(y_1-x_1)^2 + (y_2-x_2)^2}$, then set $\textbf{v} = (v_1,v_2) = (y_1-x_1,y_2-x_2)/y_4$. Let $x_4 = 0$. We can now work with $(x'_1,x'_2) = (x_4,x_2) = (0,x_3)$ and $(y'_1,y'_2) = (y_4,y_3)$.
+
+%, and transform it back after with $(y_1,y_2) = (x_1,x_2)+y_4(v_1,v_2) = (x_1+y_4v_1,x_2+y_4v_2)$.
+
+Once we have two points on a plane $\textbf{x}', \textbf{y}'$, we can use the two-dimensional solution to find the vector $\textbf{z}'$ from $\textbf{x}'$ to $\textbf{y}'$.
+
+Translating it back from the plane is simple. You just use $\textbf{z} = (z_1,z_2,z_3) = (z'_1v_1,z'_1v_2,z'_2)$.
+
+The distance remains the same as it was in the two-dimensional case.
+
+There is a problem if $x_1 = y_1, x_2 = y_2$ because $\textbf{v}$ is undefined. In this case, any value can be used for $\textbf{v}$, since it passes through every plane. If it's not a unit vector, it will scale the final value on the first two axes, but since it's zero on these axes, it doesn't matter. Just be careful not to use an undefined value.
+
+\bigskip
+
+Finding the point a given distance in a given direction from another:
+
+\bigskip
+
+Given initial point $(x_1,x_2,x_3)$ and vector $(z_1,z_2,z_3)$, we first, slice the plane again. Let $x_4 = 0, z_4 = \sqrt{z_1^2+z_2^2}, (v_1,v_2) = \frac{(z_1,z_2)}{z_4}$ and solve the two-dimensional case for $\textbf{y}'$ with $\textbf{x}' = (x'_1,x'_2) = (x_4,x_3)$ and $\textbf{z}' = (z'_1,z'_2) = (z_4,z_3)$.
+
+Now we just need to translate it back with $(y_1,y_2,y_3) = (x'_1,x'_2,y'_2)+y'_1(v_1,v_2,0) = (x'_1+y'_1v_1,x'_2+y'_1v_2,y'_2)$.
+
+We will also need to find the change in orientation.
+
+Our solution in the two-dimensional version gave us an angle which we will call $\theta$.
+
+$\mat{\cos\theta}{-\sin\theta}{\sin\theta}{\cos\theta}$
+
+You can then expand this to a $3 \times 3$ matrix with $\mat{a}{b}{c}{d} \mapsto \matc{a}{0}{b}{0}{1}{0}{c}{0}{d}$ and conjugate it with $\matc{v_1}{v_2}{0}{-v_2}{v_1}{0}{0}{0}{1}$ to get the $3 \times 3$ rotation matrix.
+
+This gives $\matc{v_1}{-v_2}{0}{v_2}{v_1}{0}{0}{0}{1} \matc{\cos\theta}{0}{-\sin\theta}{0}{0}{0}{\sin\theta}{0}{\cos\theta} \matc{v_1}{v_2}{0}{-v_2}{v_1}{0}{0}{0}{1}$
+
+Again, if the vector is pointed straight up, any value of $\textbf{v}$ will work as long as it's not NaN or something else that behaves oddly when multiplied by zero.
+
+\end{document}

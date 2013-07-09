@@ -1,0 +1,48 @@
+#ifndef PortalSpace_h
+#define PortalSpace_h
+
+#include <vector>
+#include <tr1/array>
+#include <tr1/memory>
+#include "Manifold.h"
+#include <Eigen/Core>
+using Eigen::Matrix4d;
+using Eigen::Vector4d;
+
+class PortalSpace : public Manifold {
+	public:
+		double getK();
+		class PointOfReference;
+		class Point : public Manifold::Point {
+			public:
+				PortalSpace* getSpace();
+				Point(double hyperbolic, double x, double y, double z, PortalSpace* space);	//x,y, and z give the position on S^2, and w gives the height on the surface of revolution. I can afford an extra degree of freedom. i tells how many times you have to loop around the sphere.
+				Point();
+				friend class PointOfReference;
+				//Point midpoint(Point point);
+			private:
+				Vector3d spherical;
+				double hyperbolic;
+				PortalSpace* space;
+		};
+		class PointOfReference : public Manifold::PointOfReference {
+			public:
+				PointOfReference(PortalSpace* space);
+				~PointOfReference();
+				std::vector<Vector3d> vectorsFromPoint(std::tr1::shared_ptr<Manifold::Point> point);
+				std::tr1::shared_ptr<Manifold::Point> pointFromVector(Vector3d vector);
+				Manifold::Point* getPosition();
+				//void setPosition(Manifold::Point* position);
+				void move(Vector3d dir);
+				void rotate(Matrix3d rot);
+			private:
+				Point position;
+				Matrix4d orientation;
+		};
+//		typedef std::tr1::array<std::tr1::shared_ptr<Manifold::Point>,3> Triangle;
+
+		Triangle makeTriangle();		//For debug purposes
+//		std::vector<Triangle> triforce(Triangle);
+};
+#endif
+

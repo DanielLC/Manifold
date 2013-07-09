@@ -1,0 +1,276 @@
+#include <tr1/array>
+#include <tr1/memory>
+#include <iostream>
+
+#include "PortalSpace.h"
+#include <Eigen/Core>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include "Assert.h"
+using Eigen::Matrix3d;
+using Eigen::Vector3d;
+
+double PortalSpace::getK() {
+	return log(2*M_PI)/(2*M_PI);
+}
+
+PortalSpace::Point::Point() {
+	hyperbolic = M_PI/2;
+	spherical << 0,0,1;
+}
+
+//std::tr1::array<double,3> PortalSpace::Point::coordinates;
+PortalSpace::Point::Point(double hyperbolic, double x, double y, double z, PortalSpace* space) {
+		//Hyperbolic is an angle from 0 to 2pi. I think it would be faster and more numerically stable to use the tangent of the angle, but now is not the time for optimization.
+	this->hyperbolic = hyperbolic;
+	spherical[0] = x;
+	spherical[1] = y;
+	spherical[2] = z;
+	this->space = space;
+}
+//PortalSpace::Point::~Point() {}
+
+PortalSpace* PortalSpace::Point::getSpace() {
+	return space;
+}
+
+//PortalSpace::Point PortalSpace::PointOfReference::position;
+//Matrix3d PortalSpace::PointOfReference::orientation;
+
+/*Manifold::Point PortalSpace::Point::midpoint(Manifold::Point point) {
+	
+}*/
+
+/*std::vector<Vector3d> PortalSpace::PointOfReference::vectorsFromPoint(std::tr1::shared_ptr<Manifold::Point> point) {
+	std::vector<Vector3d> outVector;
+	outVector.push_back(Vector3d());
+	return outVector;
+}*/
+
+std::vector<Vector3d> PortalSpace::PointOfReference::vectorsFromPoint(std::tr1::shared_ptr<Manifold::Point> point) {	//Don't forget to check if they're on the same vertical line. Also, show more points.
+	double k = position.space->getK();
+	Vector3d x = position.spherical;
+	std::tr1::shared_ptr<PortalSpace::Point> p = std::tr1::static_pointer_cast<PortalSpace::Point>(point);
+	Vector3d y = p->spherical;
+	assert(abs(x.norm()-1) < EPSILON);
+	assert(abs(y.norm()-1) < EPSILON);
+	//Vector3d y(p->spherical[0],p->spherical[1],p->spherical[2]);
+	double dot = x.dot(y);
+	double theta = acos(dot);
+	Vector3d yy = y-dot*x;
+	yy.normalize();			//yy is the normalization of the component of y perpendicular to x. This makes it the spherical component of the direction towards y.
+	double x0 = cos(position.hyperbolic);
+	double x1 = sin(position.hyperbolic);
+	double y0 = exp(theta*k)*cos(p->hyperbolic);
+	double y1 = exp(theta*k)*sin(p->hyperbolic);
+	double c = ((x0*x0+x1*x1)-(y0*y0+y1*y1))/(2*(x0-y0));
+	//double r = sqrt(x1*x1+c*c);
+	double r = sqrt((x0-c)*(x0-c)+x1*x1);
+	//double dir0 = x1/r;
+	//double dir1 = c/r;
+	//double dist = log((y1*(r+x0-c))/(x1*(r+y0-c)));
+	double dist = log((y1*(r-c))/(x1*(r+y0-c)));
+	double dir_hyperbolic = (x0*(x0-c)+x1*x1)/(sqrt((x0*x0+x1*x1)*((x0-c)*(x0-c)+x1*x1)));	//(x dot x-c)/(|x||x-c|)
+	if(dist < 0) {
+		dist *= -1;
+		dir_hyperbolic *= -1;	//Should this work?
+	}
+	/*if(p->hyperbolic < position.hyperbolic) {	//TODO Does this help?
+		dir_hyperbolic *= -1;
+	}
+	assert((p->hyperbolic-position.hyperbolic)*dir_hyperbolic >= 0);	//This is not always true, but it should work for small vectors.*/
+	double dir_spherical = sqrt(1-dir_hyperbolic*dir_hyperbolic);
+	Vector3d spherical = dir_spherical*yy;
+	Vector4d out;
+	out << dir_hyperbolic, spherical;
+	out *= dist;
+	//Vector4d out(dir_hyperbolic,spherical[0],spherical[1],spherical[2]);
+	out = orientation.transpose()*out;
+	assert(abs(out[3]) < EPSILON);
+	std::vector<Vector3d> outVector;
+	//std::cout << "out: " << out << "\n" << std::flush;
+	outVector.push_back(out.segment<3>(0));
+	//outVector.push_back(Vector3d(0,0,0));
+	/*std::cout << "vectorsFromPoint:\n";	//TODO
+	std::cout << orientation << "\n";	//TODO
+	std::cout << "x0:	" << x0 << "\nx1:	" << x1 << "\n";
+	std::cout << "y0:	" << y0 << "\ny1:	" << y1 << "\n";
+	std::cout << "dir_hyperbolic*dist:	" << dir_hyperbolic*dist << "\ndir_spherical*dist:	" << dir_spherical*dist << "\n";
+	std::cout << "y:\n" << y << "\n";
+	std::cout << "c:	" << c << "\nr:	" << r << "\n";
+	std::cout << "vector:\n" << out << "\n";
+	std::cout << "p->hyperbolic:	" << p->hyperbolic-M_PI/2 << "\n";*/
+	return outVector;
+}
+
+std::tr1::shared_ptr<Manifold::Point> PortalSpace::PointOfReference::pointFromVector(Vector3d vector) {
+	vector += Vector3d::Random()/1000;	//TODO: Fix it so you don't need to do this.
+	double k = position.space->getK();
+	Vector4d v(vector[0],vector[1],vector[2],0);
+	//Vector4d v << vector,0;
+	v = orientation*v;
+	double x0 = cos(position.hyperbolic);
+	double x1 = sin(position.hyperbolic);
+	double vother = v.segment<3>(1).norm();
+	double z0 = -v[0]*x1+vother*x0;
+	double z1 = v[0]*x0+vother*x1;
+	assert(x0*z0+x1*z1 >= 0);
+	double c = x0+x1*z1/z0;
+	double r = sqrt(x1*x1+(c-x0)*(c-x0));
+	double dist = sqrt(z0*z0+z1*z1);
+	if(z0 > 0) {	//This should work.
+		dist *= -1;
+	}
+	double rx0c2 = r+x0-c;
+	rx0c2 *= rx0c2;
+	double x12e2d = x1*x1*exp(2*dist);
+	double y0 = ((r+c)*rx0c2-x12e2d*(r-c))/(x12e2d+rx0c2);
+	double y1 = sqrt(r*r-(y0-c)*(y0-c));
+	//y0*y0+r*r-(y0-c)*(y0-c)
+	//r*r+2y0*c-c*c
+	//assert(y0*y0+y1*y1 >= 1);	//Since the great circle is automatically oriented so that the vector goes in the positive direction, y will always have a higher spherical part than x. The spherical part is the magnitude, and x is set with a magnitude of one.
+	double theta = log(y0*y0+y1*y1)/(2*k);
+	assert(theta >= 0);
+	Vector3d ytail = position.spherical*cos(theta)+v.segment<3>(1).normalized()*sin(theta);
+	Vector4d y;
+	y << atan2(y1,y0),ytail;
+	//std::cout << "y: " << y << "\n" << std::flush;
+	std::tr1::shared_ptr<PortalSpace::Point> out = std::tr1::shared_ptr<PortalSpace::Point>(new PortalSpace::Point(y[0],y[1],y[2],y[3],position.space));
+	//std::cout << this->vectorsFromPoint(out)[0] << "\n" << vector << "\n" << std::flush; //TODO
+	/*std::cout << "pointFromVector:\n";	//TODO
+	std::cout << "theta:	" << theta << "\n";
+	std::cout << "sin(theta):	" << sin(theta) << "\n";
+	std::cout << "x0:	" << x0 << "\nx1:	" << x1 << "\n";
+	std::cout << "y0:	" << y0 << "\ny1:	" << y1 << "\n";
+	std::cout << "z0:	" << z0 << "\nz1:	" << z1 << "\n";
+	std::cout << "c:	" << c << "\nr:	" << r << "\n";
+	Vector4d x;
+	x << position.hyperbolic, position.spherical;
+	std::cout << "delta:\n" << y-x << "\n";
+	std::cout << "out->hyperbolic:	" << out->hyperbolic-M_PI/2 << "\nout->spherical\n" << out->spherical << "\n";
+	std::cout << "vector:\n" << vector << "\n";*/
+	assert((this->vectorsFromPoint(out)[0]-vector).norm() < EPSILON);
+	return out;
+}
+
+PortalSpace::PointOfReference::PointOfReference(PortalSpace* space) {
+	orientation = orientation.Identity();
+	position.space = space;
+}
+
+PortalSpace::PointOfReference::~PointOfReference() {
+}
+
+Manifold::Point* PortalSpace::PointOfReference::getPosition() {
+	return &position;
+}
+
+void PortalSpace::PointOfReference::move(Vector3d dir) {	//Don't forget to check if they're on the same vertical line.
+	//NaNs make this crash. Why?
+	//std::cout << "move\n" << std::flush;	//TODO
+	dir += Vector3d::Random()/10000;	//TODO: Fix it so you don't need to do this.
+	double k = position.space->getK();
+	Vector4d v(dir[0],dir[1],dir[2],0);
+	//Vector4d v << vector,0;
+	v = orientation*v;
+	assert(fabs(v.end(3).dot(position.spherical)) < EPSILON);	//v.end(3) is the direction you're moving on the sphere, and position.spherical is your position. Since you're moving along the surface, they must be orthogonal.
+	double x0 = cos(position.hyperbolic);
+	double x1 = sin(position.hyperbolic);
+	double vother = v.segment<3>(1).norm();
+	double z0 = -v[0]*x1+vother*x0;
+	double z1 = v[0]*x0+vother*x1;
+	//if(fabs(z0) < EPSILON) {
+	assert(x0*z0+x1*z1 >= 0);
+	double c = x0+x1*z1/z0;
+	double r = sqrt(x1*x1+(c-x0)*(c-x0));
+	double dist = sqrt(z0*z0+z1*z1);
+	if(z0 > 0) {	//This should work.
+		dist *= -1;
+	}
+	double rx0c2 = r+x0-c;
+	rx0c2 *= rx0c2;
+	double x12e2d = x1*x1*exp(2*dist);
+	double y0 = ((r+c)*rx0c2-x12e2d*(r-c))/(x12e2d+rx0c2);
+	double y1 = sqrt(r*r-(y0-c)*(y0-c));
+	double theta = log(y0*y0+y1*y1)/(2*k);
+	std::cout << "theta:	" << theta << "\n";
+	assert(theta >= 0);	//Since the great circle is automatically oriented so that the vector goes in the positive direction, y will always have a higher spherical part than x. The spherical part is the magnitude, and x is set with a magnitude of one.
+	std::cout << "position.spherical:\n" << position.spherical << "\nv.end(3).normalized():\n" << v.end(3).normalized() << "\n";
+	Vector3d ytail = position.spherical*cos(theta)+v.end(3).normalized()*sin(theta);
+	assert(fabs(ytail.norm()-1) < EPSILON);
+	Vector3d row1 = v.end(3).normalized();
+	Vector3d row2 = position.spherical;
+	Vector3d row3 = row1.cross(row2);
+	std::cout << "v.end(3):\n" << v.end(3) << "\n";	//TODO
+	std::cout << "row1:\n" << row1 << "\n";	//TODO
+	std::cout << "position.spherical:\n" << position.spherical << "\n";	//TODO
+	std::cout << "row2:\n" << row2 << "\n";	//TODO
+	/*std::cout << "row1:\n" << row1 << "\n" << std::flush;	//TODO
+	std::cout << "row2:\n" << row2 << "\n" << std::flush;	//TODO
+	std::cout << "row3:\n" << row3 << "\n" << std::flush;	//TODO*/
+	//std::cout << "|row1 x row2|:	" << row1.cross(row2).norm() << "\n" << std::flush;	//TODO
+	std::cout << "row1 . row2:\n" << row1.dot(row2) << "\n" << std::flush;	//TODO
+	std::cout << "row2 . row3:\n" << row2.dot(row3) << "\n" << std::flush;	//TODO
+	std::cout << "row3 . row1:\n" << row3.dot(row1) << "\n" << std::flush;	//TODO
+	/*Matrix3d test;
+	test << row1,row2,row3;*/
+	Matrix4d conjugate;
+	/*conjugate << 1,0,0,0,
+		0,row1,
+		0,row2,
+		0,row3;*/
+	conjugate.block<4,1>(0,0) << 1,0,0,0;	//Why can't I just use rows? Or just make the whole matrix?
+	conjugate.block<4,1>(0,1) << 0,row1;
+	conjugate.block<4,1>(0,2) << 0,row2;
+	conjugate.block<4,1>(0,3) << 0,row3;
+	std::cout << "conjugate:\n" << conjugate << "\n" << std::flush;	//TODO
+	assert((conjugate*conjugate.transpose()-Matrix4d::Identity()).norm() < EPSILON);
+	orientation = conjugate.transpose()*orientation;
+	std::cout << "orientation:\n" << orientation << "\n" << std::flush;	//TODO
+
+	double sin0 = c*x0;
+	double cos0 = (x0*(x0-c)+x1*x1);
+	//I'm pretty sure I can combine sin/cos0 and sin/cos1.
+	double multiplier = 1/sqrt(sin0*sin0+cos0*cos0);
+	sin0 *= multiplier;
+	cos0 *= multiplier;
+	Matrix4d m = Matrix4d::Identity();
+	m.block<2,2>(0,0) << cos0,sin0,-sin0,cos0;
+	assert(fabs(m.determinant()-1) < EPSILON);
+	assert((m*m.transpose()-Matrix4d::Identity()).norm() < EPSILON);
+	orientation = m*orientation;
+
+	double sin1 = c*y0;
+	double cos1 = (y0*(y0-c)+y1*y1);
+	multiplier = 1/sqrt(sin1*sin1+cos1*cos1);
+	sin1 *= multiplier;
+	cos1 *= multiplier;
+	m = Matrix4d::Identity();
+	m.block<2,2>(0,0) << cos1,-sin1,sin1,cos1;
+	assert(fabs(m.determinant()-1) < EPSILON);
+	assert((m*m.transpose()-Matrix4d::Identity()).norm() < EPSILON);
+	orientation = m*orientation;
+
+	double sine = sin(theta);
+	double cosine = cos(theta);
+	m = Matrix4d::Identity();
+	m.block<2,2>(1,1) << cosine,-sine,sine,cosine;
+	assert(fabs(m.determinant()-1) < EPSILON);
+	assert((m*m.transpose()-Matrix4d::Identity()).norm() < EPSILON);
+	orientation = m.transpose()*orientation;	//TODO: Am I supposed to do that?
+
+	orientation = conjugate*orientation;
+	assert(fabs(orientation.determinant()-1) < EPSILON);
+	assert((orientation*orientation.transpose()-Matrix4d::Identity()).norm() < EPSILON);
+	
+	position.hyperbolic = atan2(y1,y0);
+	position.spherical = ytail;	//TODO: I'm going to need to rearrange this stuff.
+	
+	std::cout << "(orientation.transpose()*Vector4d(0,position.spherical[0],position.spherical[1],position.spherical[2])).start(3).norm():\n" << (orientation.transpose()*Vector4d(0,position.spherical[0],position.spherical[1],position.spherical[2])).start(3).norm() << "\n";
+	assert((orientation.transpose()*Vector4d(0,position.spherical[0],position.spherical[1],position.spherical[2])).start(3).norm() < EPSILON);
+}
+
+void PortalSpace::PointOfReference::rotate(Matrix3d rot) {
+	orientation.block<3,3>(0,0) = rot*orientation.block<3,3>(0,0);
+}
+

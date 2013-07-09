@@ -1,0 +1,50 @@
+\documentclass[12pt]{amsart}
+\usepackage{a4}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{verbatim}
+\usepackage{graphicx, subfigure}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\newcommand{\ignore}[1]{}
+\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
+\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
+\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
+\begin{document}
+
+1.  Describe 3-manifold decompositions.
+  A.  Prime decomposition theorem -- see Allen Hatcher's notes for statement and references.
+
+The prime decomposition theorem states that a compact, connected, orientable manifold can be decomposed into a connected sum of prime manifolds, which is unique up to insertion or deletion of $S^3$s. The connected sum of two spaces is made by removing a ball from each and identifying their bounding spheres.
+%What are the prime manifolds? What about manifolds that are not compact or are not orientable?
+  
+  B.  Torus decomposition theorem -- see Allen Hatcher's notes for statement and references.
+  C.  Geometrization theorem.  (Wikipedia probably has statement, references?)
+
+The geometrization theorem states that any 3-manifold can be decomposed canonically into submanifolds which each have one of the following eight geometries: $S^3, \mathbb{E}^3, \mathbb{H}^3, S^2 \times \mathbb{R}, \mathbb{H}^2 \times \mathbb{R}, \tilde{SL}(2,\mathbb{R}),$ Nil geometry, and Sol geometry.
+
+%What are Nil geometry and Sol geometry? Can my program do this kind of decomposition? How does the decomposition work? \mathbb{E}^3 and \mathbb{H}^3 are homeomorphic.
+
+  [D.  Your work:  take some of 8 geometries, glue together via "smooth" prime decomposition.]
+
+My program will allow you to smoothly create a connected sum of several geometries. "Smoothness" means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path than one that barely misses.
+
+%Cone points?
+
+
+2.  Visualizing 3-manifolds.
+  A.  Jeff Weeks website -- compact manifolds of constant curvature
+
+There has been previous work in visualizing $S^3$ and $\mathbb{H}^3$ and quotient spaces thereof, such as Jeff Weeks' work here: http://www.geometrygames.org/CurvedSpaces/index.html
+
+  B.  Youtube movie
+
+http://www.spacetimetravel.org/wurmlochflug/wurmlochflug.html
+
+  C.  Other?  E.g. old references on visualizing hyperbolic geometry?
+
+3.  Cone manifolds
+  A.  Define.  For example see definition in book "Three-dimensional orbifolds and cone manifolds" by Cooper, Hodgson, Kerckhoff.  Find other references there.
+  [B.  Note they are typically studied for manifolds of constant sectional curvature.  You will look at nonconstant.]
+
+
+\end{document}

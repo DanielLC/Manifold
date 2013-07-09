@@ -1,0 +1,199 @@
+\documentclass[12pt]{amsart}
+\usepackage{a4}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{verbatim}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\newcommand{\ignore}[1]{}
+\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
+\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
+\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
+\begin{document}
+
+Finding the direction and distance from one point to another in $H^3$:
+
+Given points $\textbf{x} = (x_1,x_2,x_3)$ and $\textbf{y} = (y_1,y_2,y_3)$, the first step is to find the plane that intersects both of them and intersects the $xy$-plane at a right angle. This way, it can be reduced to a problem in $H^2$. We let $y_4 = \sqrt{(y_1-x_1)^2 + (y_2-x_2)^2}$, then set $(v_1,v_2) = (y_1-x_1,y_2-x_2)/y_4$. Let $x_4 = 0$. We can now work with $(x'_1,x'_2) = (x_4,x_2) = (0,x_3)$ and $(y'_1,y'_2) = (y_4,y_3)$.
+
+%, and transform it back after with $(y_1,y_2) = (x_1,x_2)+y_4(v_1,v_2) = (x_1+y_4v_1,x_2+y_4v_2)$.
+
+Once we have two points on a plane $\textbf{x}', \textbf{y}'$, we can proceed more simply. Let $\textbf{c}$ be the center of the circle, and $r$ be the radius. We know $c_2 = 0, \|\textbf{x}'-\textbf{c}\| = \|\textbf{y}'-\textbf{c}\| = r$.
+
+$(x'_1-c_1)^2+{x'_2}^2 = (y'_1-c_1)^2+{y'_2}^2 = r^2$
+
+$= {x'_1}^2-2x'_1c_1+c_1^2+{x'_2}^2 = {y'_1}^2-2y'_1c_1+c_1^2+{y'_2}^2$
+
+${x'_1}^2-2x'_1c_1+{x'_2}^2 = {y'_1}^2-2y'_1c_1+{y'_2}^2$
+
+$2(x'_1-y'_1)c_1 = {x'_1}^2+{x'_2}^2-{y'_1}^2-{y'_2}^2$
+
+$c_1 = \frac{({x'_1}^2+{x'_2}^2)-({y'_1}^2+{y'_2}^2)}{2(x'_1-y'_1)}$
+
+$= \frac{\|\textbf{x}'\|^2-\|\textbf{y}'\|^2}{2(x'_1-y'_1)}$
+
+When we're defining the plane, we can easily set $x'_1$ to $0$. If we do so, this simplifies the equations here somewhat.
+
+$r^2 = c_1^2+{x'_2}^2, c_1 = \frac{\|\textbf{y}'\|^2-{x'_2}^2}{2y'_1}$
+
+The direction is tangent the circle, which means that it's a right angle from the direction to $\textbf{c}$, which works out to is $\mat{0}{-1}{1}{0}(\textbf{c}-\textbf{x})$. Setting $x'_1 = c_2 = 0$, this becomes $\mat{0}{-1}{1}{0}\vect{c_1}{-x'_2} = \vect{x'_2}{c_1}$. We then normalize this to $\frac{(x'_2,c_1)}{\sqrt{{x'_2}^2+c_1^2}}$.
+
+Translating it back from the plane is simple. You just use $(x_1,x_2,x_3) = \frac{(x'_2v_1,x'_2v_2,c_1)}{{x'_2}^2+c_1^2}$.
+
+The distance can be calculated using the angle it moves across.
+
+$\int_{\theta_1}^{\theta_2} \frac{\sqrt{(\frac{d}{d\theta}r\sin\theta)^2+(\frac{d}{d\theta}r\cos\theta)^2}}{r\sin\theta} d\theta$
+
+$= \int_{\theta_1}^{\theta_2} \frac{\sqrt{(r\cos\theta)^2+(-r\sin\theta)^2}}{r\sin\theta} d\theta$
+
+$= \int_{\theta_1}^{\theta_2} \frac{r}{r\sin\theta} d\theta$
+
+$= \int_{\theta_1}^{\theta_2} \csc\theta d\theta$
+
+$= -\ln\left|\frac{\csc\theta_2+\cot\theta_2}{\csc\theta_1+\cot\theta_1}\right|$
+
+$= \ln\left|\frac{\csc\theta_1+\cot\theta_1}{\csc\theta_2+\cot\theta_2}\right|$
+
+$\csc\theta_1 = \frac{r}{x'_2}, \cot\theta_1 = \frac{x'_1-c_1}{x'_2}, \csc\theta_2 = \frac{r}{y'_2}, \cot\theta_2 = \frac{y'_1-c_1}{y'_2}$
+
+$\ln\left|\frac{\frac{r}{x'_2}+\frac{x'_1-c_1}{x'_2}}{\frac{r}{y'_2}+\frac{y'_1-c_1}{y'_2}}\right|$
+
+$= \ln\left|\frac{\frac{r+x'_1-c_1}{x'_2}}{\frac{r+y'_1-c_1}{y'_2}}\right|$
+
+$= \ln\left|\frac{y'_2(r+x'_1-c_1)}{x'_2(r+y'_1-c_1)}\right|$
+
+Since $x'_1$ and $y'_1$ are within the circle, we know $|r| \geq |x'_1-c_1|, |r| \geq |x'_1-y'_1|$, and we already know $x'_2$ and $y'_2 > 0$, so $\frac{y'_2(r+x'_1-c_1)}{x'_2(r+y'_1-c_1)} \geq 0$. Thus, we may remove the absolute value.
+
+$= \ln\frac{y'_2(r+x'_1-c_1)}{x'_2(r+y'_1-c_1)}$
+
+And if $x'_1 = 0$: $\ln\frac{y'_2(r-c_1)}{x'_2(r+y'_1-c_1)}$
+
+Note that if $y'_2(r+x'_1-c_1) < x'_2(r+y'_1-c_1)$, the distance is negative. If you simply multiply the distance by the unit vector, this doesn't really matter. However, if you only need the direction, such as if you just want to know where to draw a pixel on the screen, you have to multiply by $\sgn[y'_2(r+x'_1-c_1)-x'_2(r+y'_1-c_1)]$.
+
+Of course, none of this works if the two points share the same first two coordinates. In that case, the problem is easier. The direction is $(0,0,1)$, and the distance is $\int_{x_3}^{y_3} \frac{1}{t} dt = \ln\frac{y_3}{x_3}$. This gives a vector of $(0,0,\ln\frac{y_3}{x_3})$.
+
+\bigskip
+
+Finding the point a given distance in a given direction from another:
+
+\bigskip
+
+Given initial point $(x_1,x_2,x_3)$ and vector $(z_1,z_2,z_3)$, we first, slice the plane again. Let $x_4 = 0, z_4 = \sqrt{z_1^2+z_2^2}, (v_1,v_2) = \frac{(z_1,z_2)}{z_4}$ and start working with $(x'_1,x'_2) = (x_4,x_3)$ and $(z'_1,z'_2) = (z_4,z_3)$.
+
+Since the geodesic is a circle, the center of the circle is on a line perpendicular to the tangent vector.
+
+The tangent line is $\textbf{x}'+t\textbf{z}'$, so the center of the circle is on $\textbf{x}'+t\mat{0}{-1}{1}{0}\textbf{z}' = (x'_1-tz'_2,x'_2+tz'_1)$.
+
+This intersects with the $x'$ axis when $x'_2+tz'_1 = 0$.
+
+$t = -\frac{x'_2}{z'_1}$
+
+$c_1 = x'_1-tz'_2$
+
+$= x'_1+\frac{x'_2z'_2}{z'_1}$
+
+%In the special case of $z'_1 = 0$
+
+And as before, $c_2 = 0$.
+
+$r = \|\textbf{x}'-\textbf{c}\|$
+
+If we're letting $x'_1 = 0$, that's just $r^2 = c_1^2+{x'_2}^2$.
+
+Now that we have the circle, it's just a matter of finding the point at the right distance.
+
+Let $d = \|\textbf{z}'\| =$ the distance.
+
+$d = \ln\frac{y'_2(r-c_1)}{x'_2(r+y'_1-c_1)}$
+
+$e^d = \frac{y'_2(r-c_1)}{x'_2(r+y'_1-c_1)}$
+
+$x'_2(r+y'_1-c_1)e^d = y'_2(r-c_1)$
+
+${x'_2}^2(r+y'_1-c_1)^2e^{2d} = {y'_2}^2(r-c_1)^2$
+
+$= [r^2-(y'_1-c_1)^2](r-c_1)^2$
+
+$= [r-(y'_1-c_1)][r+(y'_1-c_1)](r-c_1)^2$
+
+$= (r-y'_1+c_1)(r+y'_1-c_1)(r-c_1)^2$
+
+${x'_2}^2(r+y'_1-c_1)e^{2d} = (r-y'_1+c_1)(r-c_1)^2$
+
+$y'_1[{x'_2}^2e^{2d}+(r-c_1)^2] = (r+c_1)(r-c_1)^2 - {x'_2}^2(r-c_1)e^{2d}$
+
+$y'_1 = \frac{(r+c_1)(r-c_1)^2 - {x'_2}^2(r-c_1)e^{2d}}{{x'_2}^2e^{2d}+(r-c_1)^2}$
+
+???
+
+$d = \ln\frac{y'_2(r+x'_1-c_1)}{x'_2(r+y'_1-c_1)}$
+
+$e^d = \frac{y'_2(r+x'_1-c_1)}{x'_2(r+y'_1-c_1)}$
+
+$x'_2(r+y'_1-c_1)e^d = y'_2(r+x'_1-c_1)$
+
+${x'_2}^2(r+y'_1-c_1)^2e^{2d} = {y'_2}^2(r+x'_1-c_1)^2$
+
+$= [r^2-(y'_1-c_1)^2](r+x'_1-c_1)^2$
+
+$= [r-(y'_1-c_1)][r+(y'_1-c_1)](r+x'_1-c_1)^2$
+
+$= (r-y'_1+c_1)(r+y'_1-c_1)(r+x'_1-c_1)^2$
+
+Since $y'_0 > 0$ and $r^2 = |\textbf{y}'-\textbf{c}|$, it must be the case that $|y'_1-c_1| < r$ so $r+y'_1-c_1 \neq 0$ and can be safely canceled out.
+
+${x'_2}^2(r+y'_1-c_1)e^{2d} = (r-y'_1+c_1)(r+x'_1-c_1)^2$
+
+$y'_1[{x'_2}^2e^{2d}+(r+x'_1-c_1)^2] = (r+c_1)(r+x'_1-c_1)^2-{x'_2}^2(r-c_1)e^{2d}$
+
+$y'_1 = \frac{(r+c_1)(r+x'_1-c_1)^2-{x'_2}^2(r-c_1)e^{2d}}{{x'_2}^2e^{2d}+(r+x'_1-c_1)^2}$
+
+%There are two roots, corresponding to the fact that it could be in either direction. Just make sure $y_1 > 0$.
+
+Now that we know $y'_1$, we can easily find $y'_2$ with $y'_2 = \sqrt{r^2-({y'_1}-c_1)^2}$.
+
+Now we just need to translate it back, with $(y_1,y_2,y_3) = (x'_1,x'_2,y'_2)+y'_1(v_1,v_2,0) = (x'_1+y'_1v_1,x'_2+y'_1v_2,y'_2)$.
+
+We will also need to find the change in orientation. Starting from two dimensions:
+
+Let $\theta_0$ be the initial angle and $\theta_1$ be the final angle.
+
+$\sin \theta_0 = \frac{x'_2-c_2}{r}$
+
+$= \frac{x'_2}{r}$
+
+$\cos \theta_0 = \frac{x'_1-c_1}{r}$
+
+$= -\frac{c_1}{r}$
+
+Similarly, $\sin \theta_1 = \frac{y'_2}{r}, \cos \theta_1 = \frac{y'_1-c_1}{r}$.
+
+The rotation matrix for the whole rotation would be the inverse of the matrix for $\theta_0$ times the matrix for $\theta_1$. Rotations in two dimensions are commutative, so we don't have to worry about the order.
+
+$\mat{\cos \theta_0}{\sin \theta_0}{-\sin \theta_0}{\cos \theta_0} \mat{\cos \theta_1}{-\sin \theta_1}{\sin \theta_1}{\cos \theta_1}$
+
+$= \mat{-\frac{c_1}{r}}{\frac{x'_2}{r}}{-\frac{x'_2}{r}}{-\frac{c_1}{r}} \mat{\frac{y'_1-c_1}{r}}{-\frac{y'_2}{r}}{\frac{y'_2}{r}}{\frac{y'_1-c_1}{r}}$
+
+You can then expand this to a $3 \times 3$ matrix with $\mat{a}{b}{c}{d} \mapsto \matc{a}{0}{b}{0}{1}{0}{c}{0}{d}$ and conjugate it with $\matc{v_1}{v_2}{0}{-v_2}{v_1}{0}{0}{0}{1}$ to get the $3 \times 3$ rotation matrix.
+
+This gives $\matc{v_1}{-v_2}{0}{v_2}{v_1}{0}{0}{0}{1} \matc{-\frac{c_1}{r}}{0}{\frac{x'_2}{r}}{0}{1}{0}{-\frac{x'_2}{r}}{0}{\frac{c_1}{r}} \matc{\frac{y'_1-c_1}{r}}{0}{-\frac{y'_2}{r}}{0}{1}{0}{\frac{y'_2}{r}}{0}{\frac{y'_1-c_1}{r}} \matc{v_1}{v_2}{0}{-v_2}{v_1}{0}{0}{0}{1}$
+
+If the vector is pointing straight up or down, we have:
+
+$v_3 = \ln\frac{y_3}{x_3}$
+
+$e^{v_3} = \frac{y_3}{x_3}$
+
+$y_3 = x_3e^{v_3}$
+
+Clearly, $y_1$ and $y_2$ remain constant, and there is no rotation.
+
+\ignore{
+
+%((c*e^(2*d) - r*e^(2*d))*x2^2 + c^3 - c^2*r - c*r^2 +
+%r^3)/(x2^2*e^(2*d) + c^2 - 2*c*r + r^2)
+
+$y'_1 = \frac{(ce^{2d} - re^{2d})x_2^2 + c^3 - c^2r - cr^2 + r^3}{x_2^2e^{2d} + c^2 - 2cr + r^2}$
+
+$= \frac{(c - r)x_2^2e^{2d} + (c-r)^2(c+r)}{x_2^2e^{2d} + (c-r)^2}$
+}
+
+\end{document}
