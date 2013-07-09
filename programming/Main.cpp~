@@ -8,9 +8,9 @@
 //#include "Hyperbolic.h"
 //#include "R2xS1.h"
 //#include "PortalSpace.h"
-//#include "SurfaceOfRevolution.h"
+#include "SurfaceOfRevolution.h"
 #include "Cylinder2d.h"
-#include "PortalSpace2d2.h"
+//#include "PortalSpace2d2.h"
 #include <Eigen/Core>
 using Eigen::Matrix3d;
 using Eigen::Vector3d;

@@ -55,7 +55,7 @@ class SurfaceOfRevolution : public Manifold {
 template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getK() {
 	//return log(2*M_PI)/(2*M_PI);
-	return 1;
+	return 2;
 }
 
 template <class SurfaceOfRevolution2d>
@@ -98,7 +98,7 @@ std::vector<Vector3d> SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferen
 	double dot = x.dot(y);
 	Vector3d yy = y-dot*x;
 	yy.normalize();			//yy is the normalization of the component of y perpendicular to x. This makes it the spherical component of the direction towards y.
-	while(yy != yy) {
+	while(yy != yy) {		//If yy ends up undefined, presumably because x and y have the same or opposite position in spherical geometry.
 		Vector3d rand;
 		rand.Random();
 		dot = x.dot(rand);
@@ -138,7 +138,6 @@ std::tr1::shared_ptr<Manifold::Point> SurfaceOfRevolution<SurfaceOfRevolution2d>
 	Vector2d z2d(v[0],v.end<3>().norm());
 	assert(z2d == z2d);
 	std::tr1::array<double,2> y2d = x2d.pointFromVector(z2d).getCoordinates();
-	y2d[1] /= k;
 	Vector4d y;
 	Vector3d ytail;
 	if(y2d[1] == 0) {

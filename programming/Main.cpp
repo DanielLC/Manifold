@@ -147,7 +147,7 @@ void initialize ()
 	/*R2xS1* r2xs1 = new R2xS1();
 	space = r2xs1;
 	por = new R2xS1::PointOfReference(r2xs1);*/
-	triangleList = por->icosahedron(1.);
+	triangleList = por->icosahedron(.1);
 	glColor3f(1.0f,1.0f,1.0f);
 }
 
@@ -159,26 +159,26 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 	switch(key) {
 		case 'w':
 			//por->move((Vector3d() << 0,01,0).finished());
-			por->move(Vector3d(0,0.1,0));
+			por->move(Vector3d(0,0.01,0));
 			break;
 		case 'e':
 			//por->move(Vector3d(1/3.,2/3.,2/3.));
 			//por->move(Vector3d(0.6,0,0.8));
-			por->move(Vector3d(0,0,0.1));
+			por->move(Vector3d(0,0,0.01));
 			break;
 		case 'q':
 			//por->move(Vector3d(-1/3.,-2/3.,-2/3.));
 			//por->move(Vector3d(-0.6,0,-0.8));
-			por->move(Vector3d(0,0,-0.1));
+			por->move(Vector3d(0,0,-0.01));
 			break;
 		case 's':
-			por->move(Vector3d(0,-0.1,0));
+			por->move(Vector3d(0,-0.01,0));
 			break;
 		case 'a':
-			por->move(Vector3d(-0.1,0,0));
+			por->move(Vector3d(-0.01,0,0));
 			break;
 		case 'd':
-			por->move(Vector3d(0.1,0,0));
+			por->move(Vector3d(0.01,0,0));
 			break;
 		case KEY_ESCAPE:
 			exit(0);
