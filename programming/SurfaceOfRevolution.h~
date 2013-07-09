@@ -117,11 +117,11 @@ std::vector<Vector3d> SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferen
 	std::vector<Vector3d> outVector;
 	//std::cout << "out: " << out << "\n" << std::flush;
 	outVector.push_back(out.start<3>());
-	std::cout << "std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t:	" << std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t << "\n";
+	/*std::cout << "std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t:	" << std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t << "\n";
 	std::cout << "p->t:	" << p->t << "\n";
 	std::cout << "outVector[0]:\n" << outVector[0] << "\n";
-	//std::cout << "std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical:\n" << std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical << "\n";
-	//std::cout << "p->spherical:\n" << p->spherical << "\n";
+	std::cout << "std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical:\n" << std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical << "\n";
+	std::cout << "p->spherical:\n" << p->spherical << "\n";*/
 	assert(fabs(std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t - p->t) < EPSILON);
 	assert((std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical - p->spherical).norm() < EPSILON);
 	return outVector;
@@ -182,10 +182,12 @@ void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::move(Vector3d
 	double rot = pointAndRot.second;
 	//Crashes if v.end<3>() = 0;
 	Vector3d row1 = v.end<3>().normalized();
-	if(row1 != row1) {
-		row1 = (Vector3d().Random() - position.spherical*position.spherical[0]).normalized();
-	}
 	Vector3d row2 = position.spherical;
+	if(row1 != row1) {
+		row1 = Vector3d().Random();
+		row1 -= row2*row2.dot(row1);
+		row1.normalize();
+	}
 	Vector3d row3 = row1.cross(row2);
 	Vector3d ytail = position.spherical*cos(y2d[1]/k)+row1*sin(y2d[1]/k);
 	//std::cout << "ytail.norm()-1:	" << ytail.norm()-1 << "\n";
@@ -230,7 +232,7 @@ void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::move(Vector3d
 	orientation = m.transpose()*orientation;	//TODO: Am I supposed to do that?
 
 	orientation = conjugate*orientation;
-	std::cout << "(orientation*orientation.transpose()-Matrix4d::Identity()).norm():	" << (orientation*orientation.transpose()-Matrix4d::Identity()).norm() << "\n";
+	//std::cout << "(orientation*orientation.transpose()-Matrix4d::Identity()).norm():	" << (orientation*orientation.transpose()-Matrix4d::Identity()).norm() << "\n";
 	assert((orientation*orientation.transpose()-Matrix4d::Identity()).norm() < EPSILON);	//There seems to be a numeric instability here. It doesn't need to be corrected often, but I need a good way to check when it does. I don't think the correction is fast.
 	orientation += orientation.transpose().inverse();
 	orientation /= 2;
