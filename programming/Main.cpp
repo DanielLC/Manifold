@@ -9,9 +9,11 @@
 //#include "R2xS1.h"
 //#include "PortalSpace.h"
 #include "SurfaceOfRevolution.h"
-#include "Cylinder2d.h"
-//#include "PortalSpace2d2.h"
+//#include "Cylinder2d.h"
+#include "PortalSpace2d2.h"
+//#include "BlackHole2d.h"
 #include <Eigen/Core>
+#include <cstdlib>
 using Eigen::Matrix3d;
 using Eigen::Vector3d;
 
@@ -111,7 +113,7 @@ void display()
 	}
  
 	glutSwapBuffers();
-	usleep(30000);
+	//usleep(30000);
 }
 
 
@@ -132,9 +134,9 @@ void initialize ()
 	glClearColor(0.0, 0.0, 0.0, 1.0);											// specify clear values for the color buffers						
 
 	//The part where the space is defined		TODO
-	SurfaceOfRevolution<Cylinder2d>* sor = new SurfaceOfRevolution<Cylinder2d>();
+	SurfaceOfRevolution<PortalSpace2d>* sor = new SurfaceOfRevolution<PortalSpace2d>();
 	space = sor;
-	por = new SurfaceOfRevolution<Cylinder2d>::PointOfReference(sor);
+	por = new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(sor);
 	/*PortalSpace* portalSpace = new PortalSpace();
 	space = portalSpace;
 	por = new PortalSpace::PointOfReference(portalSpace);*/
@@ -149,6 +151,27 @@ void initialize ()
 	por = new R2xS1::PointOfReference(r2xs1);*/
 	triangleList = por->icosahedron(.1);
 	glColor3f(1.0f,1.0f,1.0f);
+	
+	display();
+	
+	/*srand(5);
+	while(1) {				//Randomly moves for debugging. This way, I don't have to keep trying to crash it myself.
+		switch(rand() % 4) {
+			case 0:
+				por->move((rand()*2-1.0)/RAND_MAX*Vector3d(1,0,0));
+				break;
+			case 1:
+				por->move((rand()*2-1.0)/RAND_MAX*Vector3d(0,1,0));
+				break;
+			case 2:
+				por->move((rand()*2-1.0)/RAND_MAX*Vector3d(0,0,1));
+				break;
+			case 3:
+				por->move(Vector3d::Random());
+				break;
+		}
+		display();
+	}*/
 }
 
 
@@ -187,6 +210,8 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 		default:
 			break;
 	}
+	
+	display();
 }
 
 int main(int argc, char **argv) 
@@ -205,7 +230,7 @@ int main(int argc, char **argv)
 	glutInitWindowSize(win.width,win.height);					// set window size
 	glutCreateWindow(win.title);								// create Window
 	glutDisplayFunc(display);									// register Display Function
-	glutIdleFunc( display );									// register Idle Function
+	//glutIdleFunc( display );									// register Idle Function
 	glutKeyboardFunc( keyboard );								// register Keyboard Handler
 	initialize();
 	glutMainLoop();												// run GLUT mainloop

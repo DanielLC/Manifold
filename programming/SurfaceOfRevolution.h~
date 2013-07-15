@@ -55,7 +55,7 @@ class SurfaceOfRevolution : public Manifold {
 template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getK() {
 	//return log(2*M_PI)/(2*M_PI);
-	return 2;
+	return 1;
 }
 
 template <class SurfaceOfRevolution2d>
@@ -79,6 +79,22 @@ SurfaceOfRevolution<SurfaceOfRevolution2d>* SurfaceOfRevolution<SurfaceOfRevolut
 }
 
 template <class SurfaceOfRevolution2d>
+SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::PointOfReference(SurfaceOfRevolution<SurfaceOfRevolution2d>* space) {
+	orientation = orientation.Identity();
+	/*Matrix3d randrot;		//Randomizes the rotation.
+	do {
+		randrot.setRandom();
+		while((randrot*randrot.transpose()-Matrix3d::Identity()).norm() > EPSILON) {
+			randrot += randrot.inverse().transpose();
+			randrot /= 2;
+		}
+	} while(randrot.determinant() <= 0);
+	orientation.block<3,3>(0,0) = randrot;
+	//std::cout << "orientation:\n" << orientation << "\n";*/
+	position.space = space;
+}
+
+template <class SurfaceOfRevolution2d>
 std::vector<Vector3d> SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::vectorsFromPoint(std::tr1::shared_ptr<Manifold::Point> point) {	//Don't forget to check if they're on the same vertical line. Also, show more points.
 	assert(point->getSpace() == position.space);
 	double k = position.space->getK();
@@ -96,66 +112,87 @@ std::vector<Vector3d> SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferen
 	assert(y == y);
 	assert(fabs(y.norm()-1) < EPSILON);
 	double dot = x.dot(y);
-	Vector3d yy = y-dot*x;
-	yy.normalize();			//yy is the normalization of the component of y perpendicular to x. This makes it the spherical component of the direction towards y.
-	while(yy != yy) {		//If yy ends up undefined, presumably because x and y have the same or opposite position in spherical geometry.
+	Vector3d yy;
+	if(fabs(dot) == 1) {		//If yy ends up undefined, presumably because x and y have the same or opposite position in spherical geometry. It doesn't matter what value you use.
 		Vector3d rand;
-		rand.Random();
-		dot = x.dot(rand);
-		yy = rand-dot*x;
+		rand.setRandom();
+		//std::cout << "rand:\n" << rand << "\n";
+		double dot2 = x.dot(rand);
+		yy = rand-dot2*x;
+		//std::cout << "yy:\n" << yy << "\n";
+	} else {
+		yy = y-dot*x;
 	}
+	yy.normalize();			//yy is the normalization of the component of y perpendicular to x. This makes it the spherical component of the direction towards y.
+	assert(yy == yy);
+
 	double theta = acos(dot);
 	typename SurfaceOfRevolution2d::Point x2d(position.t,0.);
+	//std::cout << "p->t:	" << p->t << "\n";
+	//std::cout << "theta*k:	" << theta*k << "\n";
 	typename SurfaceOfRevolution2d::Point y2d(p->t,theta*k);
-	Vector2d z = x2d.vectorFromPoint(y2d);
+	/*std::cout << "vectorsFromPoint()\n";
+	std::cout << "x2d:	(" << x2d.getCoordinates()[0] << ",	" << x2d.getCoordinates()[1] << ")\n";
+	std::cout << "y2d:	(" << y2d.getCoordinates()[0] << ",	" << y2d.getCoordinates()[1] << ")\n";*/
+	Vector2d z2d = x2d.vectorFromPoint(y2d);
+	//std::cout << "z2d:\n" << z2d << "\n";
 	//std::cout << "theta*k:\n" << theta*k << "\n";
 	//std::cout << "z:\n" << z << "\n";
 	Vector4d out;
-	out << z[0], z[1]*yy;
+	out << z2d[0], z2d[1]*yy;
 	out = orientation.transpose()*out;
+	assert(out == out);
 	assert(abs(out[3]) < EPSILON);
 	std::vector<Vector3d> outVector;
 	//std::cout << "out: " << out << "\n" << std::flush;
 	outVector.push_back(out.start<3>());
-	std::cout << "std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t:	" << std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t << "\n";
-	std::cout << "p->t:	" << p->t << "\n";
-	std::cout << "outVector[0]:\n" << outVector[0] << "\n";
+	/*std::cout << "std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t:	" << std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t << "\n";
 	std::cout << "std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical:\n" << std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical << "\n";
+	std::cout << "p->t:	" << p->t << "\n";
 	std::cout << "p->spherical:\n" << p->spherical << "\n";
+	std::cout << "position.t:	" << position.t << "\n";
+	std::cout << "position.spherical:\n" << position.spherical << "\n";
+	std::cout << "out:\n" << out << "\n";*/
 	assert(fabs(std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t - p->t) < EPSILON);
+	std::cout << "position.t:	" << position.t << "\n";
 	assert((std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical - p->spherical).norm() < EPSILON);
+	
 	return outVector;
 }
 
 template <class SurfaceOfRevolution2d>
 std::tr1::shared_ptr<Manifold::Point> SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::pointFromVector(Vector3d vector) {
+	assert(fabs(position.spherical.norm()-1) < EPSILON);
 	assert(vector == vector);
 	double k = position.space->getK();
 	Vector4d v;
 	v << vector, 0;
 	v = orientation*v;
+	assert(fabs(position.spherical.dot(v.end<3>())) < EPSILON);
+	//std::cout << "v:\n" << v << "\n";
 	typename SurfaceOfRevolution2d::Point x2d(position.t,0.);
 	Vector2d z2d(v[0],v.end<3>().norm());
 	assert(z2d == z2d);
 	std::tr1::array<double,2> y2d = x2d.pointFromVector(z2d).getCoordinates();
+	/*std::cout << "pointFromVector()\n";
+	std::cout << "x2d:	(" << x2d.getCoordinates()[0] << ",	" << x2d.getCoordinates()[1] << ")\n";
+	std::cout << "y2d:	(" << y2d[0] << ",	" << y2d[1] << ")\n";
+	std::cout << "z2d:\n" << z2d << "\n";*/
 	Vector4d y;
 	Vector3d ytail;
 	if(y2d[1] == 0) {
 		ytail = position.spherical;
 	} else {
 		ytail = position.spherical*cos(y2d[1]/k)+v.end<3>().normalized()*sin(y2d[1]/k);
+		//If yd2[1] is zero, then v.end<3>() is zero, so normalizing it gives nan. Multiplying by zero doesn't make this go away.
 	}
 	y << y2d[0], ytail;
 	assert(y == y);
+	assert(fabs(ytail.norm()-1) < EPSILON);	//TODO:Assertion failed.
 	std::tr1::shared_ptr<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point> out = std::tr1::shared_ptr<SurfaceOfRevolution::Point>(new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(y[0],y[1],y[2],y[3],position.space));
 	//std::cout << "out->t:	" << out->t << "\n";
+	//assert((vectorsFromPoint(out)[0]-vector).norm() < EPSILON);
 	return out;
-}
-
-template <class SurfaceOfRevolution2d>
-SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::PointOfReference(SurfaceOfRevolution<SurfaceOfRevolution2d>* space) {
-	orientation = orientation.Identity();
-	position.space = space;
 }
 
 template <class SurfaceOfRevolution2d>
@@ -168,27 +205,46 @@ Manifold::Point* SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::g
 }
 
 template <class SurfaceOfRevolution2d>
-void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::move(Vector3d dir) {	//Don't forget to check if they're on the same vertical line.
+void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::move(Vector3d dir) {
+	assert((orientation.transpose()*(Vector4d() << 0, position.spherical).finished()).start(3).norm() < EPSILON);
+	assert(dir == dir);
 	double k = position.space->getK();
 	Vector4d v;
 	v << dir, 0;
 	v = orientation*v;
+	//std::cout << "v.end<3>().norm():	" << v.end<3>().norm() << "\n";
+	//std::cout << "v.end<3>().dot(position.spherical):	" << v.end<3>().dot(position.spherical) << "\n";
+	assert(fabs(v.end<3>().dot(position.spherical)) < EPSILON);
 	typename SurfaceOfRevolution2d::Point x2d(position.t,0.);
 	Vector2d z2d(v[0],v.end<3>().norm());
+	assert(z2d == z2d);
 	std::pair<typename SurfaceOfRevolution2d::Point, double> pointAndRot = x2d.pointAndRotFromVector(z2d);
 	std::tr1::array<double,2> y2d = pointAndRot.first.getCoordinates();
-	y2d[1] /= k;
 	double rot = pointAndRot.second;
 	//Crashes if v.end<3>() = 0;
-	Vector3d row1 = v.end<3>().normalized();
 	Vector3d row2 = position.spherical;
-	if(row1 != row1) {
-		row1 = Vector3d().Random();
+	Vector3d row1;
+	assert(fabs(row2.norm()-1) < EPSILON);
+	if(v.end<3>().norm() < EPSILON) {
+		row1 = Vector3d().setRandom();
 		row1 -= row2*row2.dot(row1);
 		row1.normalize();
+		//std::cout << "row1 = nan\n";
+	} else {
+		row1 = v.end<3>().normalized();
 	}
+	//std::cout << "row1.dot(row2):	" << row1.dot(row2) << "\n";
+	assert(fabs(row1.dot(row2)) < EPSILON);
 	Vector3d row3 = row1.cross(row2);
-	Vector3d ytail = position.spherical*cos(y2d[1]/k)+row1*sin(y2d[1]/k);
+	Vector3d ytail;
+	if(y2d[1] == 0) {
+		ytail = position.spherical;
+		//std::cout << "y2d[1] == 0\n";
+	} else {
+		ytail = position.spherical*cos(y2d[1]/k)+v.end<3>().normalized()*sin(y2d[1]/k);
+		//std::cout << "y2d[1] != 0\n";
+		//If yd2[1] is zero, then v.end<3>() is zero, so normalizing it gives nan. Multiplying by zero doesn't make this go away.
+	}
 	//std::cout << "ytail.norm()-1:	" << ytail.norm()-1 << "\n";
 	assert(fabs(ytail.norm()-1) < EPSILON);
 	/*std::cout << "v.end<3>():\n" << v.end<3>() << "\n";
@@ -198,7 +254,10 @@ void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::move(Vector3d
 	std::cout << "row1:\n" << row1 << "\n" << std::flush;
 	std::cout << "row2:\n" << row2 << "\n" << std::flush
 	std::cout << "row3:\n" << row3 << "\n" << std::flush;
-	//std::cout << "|row1 x row2|:	" << row1.cross(row2).norm() << "\n" << std::flush;
+	//std::cout << "|row1 x row2|:	" << row1.cross(row2).norm() << "\n" << std::flush;*/
+	/*std::cout << "|row1|:\n" << row1.norm() << "\n" << std::flush;
+	std::cout << "|row2|:\n" << row2.norm() << "\n" << std::flush;
+	std::cout << "|row3|:\n" << row3.norm() << "\n" << std::flush;
 	std::cout << "row1 . row2:\n" << row1.dot(row2) << "\n" << std::flush;
 	std::cout << "row2 . row3:\n" << row2.dot(row3) << "\n" << std::flush;
 	std::cout << "row3 . row1:\n" << row3.dot(row1) << "\n" << std::flush;*/
@@ -211,8 +270,10 @@ void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::move(Vector3d
 	conjugate.block<4,1>(0,1) << 0,row1;
 	conjugate.block<4,1>(0,2) << 0,row2;
 	conjugate.block<4,1>(0,3) << 0,row3;
-	//std::cout << "conjugate:\n" << conjugate << "\n" << std::flush;
-	assert((conjugate*conjugate.transpose()-Matrix4d::Identity()).norm() < EPSILON);	//Error is here.
+	//std::cout << "conjugate:\n" << conjugate << "\n";
+	//std::cout << "conjugate*conjugate.transpose():\n" << conjugate*conjugate.transpose() << "\n";
+	//std::cout << "(conjugate*conjugate.transpose()-Matrix4d::Identity()).norm():	" << (conjugate*conjugate.transpose()-Matrix4d::Identity()).norm() << "\n";
+	assert((conjugate*conjugate.transpose()-Matrix4d::Identity()).norm() < EPSILON);
 	orientation = conjugate.transpose()*orientation;
 	//std::cout << "orientation:\n" << orientation << "\n" << std::flush;
 
@@ -238,7 +299,10 @@ void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::move(Vector3d
 	//Since the inverse and transpose are supposed to be equal, averaging it with the inverse of the transpose corrects the error somewhat and keeps it from building up.
 	
 	position.t = y2d[0];
-	position.spherical = ytail;	//TODO: I'm going to need to rearrange this stuff.
+	position.spherical = ytail;
+	/*std::cout << "orientation:\n" << orientation << "\n";
+	std::cout << "rot:	" << rot << "\n";
+	std::cout << "y2d[1]/k:	" << y2d[1]/k << "\n";*/
 	
 	/*std::cout << "position.spherical:\n" << position.spherical << "\n";
 	std::cout << "orientation*Vector4d(0,0,0,1):\n" << orientation*Vector4d(0,0,0,1) << "\n";

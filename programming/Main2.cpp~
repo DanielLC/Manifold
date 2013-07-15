@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <unistd.h>
-#include "Cylinder2d.h"
+#include "BlackHole2d.h"
 #include <Eigen/Core>
 using Eigen::Matrix2d;
 using Eigen::Vector2d;
@@ -13,12 +13,12 @@ using Eigen::Vector2d;
 
 #define KEY_ESCAPE 27
 
-Cylinder2d* space;
-Cylinder2d::Point position;
+BlackHole2d* space;
+BlackHole2d::Point position;
 double rotation;
 //std::tr1::shared_ptr<Manifold> space;
 //std::tr1::shared_ptr<Manifold::PointOfReference> por;
-std::vector<Cylinder2d::Point> pointList;
+std::vector<BlackHole2d::Point> pointList;
 
 Matrix2d rotate(double theta) {
 	Matrix2d out;
@@ -112,14 +112,14 @@ void initialize ()
 	glClearColor(0.0, 0.0, 0.0, 1.0);											// specify clear values for the color buffers						
 
 	//The part where the space is defined		TODO
-	Cylinder2d* hyperbolic = new Cylinder2d();
+	BlackHole2d* hyperbolic = new BlackHole2d();
 	space = hyperbolic;
 	constructPointList();
 	glColor3f(1.0f,1.0f,1.0f);
 }
 
 void move(double x, double y) {
-	std::pair<Cylinder2d::Point, double> pointAndRot = position.pointAndRotFromVector(rotate(rotation)*Vector2d(x,y));
+	std::pair<BlackHole2d::Point, double> pointAndRot = position.pointAndRotFromVector(rotate(rotation)*Vector2d(x,y));
 	position = pointAndRot.first;
 	rotation += pointAndRot.second;
 }

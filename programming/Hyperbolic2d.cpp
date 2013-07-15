@@ -28,8 +28,10 @@ Vector2d Hyperbolic2d::Point::vectorFromPoint(Hyperbolic2d::Point point) {
 	std::tr1::array<double,2> y = point.coordinates;
 	assert(x[1] > 0);
 	if(fabs(x[0] - y[0]) < 0.00001) {
+		//std::cout << "fabs(x[0] - y[0]) < 0.00001\n";
 		return Vector2d(0.,log(y[1]/x[1]));
 	}
+	//std::cout << "fabs(x[0] - y[0]) >= 0.00001\n";
 	double c = ((x[0]*x[0]+x[1]*x[1])-(y[0]*y[0]+y[1]*y[1]))/(2*(x[0]-y[0]));
 	double r = sqrt(x[1]*x[1]+(x[0]-c)*(x[0]-c));
 	double dir0 = x[1]/r;
@@ -49,8 +51,12 @@ Vector2d Hyperbolic2d::Point::vectorFromPoint(Hyperbolic2d::Point point) {
 	std::cout << "(y[1]*(r+x[0]-c))/(x[1]*(r+y[0]-c)):	" << (y[1]*(r+x[0]-c))/(x[1]*(r+y[0]-c)) << "\n";*/
 	assert(out[0] == out[0]);
 	assert(out[1] == out[1]);
-	/*assert(fabs(pointFromVector(out).coordinates[0] - point.coordinates[0]) < 0.000001);
-	assert(fabs(pointFromVector(out).coordinates[1] - point.coordinates[1]) < 0.000001);*/
+	/*std::cout << "pointFromVector(out).coordinates[0]:	" << pointFromVector(out).coordinates[0] << "\n";
+	std::cout << "pointFromVector(out).coordinates[1]:	" << pointFromVector(out).coordinates[1] << "\n";
+	std::cout << "point.coordinates[0]:	" << point.coordinates[0] << "\n";
+	std::cout << "point.coordinates[1]:	" << point.coordinates[1] << "\n";*/
+	assert(fabs(pointFromVector(out).coordinates[0] - point.coordinates[0]) < 0.000001);
+	assert(fabs(pointFromVector(out).coordinates[1] - point.coordinates[1]) < 0.000001);
 	return out;
 }
 
@@ -58,13 +64,22 @@ Hyperbolic2d::Point Hyperbolic2d::Point::pointFromVector(Vector2d z) {
 	assert(z == z);
 	std::tr1::array<double,2> x = coordinates;
 	if(fabs(z[0]) < 0.000001) {
+		//std::cout << "fabs(z[0]) < 0.000001\n";
+		/*std::cout << "x[0]:	" << x[0] << "\n";
+		std::cout << "x[1]:	" << x[1] << "\n";
+		std::cout << "z[1]:	" << z[1] << "\n";
+		std::cout << "x[1]*exp(z[1]):	" << x[1]*exp(z[1]) << "\n";*/
 		return Hyperbolic2d::Point(x[0],x[1]*exp(z[1]));
 	}
+	//std::cout << "fabs(z[0]) >= 0.000001\n";
 	double c = x[0]+x[1]*z[1]/z[0];
 	double r = sqrt(x[1]*x[1]+(x[0]-c)*(x[0]-c));
 	double dist = sqrt(z[0]*z[0]+z[1]*z[1]);
 	if(z[0] > 0) {
 		dist *= -1;
+		//std::cout << "z[0] > 0\n";
+	} else {
+		//std::cout << "z[0] <= 0\n";
 	}
 	double rx0c2 = r+x[0]-c;
 	rx0c2 *= rx0c2;
