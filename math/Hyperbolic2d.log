@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  5 JUL 2013 09:50
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  15 JUL 2013 23:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -189,6 +189,12 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 11.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
+Overfull \hbox (22.58603pt too wide) in paragraph at lines 67--68
+[]\OT1/cmr/m/n/12 If the path is clock-wise in-stead of coun-ter-clock-wise, it
+ comes out to $\OMS/cmsy/m/n/12 ^^@ [] [] \OT1/cmr/m/n/12 =
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] (./Hyperbolic2d
@@ -200,7 +206,7 @@ Here is how much of TeX's memory you used:
  4777 multiletter control sequences out of 15000+200000
  11211 words of font info for 44 fonts, out of 3000000 for 9000
  175 hyphenation exceptions out of 8191
- 34i,8n,26p,369b,188s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 34i,8n,26p,344b,186s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/
@@ -213,7 +219,7 @@ ic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 msy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on Hyperbolic2d.pdf (3 pages, 124380 bytes).
+Output written on Hyperbolic2d.pdf (3 pages, 126181 bytes).
 PDF statistics:
  66 PDF objects out of 1000 (max. 8388607)
  47 compressed objects within 1 object stream

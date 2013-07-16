@@ -12,9 +12,15 @@
 
 Finding the direction and distance from one point to another in $H^2$:
 
+We will be using the half plane model: $\textbf{H}^2 \mapsto \{(x_1,x_2):x_2 > 0\}$.
+
 Given points $\textbf{x} = (x_1,x_2)$ and $\textbf{y} = (y_1,y_2)$,
 
+The geodesic between them is mapped to a circle on the half-plane with a center on the $x$-axis. Consider this circle.
+
 Let $\textbf{c}$ be the center of the circle, and $r$ be the radius. We know $c_2 = 0, \|\textbf{x}-\textbf{c}\| = \|\textbf{y}-\textbf{c}\| = r$.
+
+First, let us solve for $c_1$.
 
 $(x_1-c_1)^2+{x_2}^2 = (y_1-c_1)^2+{y_2}^2 = r^2$
 
@@ -28,9 +34,11 @@ $c_1 = \frac{({x_1}^2+{x_2}^2)-({y_1}^2+{y_2}^2)}{2(x_1-y_1)}$
 
 $= \frac{\|\textbf{x}\|^2-\|\textbf{y}\|^2}{2(x_1-y_1)}$
 
-The direction is tangent the circle, which means that its a right angle from the direction to $\textbf{c}$, which works out to is $\mat{0}{-1}{1}{0}(\textbf{c}-\textbf{x})$. Setting $x_1 = c_2 = 0$, this becomes $\mat{0}{-1}{1}{0}\vect{c_1}{-x_2} = \vect{x_2}{c_1}$. We then normalize this to $\frac{(x_2,c_1)}{\sqrt{{x_2}^2+c_1^2}}$.
+We can use this value of $c_1$ to compute $r$.
 
-The distance can be calculated using the angle it moves across. Assuming it moves counterclockwise:
+The vector at $\textbf{x}$ pointing to $\textbf{y}$ is tangent the circle, which means that its a right angle from the direction to $\textbf{c}$, which works out to be $\mat{0}{-1}{1}{0}(\textbf{c}-\textbf{x}) = \vect{x_2}{c_1-x_1}$. We then normalize this to $\frac{(x_2,c_1-x_1)}{\sqrt{x_2^2+(c_1-x_1)^2}}$.
+
+The distance along the geodesic can be calculated using the angle of the arc between $\textbf{x}$ and $\textbf{y}$ on the half plane. Assuming it moves counterclockwise:
 
 $\int_{\theta_1}^{\theta_2} \frac{\sqrt{(\frac{d}{d\theta}r\sin\theta)^2+(\frac{d}{d\theta}r\cos\theta)^2}}{r\sin\theta} d\theta$
 
@@ -46,17 +54,17 @@ $= \ln\left|\frac{\csc\theta_1+\cot\theta_1}{\csc\theta_2+\cot\theta_2}\right|$
 
 $\csc\theta_1 = \frac{r}{x_2}, \cot\theta_1 = \frac{x_1-c_1}{x_2}, \csc\theta_2 = \frac{r}{y_2}, \cot\theta_2 = \frac{y_1-c_1}{y_2}$
 
-$\ln\left|\frac{\frac{r}{x_2}+\frac{x_1-c_1}{x_2}}{\frac{r}{y_2}+\frac{y_1-c_1}{y_2}}\right|$
+Hence, the distance is $\ln\left|\frac{\frac{r}{x_2}+\frac{x_1-c_1}{x_2}}{\frac{r}{y_2}+\frac{y_1-c_1}{y_2}}\right|$
 
 $= \ln\left|\frac{\frac{r+x_1-c_1}{x_2}}{\frac{r+y_1-c_1}{y_2}}\right|$
 
 $= \ln\left|\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}\right|$
 
-Since $x_1$ and $y_1$ are within the circle, we know $|r| \geq |x_1-c_1|, |r| \geq |y_1-c_1|$, and we already know $x_2$ and $y_2 > 0$, so $\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)} \geq 0$. Thus, we may remove the absolute value.
+Since $\|\textbf{x}-\textbf{c}\|, \textbf{y}-\textbf{c}\| > r$, clearly $|x_1-c_1|, |y_1-c_1| > r$, and we already know $x_2$ and $y_2 > 0$, so $\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)} \geq 0$. Thus, we may remove the absolute value.
 
 $= \ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}$
 
-If it moves clockwise, it comes out to $-\ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)} = \ln\frac{x_2(r+y_1-c_1)}{y_2(r+x_1-c_1)}$. In general, it's $\left|\ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}\right|$.
+If the path is clockwise instead of counterclockwise, it comes out to $-\ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)} = \ln\frac{x_2(r+y_1-c_1)}{y_2(r+x_1-c_1)}$. In general, the distance is $\left|\ln\frac{y_2(r+x_1-c_1)}{x_2(r+y_1-c_1)}\right|$.
 
 Of course, none of this works if the two points share the same first two coordinates. In that case, the problem is easier. The direction is $(0,1)$, and the distance is $\int_{x_3}^{y_3} \frac{1}{t} dt = \ln\frac{y_3}{x_3}$. This gives a vector of $(0,\ln\frac{y_3}{x_3})$.
 
