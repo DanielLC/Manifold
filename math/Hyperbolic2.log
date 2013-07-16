@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  3 JUL 2013 12:44
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  16 JUL 2013 12:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -188,21 +188,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 11.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-)
-Overfull \hbox (19.78113pt too wide) in paragraph at lines 15--16
-\OT1/cmr/m/n/12 This way, it can be re-duced to a prob-lem in $\OML/cmm/m/it/12
- H[]$\OT1/cmr/m/n/12 . We let $\OML/cmm/m/it/12 y[] \OT1/cmr/m/n/12 = []$,
- []
-
-
-Overfull \hbox (10.73975pt too wide) in paragraph at lines 35--36
-[]\OT1/cmr/m/n/12 Now we just need to trans-late it back with $(\OML/cmm/m/it/1
-2 y[]; y[]; y[]\OT1/cmr/m/n/12 ) = (\OML/cmm/m/it/12 x[]; x[]; y[]\OT1/cmr/m/n/
-12 ) + \OML/cmm/m/it/12 y[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 v[]; v[]; \OT1/cmr
-/m/n/12 0) =
- []
-
-[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Hyperbolic2.aux) ) 
+) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Hyperbolic2.aux) ) 
 Here is how much of TeX's memory you used:
  1728 strings out of 495059
  19498 string characters out of 3182030
@@ -210,22 +196,23 @@ Here is how much of TeX's memory you used:
  4777 multiletter control sequences out of 15000+200000
  11211 words of font info for 44 fonts, out of 3000000 for 9000
  175 hyphenation exceptions out of 8191
- 34i,8n,26p,484b,188s stack positions out of 5000i,500n,10000p,200000b,50000s
-</u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
-y8.pfb>
-Output written on Hyperbolic2.pdf (1 page, 91883 bytes).
+ 34i,8n,26p,467b,188s stack positions out of 5000i,500n,10000p,200000b,50000s
+<
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+msy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
+m10.pfb>
+Output written on Hyperbolic2.pdf (1 page, 96529 bytes).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
- 34 compressed objects within 1 object stream
+ 52 PDF objects out of 1000 (max. 8388607)
+ 37 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

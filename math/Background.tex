@@ -14,13 +14,7 @@
 1.  Describe 3-manifold decompositions.
   A.  Prime decomposition theorem -- see Allen Hatcher's notes for statement and references.
 
-\cite{Milnor}
-
-\cite{Kneser}
-
-\bibliography{Bibliography}
-
-http://www.math.cornell.edu/~hatcher/3M/3M.pdf
+%http://www.math.cornell.edu/~hatcher/3M/3M.pdf
 
 \ignore{@Misc{•,
 OPTkey = {•},
@@ -31,35 +25,13 @@ OPTmonth = {•},
 OPTyear = {•},
 OPTnote = {•},
 OPTannote = {•}
-}
-
-@Article{Milnor,
-author = {J. Milnor},
-title = {A Unique Decomposition Theorem for 3-Manifolds},
-journal = {American Journal of Mathematics},
-year = {1962},
-OPTvolume = {84},
-OPTnumber = {1},
-OPTpages = {1-7},
-OPTmonth = {January}
-}
-
-
-%H. Kneser, ``Geschlossen Fl\"achen in dreidimensionalen Mannigfaltigkeiten,'' \emph{Jahresbericht der Deutschen Mathematiker Vereinigung}, vol. 38 (1929), pp. 248-260.
-
-@Article{Kneser,
-author = {H. Kneser},
-title = {Geschlossen Fl\"achen in dreidimensionalen Mannigfaltigkeiten},
-journal = {Jahresbericht der Deutschen Mathematiker Vereinigung},
-year = {1929},
-OPTvolume = {38},
-OPTpages = {248-260}
 }}
 
-The prime decomposition theorem states that a compact, connected, orientable manifold can be decomposed into a connected sum of prime manifolds, which is unique up to insertion or deletion of $S^3$s. The connected sum of two spaces is made by removing a ball from each and identifying their bounding spheres.
+The prime decomposition theorem states that a compact, connected, orientable manifold can be decomposed into a connected sum of prime manifolds \cite{Kneser}, and that this is unique up to insertion or deletion of $S^3$s \cite{Milnor}. The connected sum of two spaces is made by removing a ball from each and identifying their bounding spheres.
 %What are the prime manifolds? What about manifolds that are not compact or are not orientable?
   
   B.  Torus decomposition theorem -- see Allen Hatcher's notes for statement and references.
+  
   C.  Geometrization theorem.  (Wikipedia probably has statement, references?)
 
 The geometrization theorem states that any 3-manifold can be decomposed canonically into submanifolds which each have one of the following eight geometries: $S^3, \mathbb{E}^3, \mathbb{H}^3, S^2 \times \mathbb{R}, \mathbb{H}^2 \times \mathbb{R}, \tilde{SL}(2,\mathbb{R}),$ Nil geometry, and Sol geometry.
@@ -71,6 +43,8 @@ The geometrization theorem states that any 3-manifold can be decomposed canonica
 My program will allow you to smoothly create a connected sum of several geometries. "Smoothness" means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path than one that barely misses.
 
 %Cone points?
+
+I also hope to add cone points to my program.
 
 
 2.  Visualizing 3-manifolds.
@@ -90,5 +64,7 @@ Corvin Zahn made a computer generated video illustrating a wormhole. He goes int
   A.  Define.  For example see definition in book "Three-dimensional orbifolds and cone manifolds" by Cooper, Hodgson, Kerckhoff.  Find other references there.
   [B.  Note they are typically studied for manifolds of constant sectional curvature.  You will look at nonconstant.]
 
+\bibliographystyle{plain}
+\bibliography{Bibliography}
 
 \end{document}
