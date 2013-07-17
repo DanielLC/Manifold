@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  16 JUL 2013 12:52
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  17 JUL 2013 15:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -303,31 +303,32 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Overfull \hbox (85.5644pt too wide) in paragraph at lines 50--51
-\OT1/cmr/m/n/12 thereof, such as Jeff Weeks' work here: http://www.geometrygame
-s.org/CurvedSpaces/index.html 
+(./Background.bbl
+Overfull \hbox (75.95119pt too wide) in paragraph at lines 20--24
+[]\OT1/cmr/m/n/10 Corvin Zahn. Flight through a worm-hole. http://www.spacetime
+travel.org/wurmlochflug/wurmlochflug.html,
  []
 
-(./Background.bbl) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-(./Background.aux) ) 
+) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Background.aux) ) 
 Here is how much of TeX's memory you used:
- 3139 strings out of 495059
- 40375 string characters out of 3182030
- 98315 words of memory out of 3000000
- 6117 multiletter control sequences out of 15000+200000
+ 3141 strings out of 495059
+ 40406 string characters out of 3182030
+ 97321 words of memory out of 3000000
+ 6119 multiletter control sequences out of 15000+200000
  10930 words of font info for 43 fonts, out of 3000000 for 9000
  175 hyphenation exceptions out of 8191
  38i,4n,32p,423b,186s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Background.pdf (1 page, 95813 bytes).
+</
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/symbols/msbm10.pfb>
+Output written on Background.pdf (1 page, 93689 bytes).
 PDF statistics:
  44 PDF objects out of 1000 (max. 8388607)
  31 compressed objects within 1 object stream
