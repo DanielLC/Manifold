@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  9 JUL 2013 10:23
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  18 JUL 2013 17:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -304,39 +304,39 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<PortalSpace.png, id=15, 256.96pt x 313.17pt>
+<PortalSpace.png, id=14, 256.96pt x 313.17pt>
 File: PortalSpace.png Graphic file (type png)
  <use PortalSpace.png>
-Package pdftex.def Info: PortalSpace.png used on input line 50.
+Package pdftex.def Info: PortalSpace.png used on input line 51.
 (pdftex.def)             Requested size: 85.65181pt x 104.38814pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 50--50
+Underfull \hbox (badness 10000) in paragraph at lines 51--51
 []\OT1/cmr/m/n/10 (a) Part of a 2-
  []
 
-<BlackHole.png, id=16, 149.55875pt x 311.1625pt>
+<BlackHole.png, id=15, 149.55875pt x 311.1625pt>
 File: BlackHole.png Graphic file (type png)
  <use BlackHole.png>
-Package pdftex.def Info: BlackHole.png used on input line 54.
+Package pdftex.def Info: BlackHole.png used on input line 55.
 (pdftex.def)             Requested size: 49.85202pt x 103.719pt.
 
-Underfull \hbox (badness 3514) in paragraph at lines 54--54
+Underfull \hbox (badness 3514) in paragraph at lines 55--55
 \OT1/cmr/m/n/10 2-black hole
  []
 
-<ConePoint.png, id=17, 250.9375pt x 210.7875pt>
+<ConePoint.png, id=16, 250.9375pt x 210.7875pt>
 File: ConePoint.png Graphic file (type png)
  <use ConePoint.png>
-Package pdftex.def Info: ConePoint.png used on input line 58.
+Package pdftex.def Info: ConePoint.png used on input line 59.
 (pdftex.def)             Requested size: 83.64435pt x 70.26125pt.
 
-<OuterTorus.png, id=18, 262.9825pt x 122.4575pt>
+<OuterTorus.png, id=17, 262.9825pt x 122.4575pt>
 File: OuterTorus.png Graphic file (type png)
  <use OuterTorus.png>
-Package pdftex.def Info: OuterTorus.png used on input line 62.
+Package pdftex.def Info: OuterTorus.png used on input line 63.
 (pdftex.def)             Requested size: 87.65927pt x 40.81844pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 62--62
+Underfull \hbox (badness 10000) in paragraph at lines 63--63
 []\OT1/cmr/m/n/10 (d) Part of a 2-
  []
 
@@ -345,11 +345,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 62--62
 Here is how much of TeX's memory you used:
  3164 strings out of 495059
  40778 string characters out of 3182030
- 99386 words of memory out of 3000000
+ 100386 words of memory out of 3000000
  6139 multiletter control sequences out of 15000+200000
  11211 words of font info for 44 fonts, out of 3000000 for 9000
  175 hyphenation exceptions out of 8191
- 38i,7n,26p,538b,210s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,7n,26p,870b,212s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/t
 exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></usr/share/texlive/texmf-
@@ -363,7 +363,7 @@ cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8
 sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Overview.pdf (3 pages, 182695 bytes).
+Output written on Overview.pdf (3 pages, 185753 bytes).
 PDF statistics:
  70 PDF objects out of 1000 (max. 8388607)
  47 compressed objects within 1 object stream
