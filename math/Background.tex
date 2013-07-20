@@ -30,7 +30,7 @@ OPTnote = {•},
 OPTannote = {•}
 }}
 
-The prime decomposition theorem states that a compact, connected, orientable 3-manifold can be decomposed into a connected sum of prime manifolds \cite{Kneser}, and that this is unique up to insertion or deletion of copies of $S^3$ \cite{Milnor}. The connected sum of two spaces is made by removing a ball from each and identifying their bounding spheres.
+The prime decomposition theorem states that a compact, connected, orientable 3-manifold can be decomposed into a connected sum of prime manifolds (manifolds that cannot be further decomposed, except by trivially removing a sphere) \cite{Kneser}, and that this is unique up to insertion or deletion of copies of $S^3$ \cite{Milnor}. The connected sum of two spaces is made by removing a ball from each and identifying their bounding spheres.
 %What are the prime manifolds? What about manifolds that are not compact or are not orientable?
   
 %  B.  Torus decomposition theorem -- see Allen Hatcher's notes for statement and references.
@@ -43,13 +43,17 @@ The torus decomposition theorem states that there is a minimal collection of dis
 
 The geometrization theorem states that any 3-manifold can be decomposed canonically into submanifolds which each have one of the following eight geometries: $S^3, \mathbb{E}^3, \mathbb{H}^3, S^2 \times \mathbb{R}, \mathbb{H}^2 \times \mathbb{R}, \tilde{SL}(2,\mathbb{R}),$ Nil geometry, and Sol geometry. This is done by decomposing along the spheres given by the prime decomposition theorem and tori given by the torus decomposition theorem. \cite{Perelman1} \cite{Perelman2} \cite{Perelman3}
 
-My program will likely never support torus decomposition, so it most likely will never be able to show every manifold.
-
-%What are Nil geometry and Sol geometry? Can my program do this kind of decomposition? How does the decomposition work? \mathbb{E}^3 and \mathbb{H}^3 are homeomorphic. I think they meant that the submanifolds are quotients of those geometries. Can I do all the quotient spaces on \mathbb{H}^3?
+%What are Nil geometry and Sol geometry? Can my program do this kind of decomposition? How does the decomposition work?\
 
 %  [D.  Your work:  take some of 8 geometries, glue together via "smooth" prime decomposition.]
 
-My program will allow you to smoothly create a connected sum of several geometries. ``Smoothness'' means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path than one that barely misses.
+I am working on a program that will allow you to smoothly create a connected sum of several geometries. ``Smoothness'' means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path than one that barely misses.
+
+For example, if you were to glue the outside of a sphere in Euclidean geometry to the outside of another such sphere in another copy of Euclidean geometry, the result would look like the portal was a reflective sphere, but with the reflection from the other geometry. This would have effects such as blocking anything behind the sphere. This is impossible in a true manifold. Any point is visible from any other. My program will avoid this by using an intermediate geometry of non-constant curvature which contains spheres that can be glued to spaces of any constant curvature.
+
+My program will likely never support torus decomposition, and thus will never be able to show every manifold. However, it is still far more general than anything that has come before.
+
+%Additionally, I hope to make my program run real-time. While this is common for programs simulating spherical, Euclidean, and hyperbolic geometry, I do not believe it has been done for more sophisticated geometries, as there is not enough time to find geodesics numerically.
 
 %Cone points?
 
@@ -70,6 +74,10 @@ My program will allow non-compact spaces, and it will allow different spaces to 
 
 Corvin Zahn made a computer generated video illustrating a wormhole. He used a solution to Einstein's field equations that had previously been found, and simulated the camera moving through this wormhole. He did not go into specifics about the program used. He detailed what kind of manifold was used, but not how he used it. I have emailed him with questions regarding it, but he is yet to respond. \cite{spacetimetravel}
 
+I believe he used a ray tracing method and found the geodesics numerically. I hope to make the program run using rasterisation and minimal amounts of numerical calculations in order to run the program real-time.
+
+\nocite{CharlieGunn}
+
 %  C.  Other?  E.g. old references on visualizing hyperbolic geometry?
 
 %3.  Cone manifolds
@@ -79,6 +87,66 @@ Corvin Zahn made a computer generated video illustrating a wormhole. He used a s
 %Is this the same as the Sasakian manifold?
 
 %https://en.wikipedia.org/wiki/Clairaut's_relation Good for solving surfaces of revolution numerically.
+
+\ignore{
+
+@Article{Torus1,
+author = {Jaco, William H.; Shalen, Peter B.},
+title = {Seifert fibered spaces in 3-manifolds},
+journal = {Mem. Amer. Math. Soc.},
+year = {1979},
+volume = {21},
+number = {220}
+}
+
+@Article{Torus2,
+author = {Jaco, William H.; Shalen, Peter B.},
+title = {Seifert fibered spaces in 3-manifolds},
+journal = {Geometric topology (Proc. Georgia Topology Conf., Athens, Ga., 1977)},
+year = {1979},
+volume = {21},
+number = {220},
+pages = {91-99}
+}
+
+@Article{Torus3,
+author = {Jaco, William; Shalen, Peter B.},
+title = {A new decomposition theorem for irreducible sufficiently-large 3-manifolds},
+journal = {Algebraic and geometric topology (Proc. Sympos. Pure Math., Stanford Univ., Stanford, Calif., 1976), Part 2},
+year = {1978},
+volume = {XXXII},
+pages = {71-84}
+}
+
+Johannson, Klaus, Homotopy equivalences of 3-manifolds with boundaries. Lecture Notes in Mathematics, 761. Springer, Berlin, 1979. ISBN 3-540-09714-7
+
+@InBook{•,
+ALTauthor = {Johannson, Klaus},
+ALTeditor = {•},
+title = {
+Homotopy Equivalences of 3-Manifolds with Boundaries (Lecture Notes in Mathematics)},
+chapter = {Lecture Notes in Mathematics},
+publisher = {•},
+year = {•},
+OPTkey = {•},
+OPTvolume = {•},
+OPTnumber = {•},
+OPTseries = {•},
+OPTtype = {•},
+OPTaddress = {•},
+OPTedition = {•},
+OPTmonth = {•},
+OPTpages = {761},
+OPTnote = {ISBN 3-540-09714-7},
+OPTannote = {•}
+}
+Jaco, William H.; Shalen, Peter B. Seifert fibered spaces in 3-manifolds. Mem. Amer. Math. Soc. 21 (1979), no. 220,
+Jaco, William; Shalen, Peter B. Seifert fibered spaces in 3-manifolds. Geometric topology (Proc. Georgia Topology Conf., Athens, Ga., 1977), pp. 91–99, Academic Press, New York-London, 1979.
+Jaco, William; Shalen, Peter B. A new decomposition theorem for irreducible sufficiently-large 3-manifolds. Algebraic and geometric topology (Proc. Sympos. Pure Math., Stanford Univ., Stanford, Calif., 1976), Part 2, pp. 71–84, Proc. Sympos. Pure Math., XXXII, Amer. Math. Soc., Providence, R.I., 1978.
+Johannson, Klaus, Homotopy equivalences of 3-manifolds with boundaries. Lecture Notes in Mathematics, 761. Springer, Berlin, 1979. ISBN 3-540-09714-7
+Charlie Gunn and Delle Maxwell. Not Knot. Jones & Bartlett, 1991. [video].
+Charlie Gunn. Discrete groups and visualization of three-dimensional manifolds. In Proceedings of SIGGRAPH '93 (Anaheim, California, August 1-6, 1993), pages 255-262, New York, 1993. ACM SIGGRAPH. Computer Graphics Proceedings, Annual Conference Series, 1993.
+}
 
 \bibliographystyle{plain}
 \bibliography{Bibliography}
