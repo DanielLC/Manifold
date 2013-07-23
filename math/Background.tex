@@ -35,13 +35,13 @@ The prime decomposition theorem states that a compact, connected, orientable 3-m
   
 %  B.  Torus decomposition theorem -- see Allen Hatcher's notes for statement and references.
 
-The torus decomposition theorem states that there is a minimal collection of disjointly embedded incompressible tori such that cutting along the edge of each yields components that are each either atoroidal or Seifert-fibered. It also states that this collection is unique up to isomorphism.
+The torus decomposition theorem states that there is a minimal collection of disjointly embedded incompressible tori such that cutting along the edge of each yields components that are each either atoroidal or Seifert-fibered. It also states that this collection is unique up to isomorphism. \cite{JSJ3} \cite{JSJ2} \cite{JSJ1} \cite{JSJ4}
 
 %Wikipedia has four references. Which do I use?
 
 %  C.  Geometrization theorem.  (Wikipedia probably has statement, references?)
 
-The geometrization theorem states that any 3-manifold can be decomposed canonically into submanifolds which each have one of the following eight geometries: $S^3, \mathbb{E}^3, \mathbb{H}^3, S^2 \times \mathbb{R}, \mathbb{H}^2 \times \mathbb{R}, \tilde{SL}(2,\mathbb{R}),$ Nil geometry, and Sol geometry. This is done by decomposing along the spheres given by the prime decomposition theorem and tori given by the torus decomposition theorem. \cite{Perelman1} \cite{Perelman2} \cite{Perelman3}
+The geometrization theorem states that any 3-manifold can be decomposed canonically into submanifolds which each have one of the following eight geometries: $S^3, \mathbb{E}^3, \mathbb{H}^3, S^2 \times \mathbb{R}, \mathbb{H}^2 \times \mathbb{R}, \tilde{SL}(2,\mathbb{R}),$ Nil geometry, and Sol geometry. This is done by decomposing along the spheres given by the prime decomposition theorem and tori given by the torus decomposition theorem. The initial work was done by Grisha Perelman \cite{Perelman1} \cite{Perelman3} \cite{Perelman2}, and it was later completed by other mathematicians \cite{Geometrization1} \cite{Geometrization2} \cite{Geometrization3}.
 
 %What are Nil geometry and Sol geometry? Can my program do this kind of decomposition? How does the decomposition work?\
 
@@ -63,7 +63,7 @@ My program will likely never support torus decomposition, and thus will never be
 %2.  Visualizing 3-manifolds.
 %  A.  Jeff Weeks website -- compact manifolds of constant curvature
 
-There has been previous work in visualizing $S^3$ and $\mathbb{H}^3$ and quotient spaces thereof. In particular, Jeff Weeks has written a program that can view compact quotient spaces of $S^3, \mathbb{E}^3,$ and $\mathbb{H}^3$. \cite{CurvedSpaces}
+There has been previous work in visualizing $S^3$ and $\mathbb{H}^3$ and quotient spaces thereof. In particular, Jeff Weeks has written a program that can view compact quotient spaces of $S^3, \mathbb{E}^3,$ and $\mathbb{H}^3$. \cite{CurvedSpaces} There was also a video made by Charlie Gunn and Delle Maxwell showing the complementary spaces of knots, most of which are quotient spaces of $\mathbb{H}^3$. \cite{CharlieGunn} \cite{NotKnot}
 
 My program will allow non-compact spaces, and it will allow different spaces to be glued together.
 
@@ -89,66 +89,10 @@ I believe he used a ray tracing method and found the geodesics numerically. I ho
 %https://en.wikipedia.org/wiki/Clairaut's_relation Good for solving surfaces of revolution numerically.
 
 \ignore{
-
-@Article{Torus1,
-author = {Jaco, William H.; Shalen, Peter B.},
-title = {Seifert fibered spaces in 3-manifolds},
-journal = {Mem. Amer. Math. Soc.},
-year = {1979},
-volume = {21},
-number = {220}
-}
-
-@Article{Torus2,
-author = {Jaco, William H.; Shalen, Peter B.},
-title = {Seifert fibered spaces in 3-manifolds},
-journal = {Geometric topology (Proc. Georgia Topology Conf., Athens, Ga., 1977)},
-year = {1979},
-volume = {21},
-number = {220},
-pages = {91-99}
-}
-
-@Article{Torus3,
-author = {Jaco, William; Shalen, Peter B.},
-title = {A new decomposition theorem for irreducible sufficiently-large 3-manifolds},
-journal = {Algebraic and geometric topology (Proc. Sympos. Pure Math., Stanford Univ., Stanford, Calif., 1976), Part 2},
-year = {1978},
-volume = {XXXII},
-pages = {71-84}
-}
-
-Johannson, Klaus, Homotopy equivalences of 3-manifolds with boundaries. Lecture Notes in Mathematics, 761. Springer, Berlin, 1979. ISBN 3-540-09714-7
-
-@InBook{•,
-ALTauthor = {Johannson, Klaus},
-ALTeditor = {•},
-title = {
-Homotopy Equivalences of 3-Manifolds with Boundaries (Lecture Notes in Mathematics)},
-chapter = {Lecture Notes in Mathematics},
-publisher = {•},
-year = {•},
-OPTkey = {•},
-OPTvolume = {•},
-OPTnumber = {•},
-OPTseries = {•},
-OPTtype = {•},
-OPTaddress = {•},
-OPTedition = {•},
-OPTmonth = {•},
-OPTpages = {761},
-OPTnote = {ISBN 3-540-09714-7},
-OPTannote = {•}
-}
-Jaco, William H.; Shalen, Peter B. Seifert fibered spaces in 3-manifolds. Mem. Amer. Math. Soc. 21 (1979), no. 220,
-Jaco, William; Shalen, Peter B. Seifert fibered spaces in 3-manifolds. Geometric topology (Proc. Georgia Topology Conf., Athens, Ga., 1977), pp. 91–99, Academic Press, New York-London, 1979.
-Jaco, William; Shalen, Peter B. A new decomposition theorem for irreducible sufficiently-large 3-manifolds. Algebraic and geometric topology (Proc. Sympos. Pure Math., Stanford Univ., Stanford, Calif., 1976), Part 2, pp. 71–84, Proc. Sympos. Pure Math., XXXII, Amer. Math. Soc., Providence, R.I., 1978.
-Johannson, Klaus, Homotopy equivalences of 3-manifolds with boundaries. Lecture Notes in Mathematics, 761. Springer, Berlin, 1979. ISBN 3-540-09714-7
-Charlie Gunn and Delle Maxwell. Not Knot. Jones & Bartlett, 1991. [video].
 Charlie Gunn. Discrete groups and visualization of three-dimensional manifolds. In Proceedings of SIGGRAPH '93 (Anaheim, California, August 1-6, 1993), pages 255-262, New York, 1993. ACM SIGGRAPH. Computer Graphics Proceedings, Annual Conference Series, 1993.
 }
 
-\bibliographystyle{plain}
+\bibliographystyle{amsplain}
 \bibliography{Bibliography}
 
 \end{document}
