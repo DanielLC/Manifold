@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  22 JUL 2013 23:43
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  23 JUL 2013 18:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -303,41 +303,39 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Background.bbl
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Background.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 39--41
 []\OT1/cmr/m/n/10 Jian Ge Jian-guo Cao, \OT1/cmr/m/it/10 Perel-man's col-laps-i
 ng the-o-rem for 3-manifolds\OT1/cmr/m/n/10 ,
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 69--71
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 73--75
 [][]\OT1/cmr/m/n/10 , \OT1/cmr/m/it/10 Ricci flow with surgery on three-manifol
 ds\OT1/cmr/m/n/10 ,
  []
 
-[2]) [3] (./Background.aux) ) 
+) [3] (./Background.aux) ) 
 Here is how much of TeX's memory you used:
- 3158 strings out of 495059
- 40582 string characters out of 3182030
- 100364 words of memory out of 3000000
- 6134 multiletter control sequences out of 15000+200000
+ 3159 strings out of 495059
+ 40594 string characters out of 3182030
+ 99368 words of memory out of 3000000
+ 6135 multiletter control sequences out of 15000+200000
  11545 words of font info for 45 fonts, out of 3000000 for 9000
  175 hyphenation exceptions out of 8191
- 38i,5n,32p,695b,358s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
-2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Background.pdf (3 pages, 130840 bytes).
+ 38i,5n,32p,695b,354s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmc
+sc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Background.pdf (3 pages, 132561 bytes).
 PDF statistics:
  58 PDF objects out of 1000 (max. 8388607)
  41 compressed objects within 1 object stream

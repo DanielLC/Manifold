@@ -35,7 +35,7 @@ The prime decomposition theorem states that a compact, connected, orientable 3-m
   
 %  B.  Torus decomposition theorem -- see Allen Hatcher's notes for statement and references.
 
-The torus decomposition theorem states that there is a minimal collection of disjointly embedded incompressible tori such that cutting along the edge of each yields components that are each either atoroidal or Seifert-fibered. It also states that this collection is unique up to isomorphism. \cite{JSJ3} \cite{JSJ2} \cite{JSJ1} \cite{JSJ4}
+The torus decomposition theorem states that there is a minimal collection of disjointly embedded incompressible tori such that cutting along the edge of each yields components that are each either atoroidal or Seifert-fibered. It also states that this collection is unique up to isomorphism \cite{JSJ3} \cite{JSJ2} \cite{JSJ1} \cite{JSJ4}.
 
 %Wikipedia has four references. Which do I use?
 
@@ -43,15 +43,13 @@ The torus decomposition theorem states that there is a minimal collection of dis
 
 The geometrization theorem states that any 3-manifold can be decomposed canonically into submanifolds which each have one of the following eight geometries: $S^3, \mathbb{E}^3, \mathbb{H}^3, S^2 \times \mathbb{R}, \mathbb{H}^2 \times \mathbb{R}, \tilde{SL}(2,\mathbb{R}),$ Nil geometry, and Sol geometry. This is done by decomposing along the spheres given by the prime decomposition theorem and tori given by the torus decomposition theorem. The initial work was done by Grisha Perelman \cite{Perelman1} \cite{Perelman3} \cite{Perelman2}, and it was later completed by other mathematicians \cite{Geometrization1} \cite{Geometrization2} \cite{Geometrization3}.
 
-%What are Nil geometry and Sol geometry? Can my program do this kind of decomposition? How does the decomposition work?\
-
 %  [D.  Your work:  take some of 8 geometries, glue together via "smooth" prime decomposition.]
 
-I am working on a program that will allow you to smoothly create a connected sum of several geometries. ``Smoothness'' means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path than one that barely misses.
+I am working on a program that will allow you to smoothly create a connected sum of several geometries as in the geometrization theorem and visualize the result. ``Smoothness'' means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path than one that barely misses.
 
 For example, if you were to glue the outside of a sphere in Euclidean geometry to the outside of another such sphere in another copy of Euclidean geometry, the result would look like the portal was a reflective sphere, but with the reflection from the other geometry. This would have effects such as blocking anything behind the sphere. This is impossible in a true manifold. Any point is visible from any other. My program will avoid this by using an intermediate geometry of non-constant curvature which contains spheres that can be glued to spaces of any constant curvature.
 
-My program will likely never support torus decomposition, and thus will never be able to show every manifold. However, it is still far more general than anything that has come before.
+My program will likely never support torus decomposition, and thus will never be able to show every manifold. However, it is still more general than anything that has come before.
 
 %Additionally, I hope to make my program run real-time. While this is common for programs simulating spherical, Euclidean, and hyperbolic geometry, I do not believe it has been done for more sophisticated geometries, as there is not enough time to find geodesics numerically.
 
@@ -63,7 +61,7 @@ My program will likely never support torus decomposition, and thus will never be
 %2.  Visualizing 3-manifolds.
 %  A.  Jeff Weeks website -- compact manifolds of constant curvature
 
-There has been previous work in visualizing $S^3$ and $\mathbb{H}^3$ and quotient spaces thereof. In particular, Jeff Weeks has written a program that can view compact quotient spaces of $S^3, \mathbb{E}^3,$ and $\mathbb{H}^3$. \cite{CurvedSpaces} There was also a video made by Charlie Gunn and Delle Maxwell showing the complementary spaces of knots, most of which are quotient spaces of $\mathbb{H}^3$. \cite{CharlieGunn} \cite{NotKnot}
+There has been previous work in visualizing $S^3$ and $\mathbb{H}^3$ and quotient spaces thereof. In particular, Jeff Weeks has written a program that can view compact quotient spaces of $S^3, \mathbb{E}^3,$ and $\mathbb{H}^3$ \cite{CurvedSpaces}. There was also a video made by Charlie Gunn and Delle Maxwell showing the complementary spaces of knots, most of which are quotient spaces of $\mathbb{H}^3$. \cite{NotKnot} Gunn later explained the techniques he used  \cite{CharlieGunn}.
 
 My program will allow non-compact spaces, and it will allow different spaces to be glued together.
 
@@ -71,12 +69,15 @@ My program will allow non-compact spaces, and it will allow different spaces to 
 
 %http://www.spacetimetravel.org/wurmlochflug/wurmlochflug.html
 
+I am not aware of any previous attempts to visualize general connected sums of geometries. However, there have been attempts to visualize a connected sum of two $\mathbb{E}^3$ spaces, with curvature near zero outside of a small wormhole.
 
-Corvin Zahn made a computer generated video illustrating a wormhole. He used a solution to Einstein's field equations that had previously been found, and simulated the camera moving through this wormhole. He did not go into specifics about the program used. He detailed what kind of manifold was used, but not how he used it. I have emailed him with questions regarding it, but he is yet to respond. \cite{spacetimetravel}
+Rune Johansen has made a video that was designed to give the idea of a wormhole \cite{runevision}. This video was primarily artistic in nature, and used various tricks to make space look curved. There is no geometry that looks precisely like the video.
 
-I believe he used a ray tracing method and found the geodesics numerically. I hope to make the program run using rasterisation and minimal amounts of numerical calculations in order to run the program real-time.
+Corvin Zahn made a computer generated video precisely illustrating a wormhole \cite{spacetimetravel}. He used a solution to Einstein's field equations that had previously been found, and simulated the camera moving through this wormhole. He did not go into specifics about the program used. He detailed what kind of manifold was used, but not how he used it. I have emailed him with questions regarding his implementation, but he is yet to respond.
 
-\nocite{CharlieGunn}
+The wormhole Zahn made was all made as one continuous geometry with everywhere negative curvature. While this is a much more interesting space than what my program will make, it's much harder to generalize. Adding another wormhole would require redesigning the entire space. In contrast, my program will have a compact manifold with boundary to connect spaces, so as long as the spheres they replace in Euclidean geometry do not touch, any number can easily be added to the same space.
+
+I believe he used a ray tracing method and found the geodesics numerically. I hope to make my program run using rasterisation and minimal amounts of numerical calculations in order to run the program in real time.
 
 %  C.  Other?  E.g. old references on visualizing hyperbolic geometry?
 
@@ -87,10 +88,6 @@ I believe he used a ray tracing method and found the geodesics numerically. I ho
 %Is this the same as the Sasakian manifold?
 
 %https://en.wikipedia.org/wiki/Clairaut's_relation Good for solving surfaces of revolution numerically.
-
-\ignore{
-Charlie Gunn. Discrete groups and visualization of three-dimensional manifolds. In Proceedings of SIGGRAPH '93 (Anaheim, California, August 1-6, 1993), pages 255-262, New York, 1993. ACM SIGGRAPH. Computer Graphics Proceedings, Annual Conference Series, 1993.
-}
 
 \bibliographystyle{amsplain}
 \bibliography{Bibliography}
