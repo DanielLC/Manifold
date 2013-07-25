@@ -1,0 +1,98 @@
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+% \MRhref is called by the amsart/book/proc definition of \MR.
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{10}
+
+\bibitem{Geometrization2}
+John~Lott Bruce~Kleiner, \emph{Locally collapsed 3-manifolds},
+  http://arxiv.org/abs/1005.5106, May 2010.
+
+\bibitem{CharlieGunn}
+Charlie Gunn, \emph{Computer graphics and mathematics}, ch.~Visualizing
+  hyperbolic geometry, pp.~299--313, Springer, 1992.
+
+\bibitem{NotKnot}
+Charlie Gunn and Delle Maxwell, \emph{Not knot}, 1991.
+
+\bibitem{JSJ3}
+William Jaco and Peter~B. Shalen, \emph{A new decomposition theorem for
+  irreducible sufficiently-large {$3$}-manifolds}, Algebraic and geometric
+  topology ({P}roc. {S}ympos. {P}ure {M}ath., {S}tanford {U}niv., {S}tanford,
+  {C}alif., 1976), {P}art 2, Proc. Sympos. Pure Math., XXXII, Amer. Math. Soc.,
+  Providence, R.I., 1978, pp.~71--84. \MR{520524 (80j:57008)}
+
+\bibitem{JSJ2}
+\bysame, \emph{Seifert fibered spaces in {$3$}-manifolds}, Geometric topology
+  ({P}roc. {G}eorgia {T}opology {C}onf., {A}thens, {G}a., 1977), Academic
+  Press, New York, 1979, pp.~91--99. \MR{537728 (80k:57016)}
+
+\bibitem{JSJ1}
+William~H. Jaco and Peter~B. Shalen, \emph{Seifert fibered spaces in
+  {$3$}-manifolds}, Mem. Amer. Math. Soc. \textbf{21} (1979), no.~220,
+  viii+192. \MR{539411 (81c:57010)}
+
+\bibitem{Geometrization3}
+Jian~Ge Jianguo~Cao, \emph{Perelman's collapsing theorem for 3-manifolds},
+  http://arxiv.org/abs/0908.3229, Aug 2009.
+
+\bibitem{JSJ4}
+Klaus Johannson, \emph{Homotopy equivalences of {$3$}-manifolds with
+  boundaries}, Lecture Notes in Mathematics, vol. 761, Springer, Berlin, 1979.
+  \MR{551744 (82c:57005)}
+
+\bibitem{runevision}
+Rune Johansen, \emph{Through the wormhole portal},
+  http://runevision.com/3d/anims/\#52, August 2003.
+
+\bibitem{Geometrization1}
+Gang~Tian John~Morgan, \emph{Completion of the proof of the geometrization
+  conjecture}, http://arxiv.org/abs/0809.4040, September 2008.
+
+\bibitem{Kneser}
+H.~Kneser, \emph{Geschlossen fl\"achen in dreidimensionalen
+  mannigfaltigkeiten}, Jahresbericht der Deutschen Mathematiker Vereinigung
+  \textbf{38} (1929), 248--260.
+
+\bibitem{Milnor}
+J.~Milnor, \emph{A unique decomposition theorem for 3-manifolds}, American
+  Journal of Mathematics \textbf{84} (1962), no.~1, 1--7.
+
+\bibitem{Perelman1}
+Grisha Perelman, \emph{The entropy formula for the ricci flow and its geometric
+  applications}, http://arxiv.org/abs/math.DG/0211159, November 2002.
+
+\bibitem{Perelman3}
+\bysame, \emph{Finite extinction time for the solutions to the ricci flow on
+  certain three-manifolds}, http://arxiv.org/abs/math.DG/0307245, July 2003.
+
+\bibitem{Perelman2}
+\bysame, \emph{Ricci flow with surgery on three-manifolds},
+  http://arxiv.org/abs/math.DG/0303109, March 2003.
+
+\bibitem{CharlieGunn2}
+Mark Phillips and Charlie Gunn, \emph{Visualizing hyperbolic space: Unusual
+  uses of 4x4 matrices}, The National Science and Technology Research Center
+  for Computation and Visualization of Geometric Structures (The Geometry
+  Center) (1991), 209--214.
+
+\bibitem{Geomview}
+Tamara~Munzner Stuart~Levy and Mark Phillips, \emph{Geomview},
+  http://www.geomview.org/, August 2007.
+
+\bibitem{CurvedSpaces}
+Jeff Weeks, \emph{Curved spaces},
+  http://www.geometrygames.org/CurvedSpaces/index.html.
+
+\bibitem{CurvedSpacesPaper}
+\bysame, \emph{Real-time rendering in curved spaces}, Computer Graphics and
+  Applications \textbf{22} (2012), no.~6, 90--99.
+
+\bibitem{spacetimetravel}
+Corvin Zahn, \emph{Flight through a wormhole},
+  \\http://www.spacetimetravel.org/wurmlochflug/wurmlochflug.html, March 2008.
+
+\end{thebibliography}

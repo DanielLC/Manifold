@@ -14,17 +14,17 @@
 \title{Overview}
 \maketitle
 
-I am writing a graphics program for three-dimensional non-euclidean geometry.
+I am writing a graphics program to visualize three-dimensional non-euclidean geometry.
 
-I currently have $\mathbb{E}^3$ and $\mathbb{H}^3$ implemented.
+I currently have $\mathbb{E}^3$, $\mathbb{H}^3$ and a space homeomorphic to $S^2 \times \mathbb{R}$ implemented.
 
-I hope to implement a method to glue multiple spaces together along spherical boundaries.
+I am in the process of implementing a method to glue multiple spaces together along spherical boundaries.
 
 Outside of Euclidean geometry, gluing spaces together like this won't always be smooth. For example, trying to glue a spheres from Euclidean and hyperbolic geometry. More precisely, since two spheres with the same surface area do not generally have the same curvature, gluing the spaces together by those spheres will result in them having different curvature from each side. A similar problem will occur if you glue the insides or outsides of two spheres together.
 
 In order to get around this problem, I have designed and am currently in the process of implementing what I call wormhole.
 
-I define an $(n,m)$-surface of revolution as an $(n+m)$-surface with an automorphism group that has the automorphism group of the $n$-sphere as a subgroup. Note that an $(n,m)$-surface of revolution is also an $(n-1,m+1)$-surface of revolution for all $n \geq 1$. For example, $S^2$ is a $(2,0)$-surface of revolution, so it is also a $(1,1)$- and $(0,2)$-surface of revolution. In addition, this definition is defined entirely by the intrinsic geometry of the space, and does not require embedding into Euclidean geometry.
+I define an $(n,m)$-surface of revolution as an $(n+m)$-manifold with an automorphism group that has the automorphism group of the $n$-sphere as a subgroup. Note that an $(n,m)$-surface of revolution is also an $(n-1,m+1)$-surface of revolution for all $n \geq 1$. In addition, this definition is defined entirely by the intrinsic geometry of the space, and does not require embedding into Euclidean geometry.
 
 %A $2$-wormhole is a $(1,1)$-surface of revolution of constant negative Gaussian curvature. This makes it a quotient space on $\mathbb{H}^2$, for which it is easy to find geodesics.
 
@@ -36,11 +36,9 @@ There are two other spaces that are similar to this wormhole that are of interes
 
 Black holes and cone spaces can allow you to connect two spaces in a similar manner, but they're more interesting just connected to one. An $n$-black hole is an $n$-dimensional analogue of a pseudosphere, in which the embedding into $\mathbb{E}^3$ which has spherical cross-sections instead of circular ones. An $n$-cone point space is notable for containing a cone point and still being easy to connect to $\mathbb{E}^n$ or $\mathbb{H}^n$.
 
-Another way to generalize this is to identify lines on $\textbf{E}^2$ or $\textbf{S}^2$ instead of $\textbf{H}^2$.
+Another way to generalize this is to identify lines on $\mathbb{E}^2$ or $S^2$ instead of $\mathbb{H}^2$.
 
-Identifying two parallel lines on $\textbf{E}^2$ creates a cylinder, which extends to $\mathbb{S}^n \times \mathbb{R}$. Identifying two intersecting lines creates a cone, which extends to a higher dimensional cone. Identifying two lines on a sphere creates something shaped like a lemon, with two cone points on opposite sides. If you extend this to identifying two lines that meet at an angle greater than $360^\circ$, which you could construct by gluing multiple spheres together, the resulting space has more interesting properties, and cannot be embedded in $\mathbb{E}^3$.  It contains a cone point of angle greater than $360^\circ$, can be smoothly attached to $\mathbb{E}^2, \mathbb{H}^2$, or $S^2$, and is smaller on the inside. Gluing a piece of hyperbolic space to it can yield something smaller on the inside with no cone point.
-
-???
+Identifying two parallel lines on $\mathbb{E}^2$ creates a cylinder, which extends to $\mathbb{S}^n \times \mathbb{R}$. Identifying two intersecting lines creates a cone, which extends to a higher dimensional cone. Identifying two lines on a sphere creates something shaped like a lemon, with two cone points on opposite sides. If you extend this to identifying two lines that meet at an angle greater than $360^\circ$, which you could construct by gluing multiple spheres together, the resulting space has more interesting properties, and cannot be embedded in $\mathbb{E}^3$.  It contains a cone point of angle greater than $360^\circ$, can be smoothly attached to $\mathbb{E}^2, \mathbb{H}^2$, or $S^2$, and is smaller on the inside. Gluing a piece of hyperbolic space to it can yield something smaller on the inside with no cone point.
 
 Figures 1-4 illustrate the $2$-dimensional versions of these surfaces. Note that while only a portion of the surfaces can be embedded into $\mathbb{E}^3$, my program will be capable of using the entire surface.
 
