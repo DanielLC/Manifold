@@ -30,7 +30,7 @@ OPTnote = {•},
 OPTannote = {•}
 }}
 
-The prime decomposition theorem states that a compact, connected, orientable 3-manifold can be decomposed into a connected sum of prime manifolds (manifolds that cannot be further decomposed, except by trivially removing a sphere) \cite{Kneser}, and that this is unique up to insertion or deletion of copies of $S^3$ \cite{Milnor}. The connected sum of two spaces is made by removing a ball from each and identifying their bounding spheres.
+The prime decomposition theorem states that a compact, connected, orientable 3-manifold can be decomposed into a connected sum of prime manifolds (manifolds that cannot be decomposed further, except by trivially removing a sphere) \cite{Kneser}, and that this is unique up to insertion or deletion of copies of $S^3$ \cite{Milnor}. The connected sum of two spaces is made by removing a ball from each and identifying their bounding spheres.
 %What are the prime manifolds? What about manifolds that are not compact or are not orientable?
   
 %  B.  Torus decomposition theorem -- see Allen Hatcher's notes for statement and references.
@@ -41,15 +41,15 @@ The torus decomposition theorem states that there is a minimal collection of dis
 
 %  C.  Geometrization theorem.  (Wikipedia probably has statement, references?)
 
-The geometrization theorem states that any 3-manifold can be decomposed canonically into submanifolds which each have one of the following eight geometries: $S^3, \mathbb{E}^3, \mathbb{H}^3, S^2 \times \mathbb{R}, \mathbb{H}^2 \times \mathbb{R}, \tilde{SL}(2,\mathbb{R}),$ Nil geometry, and Sol geometry. This is done by decomposing along the spheres given by the prime decomposition theorem and tori given by the torus decomposition theorem. The initial work was done by Grisha Perelman \cite{Perelman1} \cite{Perelman3} \cite{Perelman2}, and it was later completed by other mathematicians \cite{Geometrization1} \cite{Geometrization2} \cite{Geometrization3}.
+The geometrization theorem states that any 3-manifold can be decomposed canonically into submanifolds which each have one of the following eight geometries: $S^3, \mathbb{E}^3, \mathbb{H}^3, S^2 \times \mathbb{R}, \mathbb{H}^2 \times \mathbb{R}, \tilde{SL}(2,\mathbb{R}),$ Nil geometry, and Sol geometry. This is done by decomposing along the spheres given by the prime decomposition theorem and tori given by the torus decomposition theorem. The initial work was done by Grisha Perelman \cite{Perelman1} \cite{Perelman3} \cite{Perelman2}, and was later completed by other mathematicians \cite{Geometrization1} \cite{Geometrization2} \cite{Geometrization3}.
 
 %  [D.  Your work:  take some of 8 geometries, glue together via "smooth" prime decomposition.]
 
-I am working on a program that will allow you to smoothly create a connected sum of several geometries as in the geometrization theorem and visualize the result. ``Smoothness'' means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path than one that barely misses.
+I am working on a program that will allow smooth creation of a connected sum of several geometries as in the geometrization theorem, and visualization of the result. ``Smoothness'' means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path from one that barely misses.
 
-For example, if you were to glue the outside of a sphere in Euclidean geometry to the outside of another such sphere in another copy of Euclidean geometry, the result would look like the portal was a reflective sphere, but with the reflection from the other geometry. This would have effects such as blocking anything behind the sphere. This is impossible in a true manifold. Any point is visible from any other. My program will avoid this by using an intermediate geometry of non-constant curvature which contains spheres that can be glued to spaces of any constant curvature.
+For example, if we glue the outside of a sphere in Euclidean geometry to the outside of another such sphere in another copy of Euclidean geometry, the result looks like the portal is a reflective sphere, but with the reflection from the other geometry. This has effects such as blocking anything behind the sphere. This is impossible in a true manifold. Any point is visible from any other. My program will avoid this by using an intermediate geometry of non-constant curvature which contains spheres that can be glued to spaces of any constant curvature.
 
-My program will likely never support torus decomposition, and thus will never be able to show every manifold. However, it is still more general than anything that has come before.
+My program will likely not support torus decomposition, and thus will not be able to show every manifold. However, it is still more general than anything that has come before, as described next.
 
 %Additionally, I hope to make my program run real-time. While this is common for programs simulating spherical, Euclidean, and hyperbolic geometry, I do not believe it has been done for more sophisticated geometries, as there is not enough time to find geodesics numerically.
 
@@ -61,27 +61,27 @@ My program will likely never support torus decomposition, and thus will never be
 %2.  Visualizing 3-manifolds.
 %  A.  Jeff Weeks website -- compact manifolds of constant curvature
 
-There has been previous work in visualizing $S^3$ and $\mathbb{H}^3$ and quotient spaces thereof. In particular, Jeff Weeks has written a program that can view compact quotient spaces of $S^3, \mathbb{E}^3,$ and $\mathbb{H}^3$ \cite{CurvedSpaces}. He also wrote a paper that went in depth about how it worked \cite{CurvedSpacesPaper}.
+Previous work has been done in visualizing $S^3$ and $\mathbb{H}^3$ and quotient spaces thereof. In particular, Jeff Weeks has written a program that can view compact quotient spaces of $S^3, \mathbb{E}^3,$ and $\mathbb{H}^3$ \cite{CurvedSpaces}. He also wrote a paper that describes the process in depth \cite{CurvedSpacesPaper}.
 
-There was also a video made by Charlie Gunn and Delle Maxwell showing the complementary spaces of knots, most of which are quotient spaces of $\mathbb{H}^3$ \cite{NotKnot}. Gunn later explained the techniques he used \cite{CharlieGunn} \cite{CharlieGunn2}.
+Charlie Gunn and Delle Maxwell made a video showing the complementary spaces of knots, most of which are quotient spaces of $\mathbb{H}^3$ \cite{NotKnot}. Gunn explains the techniques he uses in \cite{CharlieGunn} \cite{CharlieGunn2}.
 
 Stuart Levy, Tamara Munzner and Mark Phillips wrote a geometry viewer called Geomview. Among its features is the ability to render non-Euclidean geometry \cite{Geomview}.
 
-My program will allow non-compact spaces, and it will allow different spaces to be glued together.
+The main difference my work will have is the ability to create connected sums between spaces.
 
 %  B.  Youtube movie
 
 %http://www.spacetimetravel.org/wurmlochflug/wurmlochflug.html
 
-I am not aware of any previous attempts to visualize general connected sums of geometries. However, there have been attempts to visualize a connected sum of two $\mathbb{E}^3$ spaces, with curvature near zero outside of a small wormhole.
+I am unaware of any previous attempts to visualize general connected sums of geometries. However, there have been attempts to visualize a connected sum of two $\mathbb{E}^3$ spaces, with curvature near zero outside of a small wormhole.
 
-Rune Johansen has made a video that was designed to give the idea of a wormhole \cite{runevision}. This video was primarily artistic in nature, and used various tricks to make space look curved. There is no geometry that looks precisely like the video.
+Rune Johansen made a video that was designed to convey the idea of a wormhole \cite{runevision}. This video is primarily artistic in nature, and usees various tricks to make space look curved. There is no geometry that looks precisely like the video.
 
-Corvin Zahn made a computer generated video precisely illustrating a wormhole \cite{spacetimetravel}. He used a solution to Einstein's field equations that had previously been found, and simulated the camera moving through this wormhole. He did not go into specifics about the program used. He detailed what kind of manifold was used, but not how he used it. I have emailed him with questions regarding his implementation, but he is yet to respond.
+Corvin Zahn made a computer generated video precisely illustrating a wormhole \cite{spacetimetravel}. He uses a solution to Einstein's field equations that has been found previously \cite{WormholeSolution}, and simulated the camera moving through this wormhole. He did not go into specifics about the program used. He detailed what kind of manifold was used, but not how he used it. I have emailed him with questions regarding his implementation, but he is yet to respond.
 
-The wormhole Zahn made was all made as one continuous geometry with everywhere negative curvature. While this is a much more interesting space than what my program will make, it's much harder to generalize. Adding another wormhole would require redesigning the entire space. In contrast, my program will have a compact manifold with boundary to connect spaces, so as long as the spheres they replace in Euclidean geometry do not touch, any number can easily be added to the same space.
+Zahn's wormhole was made as one continuous geometry with everywhere negative curvature. While this is a much more interesting space than what my program will make, it's much harder to generalize. Adding a second wormhole between the spaces or a second wormhole leading to a third space would require redesigning the entire manifold. In contrast, my program will have a compact manifold with boundary to connect spaces, so as long as the spheres they replace in Euclidean geometry do not touch, any number can be added easily to the same space.
 
-I believe he used a ray tracing method and found the geodesics numerically. I hope to make my program run using rasterisation and minimal amounts of numerical calculations in order to run the program in real time.
+It appears he used a ray tracing method and found the geodesics numerically. I intend to make my program run using rasterization and minimal amounts of numerical calculations in order to run the program in real time.
 
 %  C.  Other?  E.g. old references on visualizing hyperbolic geometry?
 
