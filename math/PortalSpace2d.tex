@@ -24,14 +24,24 @@ This quotient space can be mapped to $S^1 \times \mathbb{R}$ by setting the $S^1
 
 In addition to mapping the points, we have to be able to convert vectors between the two. The vectors used in the half plane model are set so that $(0,1)$ points to the point at $(0,\infty)$ and $(1,0)$ is $90^\circ$ clockwise of this.
 
-For the $2$-Wormhole, at $(x,y)$, $(0,1)$ should point to $(x,\infty)$ and $(1,0)$ should point to $(x+\epsilon,y)$.
+For the $2$-Wormhole, at $(x,y)$, $(0,1)$ should point in the direction of $(1+\epsilon)(x,y)$, and $(1,0)$ should point $90^\circ$ counterclockwise of this.
 
-Then a miracle happened.
+Suppose you're at point $(x,y)$.
 
 Let $\theta = \arctan\frac{y}{x}$.
 
-$M = M^{-1} = \mat{-\sin\theta}{\cos\theta}{\cos\theta}{\sin\theta}$
+$(0,1)$ in wormhole coordinates should correspond to the direction of $(x,y)$ in $\mathbb{H}^2$ coordinates. This is $(\cos\theta,\sin\theta)$.
 
-Multiplying by this matrix will convert vectors between the two coordinate systems.
+$(1,0)$ in wormhole coordinates should correspond to the direction $90^\circ$ counterclockwise. This comes out to $\mat{0}{-1}{1}{0}\vect{\cos\theta}{\sin\theta} = \vect{-\sin\theta}{\cos\theta}$
+
+Using this, the matrix to convert from wormhole coordinates to $\mathbb{H}^2$ coordinates should be $\mat{-\sin\theta}{\cos\theta}{\cos\theta}{\sin\theta}$. This matrix is its own inverse, so it can be used to convert either way.
+
+%Add stuff for finding the rotation of a point that has moved.
+
+The final problem is finding the rotation of a point that has moved. Since this is an orientation-reversing map, the rotation must be inverted.
+
+Then a miracle happened.
+
+The rotation $\phi'$ on the wormhole map is $-\phi-(\theta_1-\theta_0)$ where $\phi$ is the rotation on the $\mathbb{H}^2$ map, $\theta_0$ is $\arctan\frac{y_0}{x_0}$ where $(x_0,y_0)$ is the initial point on $\mathbb{H}^2$, and $\theta_1$ is $\arctan\frac{y_1}{x_1}$ where $(x_1,y_1)$ is the final point on $\mathbb{H}^2$.
 
 \end{document}
