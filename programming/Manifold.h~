@@ -15,13 +15,14 @@ class Manifold {
 		class Point {
 			public:
 				virtual Manifold* getSpace() = 0;
-				virtual ~Point();
+				~Point();
+				virtual Vector3d getVector() = 0;
 		};
 		typedef std::tr1::shared_ptr<Point> PointP;
 		typedef std::tr1::array<PointP,3> Triangle;
 		class PointOfReference {
 			public:
-				virtual ~PointOfReference();
+				~PointOfReference();
 				virtual std::vector<Vector3d> vectorsFromPoint(std::tr1::shared_ptr<Point> point) = 0;
 				virtual std::tr1::shared_ptr<Point> pointFromVector(Vector3d vector) = 0;
 				virtual void move(Vector3d dir) = 0;
@@ -30,6 +31,8 @@ class Manifold {
 				//virtual void setPosition(Manifold::Point* position) = 0;
 				std::vector<Triangle> icosahedron();
 				std::vector<Triangle> icosahedron(double k);
+				std::vector<Triangle> octahedron();
+				std::vector<Triangle> octahedron(double k);
 		};
 		virtual ~Manifold();
 

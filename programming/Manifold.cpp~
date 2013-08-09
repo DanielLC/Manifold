@@ -25,6 +25,23 @@ std::vector<Manifold::Triangle> Manifold::PointOfReference::octahedron(double k)
 	std::tr1::shared_ptr<Manifold::Point> ym = pointFromVector(Vector3d(0,-1,0));
 	std::tr1::shared_ptr<Manifold::Point> zp = pointFromVector(Vector3d(0,0,1));
 	std::tr1::shared_ptr<Manifold::Point> zm = pointFromVector(Vector3d(0,0,-1));
+	Triangle triangle0 = {xp,yp,zp};
+	Triangle triangle1 = {xp,yp,zm};
+	Triangle triangle2 = {xp,ym,zp};
+	Triangle triangle3 = {xp,ym,zm};
+	Triangle triangle4 = {xm,yp,zp};
+	Triangle triangle5 = {xm,yp,zm};
+	Triangle triangle6 = {xm,ym,zp};
+	Triangle triangle7 = {xm,ym,zm};
+	out.push_back(triangle0);
+	out.push_back(triangle1);
+	out.push_back(triangle2);
+	out.push_back(triangle3);
+	out.push_back(triangle4);
+	out.push_back(triangle5);
+	out.push_back(triangle6);
+	out.push_back(triangle7);
+	return out;
 }
 
 std::vector<Manifold::Triangle> Manifold::PointOfReference::icosahedron(double k) {

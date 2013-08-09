@@ -85,3 +85,4 @@ std::vector<Manifold::Triangle> Manifold::PointOfReference::icosahedron(double k
 	out.push_back(triangle11);
 	return out;
 }
+

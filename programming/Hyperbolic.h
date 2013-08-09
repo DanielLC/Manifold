@@ -13,11 +13,12 @@ class Hyperbolic : public Manifold {
 		class PointOfReference;
 		class Point : public Manifold::Point {
 			public:
-				Hyperbolic* getSpace();
+				Manifold* getSpace();
 				Point(double x, double y, double z, Hyperbolic* space);
 				Point();
 				std::tr1::array<double,3> getCoordinates();
 				void setCoordinates(double x, double y, double z);
+				Vector3d getVector();
 				friend class PointOfReference;
 				//Point midpoint(Point point);
 			private:

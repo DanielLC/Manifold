@@ -21,11 +21,13 @@ Hyperbolic::Point::Point(double x, double y, double z, Hyperbolic* space) {
 }
 //Hyperbolic::Point::~Point() {}
 
-Hyperbolic* Hyperbolic::Point::getSpace() {
+Manifold* Hyperbolic::Point::getSpace() {
 	return space;
 }
 
 std::tr1::array<double,3> Hyperbolic::Point::getCoordinates(){return coordinates;}
+
+Vector3d Hyperbolic::Point::getVector(){return Vector3d(coordinates[0],coordinates[1],coordinates[2]);}
 
 //Hyperbolic::Point Hyperbolic::PointOfReference::position;
 //Matrix3d Hyperbolic::PointOfReference::orientation;
@@ -43,7 +45,7 @@ Vector3d Hyperbolic::PointOfReference::vectorFromPoint(std::tr1::shared_ptr<Mani
 	v0 /= y0;
 	v1 /= y0;
 	Hyperbolic2d::Point xpoint(0,x[2]);
-	std::tr1::shared_ptr<Hyperbolic2d::Point> ypoint(new Hyperbolic2d::Point(y0,y[2]));
+	Hyperbolic2d::Point ypoint(y0,y[2]);
 	Vector2d z = xpoint.vectorFromPoint(ypoint);
 	Vector3d out(v0*z[0],v1*z[0],z[1]);
 	out = orientation.transpose()*out;
@@ -57,13 +59,22 @@ std::vector<Vector3d> Hyperbolic::PointOfReference::vectorsFromPoint(std::tr1::s
 }
 
 std::tr1::shared_ptr<Manifold::Point> Hyperbolic::PointOfReference::pointFromVector(Vector3d vector) {
+	assert(vector == vector);
 	vector = orientation*vector;
 	std::tr1::array<double,3> x = position.coordinates;
 	Hyperbolic2d::Point xpoint(0,x[2]);
 	Vector2d z(sqrt(vector[0]*vector[0]+vector[1]*vector[1]), vector[2]);
-	double v0 = vector[0]/z[0];
-	double v1 = vector[1]/z[0];
-	std::tr1::array<double,2> y = xpoint.pointFromVector(z)->getCoordinates();
+	assert(z == z);
+	double v0;
+	double v1;
+	if(fabs(z[0]) > EPSILON) {
+		v0 = vector[0]/z[0];
+		v1 = vector[1]/z[0];
+	} else {	//It doesn't really matter, but I'd recommend making sure the magnitude is one.
+		v0 = 1;
+		v1 = 0;
+	}
+	std::tr1::array<double,2> y = xpoint.pointFromVector(z).getCoordinates();
 	//std::cout << "Point:	(" << (x[0]+y[0]*v0) << ",	" << (x[1]+y[0]*v1) << ",	" << y[1] << ")\n";
 	return std::tr1::shared_ptr<Manifold::Point>(new Hyperbolic::Point(x[0]+y[0]*v0,x[1]+y[0]*v1,y[1],position.space));
 }
@@ -93,11 +104,12 @@ void Hyperbolic::PointOfReference::move(Vector3d vector) {
 	Vector2d z(sqrt(vector[0]*vector[0]+vector[1]*vector[1]), vector[2]);
 	double v0 = vector[0]/z[0];
 	double v1 = vector[1]/z[0];
-	std::pair<std::tr1::shared_ptr<Hyperbolic2d::Point>, double> pointAndRot = xpoint.pointAndRotFromVector(z);
-	std::tr1::array<double,2> y = pointAndRot.first->getCoordinates();
+	std::pair<Hyperbolic2d::Point, double> pointAndRot = xpoint.pointAndRotFromVector(z);
+	std::tr1::array<double,2> y = pointAndRot.first.getCoordinates();
 	double rot = pointAndRot.second;
 	position.setCoordinates(x[0]+y[0]*v0,x[1]+y[0]*v1,y[1]);
 	
+	orientation = (Matrix3d() << v0,v1,0,-v1,v0,0,0,0,1).finished()*orientation;
 	orientation = (Matrix3d() << cos(rot),0,-sin(rot),0,1,0,sin(rot),0,cos(rot)).finished()*orientation;
 	orientation = (Matrix3d() << v0,-v1,0,v1,v0,0,0,0,1).finished()*orientation;
 	//std::cout << "determinant0:	" << (Matrix3d() << cos(rot),0,-sin(rot),0,1,0,sin(rot),0,cos(rot)).finished().determinant() << "\n";

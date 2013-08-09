@@ -16,6 +16,7 @@ class Manifold {
 			public:
 				virtual Manifold* getSpace() = 0;
 				virtual ~Point();
+				virtual Vector3d getVector() = 0;
 		};
 		typedef std::tr1::shared_ptr<Point> PointP;
 		typedef std::tr1::array<PointP,3> Triangle;
