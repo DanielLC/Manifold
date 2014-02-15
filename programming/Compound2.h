@@ -1,6 +1,8 @@
 #ifndef Compound_h
 #define Compound_h
 
+//Depricated
+
 #include <vector>
 #include <tr1/array>
 #include <tr1/memory>
@@ -21,8 +23,7 @@ class Compound : public Manifold {
 			public:
 				Compound* getSpace();
 				Vector3d getVector();
-				Point(std::tr1::shared_ptr<Manifold::Point> position);
-				Point();
+				Point(Manifold::PointPtr position, Compound* space);
 				Manifold* getSubspace();
 				std::tr1::shared_ptr<Manifold::Point> getPosition();
 			private:
@@ -32,9 +33,9 @@ class Compound : public Manifold {
 		class PointOfReference : public Manifold::PointOfReference {
 			public:
 				PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference> pointOfReference);
-				Vector3d vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector);
+				Vector3d vectorFromPointAndNearVector(PointPtr point, Vector3d vector);
 				//std::tr1::shared_ptr<Point> pointFromVector(Vector3d vector);
-				Manifold::Point* getPosition();
+				Manifold::PointPtr getPosition();
 				void rotate(Matrix3d rot);
 			private:
 				std::tr1::shared_ptr<Manifold::PointOfReference> pointOfReference;
@@ -42,12 +43,13 @@ class Compound : public Manifold {
 		class Geodesic : public Manifold::Geodesic {
 			public:
 				Geodesic(PointOfReferencePtr start, PointOfReferencePtr end, Vector3d vector);
-				PointPtr getEndPoint();
-				PointOfReferencePtr getEndPointOfReference();
+				Manifold::PointPtr getEndPoint();
+				Manifold::PointOfReferencePtr getEndPointOfReference();
 				Vector3d getVector();
 			private:
 				PointOfReferencePtr start;
-				
+				PointOfReferencePtr end;
+				Vector3d vector;
 		};
 		GeodesicPtr getGeodesic(PointOfReferencePtr start, PointPtr end);
 		GeodesicPtr getGeodesic(PointOfReferencePtr start, Vector3d vector);
