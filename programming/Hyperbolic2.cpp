@@ -9,37 +9,40 @@
 using Eigen::Matrix3d;
 using Eigen::Vector3d;
 
-Hyperbolic::Point::Point() {
-	coordinates[2] = 1;
-}
-
-//std::tr1::array<double,3> Hyperbolic::Point::coordinates;
 Hyperbolic::Point::Point(double x, double y, double z, Hyperbolic* space) {
 	coordinates[0] = x;
 	coordinates[1] = y;
 	coordinates[2] = z;
 	this->space = space;
 }
-//Hyperbolic::Point::~Point() {}
 
-Manifold* Hyperbolic::Point::getSpace() {
+Hyperbolic::Point::Point(Hyperbolic* space) {
+	coordinates[2] = 1;
+	this->space = space;
+}
+
+Hyperbolic::Point::Point() {
+	coordinates[2] = 1;
+}
+
+Hyperbolic* Hyperbolic::Point::getSpace() {
 	return space;
 }
 
-std::tr1::array<double,3> Hyperbolic::Point::getCoordinates(){return coordinates;}
+std::tr1::array<double,3> Hyperbolic::Point::getCoordinates(){
+	return coordinates;
+}
 
-Vector3d Hyperbolic::Point::getVector(){return Vector3d(coordinates[0],coordinates[1],coordinates[2]);}
+Vector3d Hyperbolic::Point::getVector(){
+	return Vector3d(coordinates[0],coordinates[1],coordinates[2]);
+}
 
-//Hyperbolic::Point Hyperbolic::PointOfReference::position;
-//Matrix3d Hyperbolic::PointOfReference::orientation;
-
-/*Manifold::Point Hyperbolic::Point::midpoint(Manifold::Point point) {
-	
-}*/
-
-Vector3d Hyperbolic::PointOfReference::vectorFromPoint(std::tr1::shared_ptr<Manifold::Point> point) {
-	std::tr1::array<double,3> x = position.coordinates;
-	std::tr1::array<double,3> y = std::tr1::static_pointer_cast<Hyperbolic::Point>(point)->coordinates;
+Manifold::GeodesicPtr Hyperbolic::getGeodesic(Manifold::PointOfReferencePtr start, Manifold::PointPtr end) {
+	assert(start->getPosition()->getSpace() == this);
+	assert(end->getSpace() == this);
+	std::tr1::array<double,3> x = std::tr1::static_pointer_cast<Hyperbolic::Point>(start->getPosition())->getCoordinates();
+	Hyperbolic::PointPtr castedEnd = std::tr1::static_pointer_cast<Hyperbolic::Point>(end);
+	std::tr1::array<double,3> y = castedEnd->getCoordinates();
 	double v0 = y[0]-x[0];
 	double v1 = y[1]-x[1];
 	double y0 = sqrt(v0*v0+v1*v1);
@@ -47,37 +50,47 @@ Vector3d Hyperbolic::PointOfReference::vectorFromPoint(std::tr1::shared_ptr<Mani
 	v1 /= y0;
 	Hyperbolic2d::Point xpoint(0,x[2]);
 	Hyperbolic2d::Point ypoint(y0,y[2]);
-	Vector2d z = xpoint.vectorFromPoint(ypoint);
-	Vector3d out(v0*z[0],v1*z[0],z[1]);
-	out = orientation.transpose()*out;
-	return out;
+	std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic2d = xpoint.getGeodesic(ypoint);
+	Vector2d z = geodesic2d->getVector();
+	Vector3d vector(v0*z[0],v1*z[0],z[1]);
+	vector = std::tr1::static_pointer_cast<Hyperbolic::PointOfReference>(start)->getOrientation().transpose()*vector;
+	return Manifold::GeodesicPtr(new Hyperbolic::Geodesic(start, castedEnd, vector, v0, v1, geodesic2d));
 }
 
-std::vector<Vector3d> Hyperbolic::PointOfReference::vectorsFromPoint(std::tr1::shared_ptr<Manifold::Point> point) {
-	std::vector<Vector3d> out;
-	out.push_back(this->vectorFromPoint(point));
-	return out;
+Matrix3d Hyperbolic::PointOfReference::getOrientation() {
+	return orientation;
 }
 
-std::tr1::shared_ptr<Manifold::Point> Hyperbolic::PointOfReference::pointFromVector(Vector3d vector) {
-	assert(vector == vector);
-	vector = orientation*vector;
-	std::tr1::array<double,3> x = position.coordinates;
+Vector3d Hyperbolic::Geodesic::getVector() {
+	return vector;
+}
+
+Manifold::GeodesicPtr Hyperbolic::getGeodesic(Manifold::PointOfReferencePtr start, Vector3d vector) {
+	assert(start->getPosition()->getSpace() == this);
+	Vector3d vector2 = std::tr1::static_pointer_cast<Hyperbolic::PointOfReference>(start)->getOrientation()*vector;
+	std::tr1::array<double,3> x = std::tr1::static_pointer_cast<Hyperbolic::Point>(start->getPosition())->getCoordinates();
 	Hyperbolic2d::Point xpoint(0,x[2]);
-	Vector2d z(sqrt(vector[0]*vector[0]+vector[1]*vector[1]), vector[2]);
-	assert(z == z);
-	double v0;
-	double v1;
-	if(fabs(z[0]) > EPSILON) {
-		v0 = vector[0]/z[0];
-		v1 = vector[1]/z[0];
-	} else {	//It doesn't really matter, but I'd recommend making sure the magnitude is one.
-		v0 = 1;
-		v1 = 0;
-	}
-	std::tr1::array<double,2> y = xpoint.pointFromVector(z).getCoordinates();
+	Vector2d z(sqrt(vector2[0]*vector2[0]+vector2[1]*vector2[1]), vector2[2]);
+	double v0 = vector2[0]/z[0];
+	double v1 = vector2[1]/z[0];
+	//std::cout << "getGeodesic:	" << x[2] << "\n" << z << std::endl;
+	std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic2d = xpoint.getGeodesic(z);
+	std::tr1::array<double,2> y = geodesic2d->getEndPoint().getCoordinates();
 	//std::cout << "Point:	(" << (x[0]+y[0]*v0) << ",	" << (x[1]+y[0]*v1) << ",	" << y[1] << ")\n";
-	return std::tr1::shared_ptr<Manifold::Point>(new Hyperbolic::Point(x[0]+y[0]*v0,x[1]+y[0]*v1,y[1],position.space));
+	Hyperbolic::PointPtr end(new Hyperbolic::Point(x[0]+y[0]*v0,x[1]+y[0]*v1,y[1],this));
+	//std::cout << "move:" << std::endl;
+	//std::cout << "xpoint.getCoordinates()[1]:	" << xpoint.getCoordinates()[1] << std::endl;
+	
+	//std::cout << "this->getPosition()->getCoordinates()[2]:	" << std::tr1::static_pointer_cast<Hyperbolic::Point>(this->getPosition())->getCoordinates()[2] << std::endl;
+	//std::cout << "getGeodesic:" << std::endl;
+	//std::cout << "geodesic2d->start:	" << geodesic2d->start << std::endl;
+	//std::cout << "geodesic2d->start.getCoordinates()[1]:	" << geodesic2d->start.getCoordinates()[1] << std::endl;
+
+	return Manifold::GeodesicPtr(new Hyperbolic::Geodesic(start, end, vector, v0, v1, geodesic2d));
+}
+
+Manifold::PointPtr Hyperbolic::Geodesic::getEndPoint() {
+	return end;
 }
 
 void Hyperbolic::Point::setCoordinates(double x, double y, double z) {
@@ -86,39 +99,45 @@ void Hyperbolic::Point::setCoordinates(double x, double y, double z) {
 	coordinates[2] = z;
 }
 
+Hyperbolic::PointOfReference::PointOfReference(Hyperbolic::PointPtr position, Matrix3d orientation) {
+	this->position = position;
+	this->orientation = orientation;
+}
+
 Hyperbolic::PointOfReference::PointOfReference(Hyperbolic* space) {
 	orientation = orientation.Identity();
-	position.space = space;
+	position = Hyperbolic::PointPtr(new Hyperbolic::Point(space));
 }
 
-Hyperbolic::PointOfReference::~PointOfReference() {
+Manifold::PointPtr Hyperbolic::PointOfReference::getPosition() {
+	return position;
 }
 
-Manifold::Point* Hyperbolic::PointOfReference::getPosition() {
-	return &position;
+Manifold::PointOfReferencePtr Hyperbolic::getPointOfReference(Manifold::PointOfReferencePtr start, Vector3d vector) {
+	return getGeodesic(start, vector)->getEndPointOfReference();
 }
 
-void Hyperbolic::PointOfReference::move(Vector3d vector) {
-	vector = orientation*vector;
-	std::tr1::array<double,3> x = position.coordinates;
-	Hyperbolic2d::Point xpoint(0,x[2]);
-	Vector2d z(sqrt(vector[0]*vector[0]+vector[1]*vector[1]), vector[2]);
-	double v0 = vector[0]/z[0];
-	double v1 = vector[1]/z[0];
-	std::pair<Hyperbolic2d::Point, double> pointAndRot = xpoint.pointAndRotFromVector(z);
-	std::tr1::array<double,2> y = pointAndRot.first.getCoordinates();
-	double rot = pointAndRot.second;
-	position.setCoordinates(x[0]+y[0]*v0,x[1]+y[0]*v1,y[1]);
+Manifold::PointOfReferencePtr Hyperbolic::Geodesic::getEndPointOfReference() {
+	double rot = geodesic2d->getRot();	
+	Matrix3d rotation = (Matrix3d() << v0,v1,0,-v1,v0,0,0,0,1).finished();
+	rotation = (Matrix3d() << cos(rot),0,-sin(rot),0,1,0,sin(rot),0,cos(rot)).finished()*rotation;
+	rotation = (Matrix3d() << v0,-v1,0,v1,v0,0,0,0,1).finished()*rotation;
 	
-	orientation = (Matrix3d() << v0,v1,0,-v1,v0,0,0,0,1).finished()*orientation;
-	orientation = (Matrix3d() << cos(rot),0,-sin(rot),0,1,0,sin(rot),0,cos(rot)).finished()*orientation;
-	orientation = (Matrix3d() << v0,-v1,0,v1,v0,0,0,0,1).finished()*orientation;
-	//std::cout << "determinant0:	" << (Matrix3d() << cos(rot),0,-sin(rot),0,1,0,sin(rot),0,cos(rot)).finished().determinant() << "\n";
-	//std::cout << "determinant1:	" << (Matrix3d() << v0,-v1,0,v1,v0,0,0,0,1).finished().determinant() << "\n";
-	//std::cout << "determinant:	" << orientation.determinant() << "\n";
+	Matrix3d orientation = std::tr1::static_pointer_cast<Hyperbolic::PointOfReference>(start)->getOrientation();
+	Hyperbolic::PointOfReferencePtr out(new Hyperbolic::PointOfReference(std::tr1::static_pointer_cast<Hyperbolic::Point>(this->getEndPoint()), rotation*orientation));
+	return std::tr1::static_pointer_cast<Manifold::PointOfReference>(out);
 }
 
 void Hyperbolic::PointOfReference::rotate(Matrix3d rot) {
 	orientation = rot*orientation;
+}
+
+Hyperbolic::Geodesic::Geodesic(Manifold::PointOfReferencePtr start, Hyperbolic::PointPtr end, Vector3d vector, double v0, double v1, std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic2d) {
+	this->start = start;
+	this->end = end;
+	this->vector = vector;
+	this->v0 = v0;
+	this->v1 = v1;
+	this->geodesic2d = geodesic2d;
 }
 

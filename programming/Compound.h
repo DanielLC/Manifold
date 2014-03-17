@@ -9,7 +9,7 @@
 using Eigen::Vector3d;
 using Eigen::Matrix3d;
 
-class Compound : public Manifold {
+class Compound {
 	public:
 		class Point;
 		class PointOfReference;
@@ -17,37 +17,33 @@ class Compound : public Manifold {
 		typedef std::tr1::shared_ptr<Point> PointPtr;
 		typedef std::tr1::shared_ptr<PointOfReference> PointOfReferencePtr;
 		typedef std::tr1::shared_ptr<Geodesic> GeodesicPtr;
+		typedef std::tr1::array<PointPtr,3> Triangle;
 		class Point {
 			public:
 				Compound* getSpace();
-				Vector3d getVector();
-				Point(std::tr1::shared_ptr<Manifold::Point> position);
+				//Vector3d getVector();
+				Point(Manifold::PointPtr position);
 				Point();
 				Manifold* getSubspace();
-				std::tr1::shared_ptr<Manifold::Point> getPosition();
+				Manifold::PointPtr getPosition();
 			private:
-				std::tr1::shared_ptr<Manifold::Point> position;
+				Manifold::PointPtr position;
 				Compound* space;
 		};
-		class PointOfReference : public Manifold::PointOfReference {
+		class PointOfReference {
 			public:
 				PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference> pointOfReference);
 				Vector3d vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector);
-				//std::tr1::shared_ptr<Point> pointFromVector(Vector3d vector);
-				Manifold::Point* getPosition();
+				std::tr1::shared_ptr<Point> pointFromVector(Vector3d vector);
+				Manifold::PointPtr getPosition();
 				void rotate(Matrix3d rot);
+				void move(Vector3d dir);
+				std::vector<Triangle> icosahedron();
+				std::vector<Triangle> icosahedron(double k);
+				std::vector<Triangle> octahedron();
+				std::vector<Triangle> octahedron(double k);
 			private:
 				std::tr1::shared_ptr<Manifold::PointOfReference> pointOfReference;
-		};
-		class Geodesic : public Manifold::Geodesic {
-			public:
-				Geodesic(PointOfReferencePtr start, PointOfReferencePtr end, Vector3d vector);
-				PointPtr getEndPoint();
-				PointOfReferencePtr getEndPointOfReference();
-				Vector3d getVector();
-			private:
-				PointOfReferencePtr start;
-				
 		};
 		GeodesicPtr getGeodesic(PointOfReferencePtr start, PointPtr end);
 		GeodesicPtr getGeodesic(PointOfReferencePtr start, Vector3d vector);

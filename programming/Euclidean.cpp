@@ -2,70 +2,104 @@
 #include <tr1/memory>
 #include <iostream>
 
-#include "Euclidean2.h"
+#include "Euclidean.h"
 #include <Eigen/Core>
+#include <utility>
+
 using Eigen::Matrix3d;
 using Eigen::Vector3d;
 
-Euclidean::Point::Point() {
-}
-
-//std::tr1::array<double,3> Euclidean::Point::coordinates;
 Euclidean::Point::Point(double x, double y, double z, Euclidean* space) {
-	coordinates[0] = x;
-	coordinates[1] = y;
-	coordinates[2] = z;
+	coordinates << x,y,z;
 	this->space = space;
 }
-//Euclidean::Point::~Point() {}
+
+Euclidean::Point::Point(Vector3d coordinates, Euclidean* space) {
+	this->coordinates = coordinates;
+	this->space = space;
+}
+
+Euclidean::Point::Point(Euclidean* space) {
+	coordinates << 0,0,0;
+	this->space = space;
+}
+
+Euclidean::Point::Point() {
+	coordinates << 0,0,0;
+}
 
 Euclidean* Euclidean::Point::getSpace() {
 	return space;
 }
 
-//Euclidean::Point Euclidean::PointOfReference::position;
-//Matrix3d Euclidean::PointOfReference::orientation;
-
-/*Manifold::Point Euclidean::Point::midpoint(Manifold::Point point) {
-	
-}*/
-
-std::vector<Vector3d> Euclidean::PointOfReference::vectorsFromPoint(std::tr1::shared_ptr<Manifold::Point> point) {		//They have to have the same parent.
-	std::tr1::array<double,3> c0 = position.coordinates;
-	std::tr1::array<double,3> c1 = std::tr1::static_pointer_cast<Euclidean::Point>(point)->coordinates;
-        Matrix3d test();
-	Vector3d base = orientation*Vector3d(c1[0]-c0[0],c1[1]-c0[1],c1[2]-c0[2]);
-	std::vector<Vector3d> out(1,base);
-	return out;
+Vector3d Euclidean::Point::getCoordinates(){
+	return coordinates;
 }
 
-std::tr1::shared_ptr<Manifold::Point> Euclidean::PointOfReference::pointFromVector(Vector3d vector) {
-	//std::cout << position.coordinates[0]+vector[0] << "," << position.coordinates[1]+vector[1] << "," << position.coordinates[2]+vector[2] << "\n";
-	return std::tr1::shared_ptr<Manifold::Point>(new Euclidean::Point(position.coordinates[0]+vector[0], position.coordinates[1]+vector[1], position.coordinates[2]+vector[2], position.space));
+Vector3d Euclidean::Point::getVector(){
+	return coordinates;
+}
+
+Manifold::GeodesicPtr Euclidean::getGeodesic(Manifold::PointOfReferencePtr start, Manifold::PointPtr end) {
+	Euclidean::PointOfReferencePtr castedStart = std::tr1::static_pointer_cast<Euclidean::PointOfReference>(start);
+	Euclidean::PointPtr castedEnd = std::tr1::static_pointer_cast<Euclidean::Point>(end);
+	return Manifold::GeodesicPtr(new Euclidean::Geodesic(castedStart, castedEnd, castedEnd->getCoordinates()-castedStart->getCoordinates()));
+}
+
+Matrix3d Euclidean::PointOfReference::getOrientation() {
+	return orientation;
+}
+
+Vector3d Euclidean::PointOfReference::getCoordinates() {
+	return position->getCoordinates();
+}
+
+Vector3d Euclidean::Geodesic::getVector() {
+	return vector;
+}
+
+Manifold::GeodesicPtr Euclidean::getGeodesic(Manifold::PointOfReferencePtr start, Vector3d vector) {
+	Euclidean::PointOfReferencePtr castedStart = std::tr1::static_pointer_cast<Euclidean::PointOfReference>(start);
+	Euclidean::PointPtr end(new Euclidean::Point(castedStart->getCoordinates() + vector, (Euclidean*) start->getSpace()));
+	return Manifold::GeodesicPtr(new Euclidean::Geodesic(castedStart, end, vector));
+}
+
+Manifold::PointPtr Euclidean::Geodesic::getEndPoint() {
+	return std::tr1::static_pointer_cast<Manifold::Point>(end);
+}
+
+void Euclidean::Point::setCoordinates(double x, double y, double z) {
+	coordinates[0] = x;
+	coordinates[1] = y;
+	coordinates[2] = z;
+}
+
+Euclidean::PointOfReference::PointOfReference(Euclidean::PointPtr position, Matrix3d orientation) {
+	this->position = position;
+	this->orientation = orientation;
 }
 
 Euclidean::PointOfReference::PointOfReference(Euclidean* space) {
 	orientation = orientation.Identity();
-	position.space = space;
+	position = Euclidean::PointPtr(new Euclidean::Point(space));
 }
 
-Euclidean::PointOfReference::~PointOfReference() {
+Manifold::PointPtr Euclidean::PointOfReference::getPosition() {
+	return std::tr1::static_pointer_cast<Manifold::Point>(position);
 }
 
-Manifold::Point* Euclidean::PointOfReference::getPosition() {
-	return &position;
-}
-
-void Euclidean::PointOfReference::move(Vector3d dir) {
-	dir = orientation*dir;
-	position.coordinates[0] += dir[0];
-	position.coordinates[1] += dir[1];
-	position.coordinates[2] += dir[2];
-	//std::cout << "(" << dir[0] << ", " << dir[1] << ", " << dir[2] << ")\n" << std::flush;
-	//std::cout << "(" << position.getCoordinates()[0] << ", " << position.getCoordinates()[1] << ", " << position.getCoordinates()[2] << ")\n" << std::flush;
+Manifold::PointOfReferencePtr Euclidean::Geodesic::getEndPointOfReference() {
+	Matrix3d orientation(std::tr1::static_pointer_cast<Euclidean::PointOfReference>(start)->getOrientation());
+	return Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(std::tr1::static_pointer_cast<Euclidean::Point>(end), orientation));
 }
 
 void Euclidean::PointOfReference::rotate(Matrix3d rot) {
 	orientation = rot*orientation;
+}
+
+Euclidean::Geodesic::Geodesic(Euclidean::PointOfReferencePtr start, Euclidean::PointPtr end, Vector3d vector) {
+	this->start = start;
+	this->end = end;
+	this->vector = vector;
 }
 

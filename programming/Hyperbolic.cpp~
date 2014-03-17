@@ -102,6 +102,7 @@ std::tr1::shared_ptr<Manifold::Point> Hyperbolic::PointOfReference::pointFromVec
 	double x12e2d = x1*x1*exp(2*dist);
 	double y0 = ((r+c)*rc-x12e2d)*rc/(x12e2d+rc*rc);
 	double y1 = sqrt(r*r-(y0-c)*(y0-c));
+	std::cout << "Point:	" << "(" << x[0]+y[0]*v0 << "",	"" << x[1]+y[0]*v1 << "",	"" << y[1] << ")\n";
 	return std::tr1::shared_ptr<Manifold::Point>(new Hyperbolic::Point(x[0]+y0*v0,x[1]+y0*v1,y1,position.space));
 }
 

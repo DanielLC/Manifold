@@ -38,10 +38,11 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 	//Vector3d v0 = point->getPosition()->getVector();
 	//assert(v0 == v0);
 	double epsilon = 0.001;
-	Vector3d v0 = pointFromVector(vector)->getPosition()->getVector();
-	Vector3d vx = pointFromVector(vector + Vector3d(epsilon,0,0))->getPosition()->getVector();
-	Vector3d vy = pointFromVector(vector + Vector3d(0,epsilon,0))->getPosition()->getVector();
-	Vector3d vz = pointFromVector(vector + Vector3d(0,0,epsilon))->getPosition()->getVector();
+	//Manifold* space = point->getPosition()->getSpace();
+	Vector3d v0 = this->pointFromVector(vector)->getVector();
+	Vector3d vx = this->pointFromVector(vector + Vector3d(epsilon,0,0))->getVector();
+	Vector3d vy = this->pointFromVector(vector + Vector3d(0,epsilon,0))->getVector();
+	Vector3d vz = this->pointFromVector(vector + Vector3d(0,0,epsilon))->getVector();
 	assert(vz == vz);
 	Matrix3d jacobean;
 	jacobean << vx-v0,vy-v0,vz-v0;
@@ -60,8 +61,8 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 		//std::cout << "v1-v0:\n" << v1-v0 << std::endl;
 		//std::cout << "delta:\n" << delta << std::endl;
 		//std::cout << "vector:\n" << vector << std::endl;
-		std::cout << "delta+vector:\n" << delta+vector << std::endl;
-		std::cout << "pointOfReference->vectorFromPoint(point):\n" << pointOfReference->vectorsFromPoint(point->getPosition())[0] << std::endl;
+		//std::cout << "delta+vector:\n" << delta+vector << std::endl;
+		//std::cout << "pointOfReference->vectorFromPoint(point):\n" << pointOfReference->vectorsFromPoint(point->getPosition())[0] << std::endl;
 		return delta+vector;
 	} else {
 		return vectorFromPointAndNearVector(point, delta+vector);
@@ -71,7 +72,7 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 std::tr1::shared_ptr<Compound::Point> Compound::PointOfReference::pointFromVector(Vector3d vector) {
 	assert(vector == vector);
 	//This will need to be made more sophisticated when Compound is made to support more than one space.
-	std::tr1::shared_ptr<Compound::Point> out(new Compound::Point(pointOfReference->pointFromVector(vector)));
+	std::tr1::shared_ptr<Compound::Point> out(new Compound::Point(pointOfReference->getPosition()->getSpace()->pointFromVector(pointOfReference, vector)));
 	return out;
 }
 
@@ -79,15 +80,15 @@ Compound::PointOfReference::PointOfReference(std::tr1::shared_ptr<Manifold::Poin
 	this->pointOfReference = pointOfReference;
 }
 
-Compound::PointOfReference::~PointOfReference() {
-}
+/*Compound::PointOfReference::~PointOfReference() {
+}*/
 
-Manifold::Point* Compound::PointOfReference::getPosition() {
+Manifold::PointPtr Compound::PointOfReference::getPosition() {
 	return pointOfReference->getPosition();
 }
 
 void Compound::PointOfReference::move(Vector3d dir) {
-	pointOfReference->move(dir);
+	pointOfReference = pointOfReference->getSpace()->getPointOfReference(pointOfReference, dir);
 }
 
 void Compound::PointOfReference::rotate(Matrix3d rot) {

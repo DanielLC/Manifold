@@ -128,8 +128,8 @@ Hyperbolic::PointOfReference::PointOfReference(Hyperbolic* space) {
 	position.space = space;
 }
 
-Hyperbolic::PointOfReference::~PointOfReference() {
-}
+/*Hyperbolic::PointOfReference::~PointOfReference() {
+}*/
 
 Manifold::Point* Hyperbolic::PointOfReference::getPosition() {
 	return &position;

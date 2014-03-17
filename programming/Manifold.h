@@ -9,32 +9,41 @@ using Eigen::Matrix3d;
 using Eigen::Vector3d;
 
 //TODO: It might be possible to make it a template, given the address of a constant pointer to k.
-
 class Manifold {
 	public:
+		class Point;
+		class PointOfReference;
+		class Geodesic;
+		typedef std::tr1::shared_ptr<Point> PointPtr;
+		typedef std::tr1::shared_ptr<PointOfReference> PointOfReferencePtr;
+		typedef std::tr1::shared_ptr<Geodesic> GeodesicPtr;
+		typedef std::tr1::array<PointPtr,3> Triangle;
 		class Point {
 			public:
 				virtual Manifold* getSpace() = 0;
-				virtual ~Point();
 				virtual Vector3d getVector() = 0;
 		};
-		typedef std::tr1::shared_ptr<Point> PointP;
-		typedef std::tr1::array<PointP,3> Triangle;
 		class PointOfReference {
 			public:
-				virtual ~PointOfReference();
-				virtual std::vector<Vector3d> vectorsFromPoint(std::tr1::shared_ptr<Point> point) = 0;
-				virtual std::tr1::shared_ptr<Point> pointFromVector(Vector3d vector) = 0;
-				virtual void move(Vector3d dir) = 0;
 				virtual void rotate(Matrix3d rot) = 0;
-				virtual Point* getPosition() = 0;
-				//virtual void setPosition(Manifold::Point* position) = 0;
-				std::vector<Triangle> icosahedron();
-				std::vector<Triangle> icosahedron(double k);
-				std::vector<Triangle> octahedron();
-				std::vector<Triangle> octahedron(double k);
+				virtual PointPtr getPosition() = 0;
+				Manifold* getSpace();
 		};
-		virtual ~Manifold();
+		class Geodesic {
+			public:
+				virtual PointPtr getEndPoint() = 0;
+				virtual PointOfReferencePtr getEndPointOfReference() = 0;
+				virtual Vector3d getVector() = 0;
+		};
+		Vector3d vectorFromPoint(PointOfReferencePtr start, PointPtr end);		//Maybe these two should be in PointOfReference.
+		PointPtr pointFromVector(PointOfReferencePtr start, Vector3d vector);	//
+		PointOfReferencePtr getPointOfReference(PointOfReferencePtr start, Vector3d vector);
+		virtual GeodesicPtr getGeodesic(PointOfReferencePtr start, PointPtr end) = 0;
+		virtual GeodesicPtr getGeodesic(PointOfReferencePtr start, Vector3d vector) = 0;
+		std::vector<Triangle> icosahedron(PointOfReferencePtr por);
+		std::vector<Triangle> icosahedron(PointOfReferencePtr por, double k);
+		std::vector<Triangle> octahedron(PointOfReferencePtr por);
+		std::vector<Triangle> octahedron(PointOfReferencePtr por, double k);
 
 		//virtual Triangle makeTriangle() = 0;		//For debug purposes
 		//virtual std::vector<Triangle> makeTriangleList() = 0;

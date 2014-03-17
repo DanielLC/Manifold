@@ -101,7 +101,7 @@ std::tr1::shared_ptr<Manifold::Point> PortalSpace::PointOfReference::pointFromVe
 	std::tr1::array<double,2> y2d = x2d.pointFromVector(z2d).getCoordinates();
 	y2d[1] /= k;
 	Vector4d y;
-	Vector3d ytail = position.spherical*cos(z2d[1])+v.end<3>().normalized()*sin(z2d[1]);
+	Vector3d ytail = position.spherical*cos(y2d[1])+v.end<3>().normalized()*sin(y2d[1]);
 	y << y2d[0], ytail;
 	//std::cout << "y: " << y << "\n" << std::flush;
 	std::tr1::shared_ptr<PortalSpace::Point> out = std::tr1::shared_ptr<PortalSpace::Point>(new PortalSpace::Point(y[0],y[1],y[2],y[3],position.space));
@@ -144,7 +144,7 @@ void PortalSpace::PointOfReference::move(Vector3d dir) {	//Don't forget to check
 	std::tr1::array<double,2> y2d = pointAndRot.first.getCoordinates();
 	y2d[1] /= k;
 	double rot = pointAndRot.second;
-	Vector3d ytail = position.spherical*cos(z2d[1])+v.end<3>().normalized()*sin(z2d[1]);
+	Vector3d ytail = position.spherical*cos(y2d[1])+v.end<3>().normalized()*sin(y2d[1]);
 
 	assert(fabs(ytail.norm()-1) < EPSILON);
 	Vector3d row1 = v.end<3>().normalized();

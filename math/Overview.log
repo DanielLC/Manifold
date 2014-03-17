@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.6.23)  30 JUL 2013 13:49
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.9.4)  12 MAR 2014 18:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -303,72 +303,104 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Underfull \vbox (badness 10000) has occurred while \output is active []
+<../images/IntersectingSpaces.png, id=1, 642.4pt x 481.8pt>
+File: ../images/IntersectingSpaces.png Graphic file (type png)
 
- [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<PortalSpace.png, id=14, 256.96pt x 313.17pt>
-File: PortalSpace.png Graphic file (type png)
- <use PortalSpace.png>
-Package pdftex.def Info: PortalSpace.png used on input line 51.
+<use ../images/IntersectingSpaces.png>
+Package pdftex.def Info: ../images/IntersectingSpaces.png used on input line 31
+.
+(pdftex.def)             Requested size: 128.47772pt x 96.35829pt.
+
+Underfull \hbox (badness 1383) in paragraph at lines 31--31
+[]\OT1/cmr/m/n/10 (a) Two spaces naively con-
+ []
+
+<../images/PortalSpace.png, id=3, 256.96pt x 313.17pt>
+File: ../images/PortalSpace.png Graphic file (type png)
+
+<use ../images/PortalSpace.png>
+Package pdftex.def Info: ../images/PortalSpace.png used on input line 35.
+(pdftex.def)             Requested size: 77.0886pt x 93.95172pt.
+
+<../images/MergedSpaces.png, id=4, 642.4pt x 481.8pt>
+File: ../images/MergedSpaces.png Graphic file (type png)
+
+<use ../images/MergedSpaces.png>
+Package pdftex.def Info: ../images/MergedSpaces.png used on input line 39.
+(pdftex.def)             Requested size: 128.47772pt x 96.35829pt.
+ [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <../images/IntersectingS
+paces.png> <../images/PortalSpace.png (PNG copy)> <../images/MergedSpaces.png>]
+File: ../images/PortalSpace.png Graphic file (type png)
+ <use ../images/PortalSpace.png>
+Package pdftex.def Info: ../images/PortalSpace.png used on input line 66.
 (pdftex.def)             Requested size: 85.65181pt x 104.38814pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 51--51
-[]\OT1/cmr/m/n/10 (a) Part of a 2-
- []
-
-<BlackHole.png, id=15, 149.55875pt x 311.1625pt>
-File: BlackHole.png Graphic file (type png)
- <use BlackHole.png>
-Package pdftex.def Info: BlackHole.png used on input line 55.
-(pdftex.def)             Requested size: 49.85202pt x 103.719pt.
-
-Underfull \hbox (badness 3514) in paragraph at lines 55--55
-\OT1/cmr/m/n/10 2-black hole
- []
-
-<ConePoint.png, id=16, 250.9375pt x 210.7875pt>
-File: ConePoint.png Graphic file (type png)
- <use ConePoint.png>
-Package pdftex.def Info: ConePoint.png used on input line 59.
-(pdftex.def)             Requested size: 83.64435pt x 70.26125pt.
-
-<OuterTorus.png, id=17, 262.9825pt x 122.4575pt>
-File: OuterTorus.png Graphic file (type png)
- <use OuterTorus.png>
-Package pdftex.def Info: OuterTorus.png used on input line 63.
-(pdftex.def)             Requested size: 87.65927pt x 40.81844pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 63--63
+Underfull \hbox (badness 10000) in paragraph at lines 66--66
 []\OT1/cmr/m/n/10 (d) Part of a 2-
  []
 
-[2 <./PortalSpace.png (PNG copy)> <./BlackHole.png (PNG copy)> <./ConePoint.png
- (PNG copy)> <./OuterTorus.png (PNG copy)>] [3] (./Overview.aux) ) 
+<../images/BlackHole.png, id=21, 149.55875pt x 311.1625pt>
+File: ../images/BlackHole.png Graphic file (type png)
+
+<use ../images/BlackHole.png>
+Package pdftex.def Info: ../images/BlackHole.png used on input line 70.
+(pdftex.def)             Requested size: 49.85202pt x 103.719pt.
+
+Underfull \hbox (badness 3514) in paragraph at lines 70--70
+\OT1/cmr/m/n/10 2-black hole
+ []
+
+<../images/ConePoint.png, id=22, 250.9375pt x 210.7875pt>
+File: ../images/ConePoint.png Graphic file (type png)
+
+<use ../images/ConePoint.png>
+Package pdftex.def Info: ../images/ConePoint.png used on input line 74.
+(pdftex.def)             Requested size: 83.64435pt x 70.26125pt.
+
+<../images/OuterTorus.png, id=23, 262.9825pt x 122.4575pt>
+File: ../images/OuterTorus.png Graphic file (type png)
+
+<use ../images/OuterTorus.png>
+Package pdftex.def Info: ../images/OuterTorus.png used on input line 78.
+(pdftex.def)             Requested size: 87.65927pt x 40.81844pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+[]\OT1/cmr/m/n/10 (g) Part of a 2-
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[2] [3 <../images/BlackHole.png (PNG copy)> <../images/ConePoint.png (PNG copy)
+> <../images/OuterTorus.png (PNG copy)>] (./Overview.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 3164 strings out of 495059
- 40778 string characters out of 3182030
- 99386 words of memory out of 3000000
- 6139 multiletter control sequences out of 15000+200000
+ 3175 strings out of 495059
+ 41256 string characters out of 3182031
+ 100386 words of memory out of 3000000
+ 6147 multiletter control sequences out of 15000+200000
  11211 words of font info for 44 fonts, out of 3000000 for 9000
  175 hyphenation exceptions out of 8191
  38i,7n,26p,770b,212s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Overview.pdf (3 pages, 186910 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
+0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Overview.pdf (3 pages, 317907 bytes).
 PDF statistics:
- 70 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 75 PDF objects out of 1000 (max. 8388607)
+ 48 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

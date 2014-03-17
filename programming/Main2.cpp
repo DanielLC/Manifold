@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <unistd.h>
-#include "PortalSpace2d.h"
+#include "PortalSpace2d2.h"
 #include <Eigen/Core>
 using Eigen::Matrix2d;
 using Eigen::Vector2d;
@@ -13,12 +13,12 @@ using Eigen::Vector2d;
 
 #define KEY_ESCAPE 27
 
-PortalSpace2d* space;
-PortalSpace2d::Point position;
+Hyperbolic2d* space;
+Hyperbolic2d::Point position;
 double rotation;
 //std::tr1::shared_ptr<Manifold> space;
 //std::tr1::shared_ptr<Manifold::PointOfReference> por;
-std::vector<PortalSpace2d::Point> pointList;
+std::vector<Hyperbolic2d::Point> pointList;
 
 Matrix2d rotate(double theta) {
 	Matrix2d out;
@@ -112,14 +112,14 @@ void initialize ()
 	glClearColor(0.0, 0.0, 0.0, 1.0);											// specify clear values for the color buffers						
 
 	//The part where the space is defined		TODO
-	PortalSpace2d* hyperbolic = new PortalSpace2d();
+	Hyperbolic2d* hyperbolic = new Hyperbolic2d();
 	space = hyperbolic;
 	constructPointList();
 	glColor3f(1.0f,1.0f,1.0f);
 }
 
 void move(double x, double y) {
-	std::pair<PortalSpace2d::Point, double> pointAndRot = position.pointAndRotFromVector(rotate(rotation)*Vector2d(x,y));
+	std::pair<Hyperbolic2d::Point, double> pointAndRot = position.pointAndRotFromVector(rotate(rotation)*Vector2d(x,y));
 	position = pointAndRot.first;
 	rotation += pointAndRot.second;
 }

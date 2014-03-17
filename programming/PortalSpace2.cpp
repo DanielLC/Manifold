@@ -31,6 +31,10 @@ PortalSpace::Point::Point(double hyperbolic, double x, double y, double z, Porta
 }
 //PortalSpace::Point::~Point() {}
 
+Vector3d PortalSpace::Point::getVector() {
+	return exp(hyperbolic)*spherical;
+}
+
 PortalSpace* PortalSpace::Point::getSpace() {
 	return space;
 }

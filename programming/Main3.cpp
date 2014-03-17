@@ -4,8 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <unistd.h>
-//#include "Euclidean.h"
-#include "Hyperbolic.h"
+#include "Euclidean.h"
+//#include "Hyperbolic.h"
 //#include "R2xS1.h"
 //#include "PortalSpace.h"
 //#include "SurfaceOfRevolution.h"
@@ -110,8 +110,8 @@ void initialize ()
 	glClearColor(0.0, 0.0, 0.0, 1.0);											// specify clear values for the color buffers						
 
 	space = new Compound();
-	Hyperbolic* hyperbolic = new Hyperbolic();
-	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new Hyperbolic::PointOfReference(hyperbolic)));
+	Euclidean* euclidean = new Euclidean();
+	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new Euclidean::PointOfReference(euclidean)));
 
 	triangleList = por->icosahedron(.1);
 	glColor3f(1.0f,1.0f,1.0f);

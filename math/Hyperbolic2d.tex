@@ -1,16 +1,6 @@
-\documentclass[12pt]{amsart}
-\usepackage{a4}
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage{multicol}
-\usepackage{verbatim}
-\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
-\newcommand{\ignore}[1]{}
-\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
-\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
-\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
-\begin{document}
+\subsection{2d Hyperbolic Geometry}
 
-Finding the direction and distance from one point to another in $H^2$:
+\subsubsection{Finding the direction and distance from one point to another}
 
 We will be using the half plane model: $\textbf{H}^2 \mapsto \{(x_1,x_2):x_2 > 0\}$.
 
@@ -68,11 +58,7 @@ If the path is clockwise instead of counterclockwise, it comes out to $-\ln\frac
 
 Of course, none of this works if the two points share the same first two coordinates. In that case, the problem is easier. The direction is $(0,1)$, and the distance is $\int_{x_3}^{y_3} \frac{1}{t} dt = \ln\frac{y_3}{x_3}$. This gives a vector of $(0,\ln\frac{y_3}{x_3})$.
 
-\bigskip
-
-Finding the point a given distance in a given direction from another:
-
-\bigskip
+\subsubsection{Finding the point a given distance in a given direction from another}
 
 Given initial point $\textbf{x} = (x_1,x_2)$ and vector $\textbf{z} = (z_1,z_2)$,
 
@@ -151,5 +137,3 @@ $e^{z_2} = \frac{y_2}{x_2}$
 $y_2 = x_2e^{z_2}$
 
 Clearly, $y_1$ remains constant and there is no rotation.
-
-\end{document}

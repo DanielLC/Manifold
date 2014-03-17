@@ -18,6 +18,7 @@ PortalSpace2d::Point::Point() {
 }
 
 PortalSpace2d::Point::Point(double t, double thetak) : hyperbolic(exp(thetak)/sqrt(1/(t*t)+1)*sgn(t),exp(thetak)/sqrt(t*t+1)) {
+	//std::cout << "t:\t" << t << "\ntheta k:\t" << thetak << std::endl;
 	assert(fabs(t - getT()) < EPSILON);
 	assert(fabs(thetak - getThetaK()) < EPSILON);
 }
@@ -55,35 +56,37 @@ std::tr1::array<double,2> PortalSpace2d::Point::getCoordinates(){
 }
 
 Vector2d PortalSpace2d::Point::vectorFromPoint(PortalSpace2d::Point point) {
-	Vector2d cartesian = hyperbolic.vectorFromPoint(point.hyperbolic);
+	return this->getGeodesic(point)->getVector();
+}
+
+Vector2d PortalSpace2d::Geodesic::getVector() {
+	//std::cout << "From:\t" << getStartPoint().getT() << ",\t" << getStartPoint().getThetaK() << std::endl;
+	//std::cout << "To:\t" << getEndPoint().getT() << ",\t" << getEndPoint().getThetaK() << std::endl;
+	Vector2d cartesian = geodesic->getVector();
+	double sin = getStartPoint().getSin();
+	double cos = getStartPoint().getCos();
 	Matrix2d m;
-	m <<	-getSin(),	getCos(),		//This matrix is the inverse of the other two. It turns out that it's its own inverse, so it's the same matrix.
-			getCos(),	getSin();
+	m <<	-sin,	cos,	//This matrix is the inverse of the other two. It turns out that it's its own inverse, so it's the same matrix.
+			cos,	sin;
 	Vector2d polar = m*cartesian;
-	/*std::cout << "pointFromVector(polar).hyperbolic.getCoordinates()[0]:	" << pointFromVector(polar).hyperbolic.getCoordinates()[0] << "\n";
-	std::cout << "point.hyperbolic.getCoordinates()[0]:	" << point.hyperbolic.getCoordinates()[0] << "\n";
-	std::cout << "pointFromVector(polar).hyperbolic.getCoordinates()[1]:	" << pointFromVector(polar).hyperbolic.getCoordinates()[1] << "\n";
-	std::cout << "point.hyperbolic.getCoordinates()[1]:	" << point.hyperbolic.getCoordinates()[1] << "\n";
-	//std::cout << "pointFromVector(polar).hyperbolic.getCoordinates()[0] - point.hyperbolic.getCoordinates()[0]:	" << pointFromVector(polar).hyperbolic.getCoordinates()[0] - point.hyperbolic.getCoordinates()[0] << "\n";*/
-	//std::cout << "fabs(pointFromVector(polar).hyperbolic.getCoordinates()[0] - point.hyperbolic.getCoordinates()[0]):	" << fabs(pointFromVector(polar).hyperbolic.getCoordinates()[0] - point.hyperbolic.getCoordinates()[0]) << "\n";
-	//assert(fabs(pointFromVector(polar).hyperbolic.getCoordinates()[0] - point.hyperbolic.getCoordinates()[0]) < 0.00001);
-	//This assertion tends to get cut close.
-	//assert(fabs(pointFromVector(polar).hyperbolic.getCoordinates()[1] - point.hyperbolic.getCoordinates()[1]) < 0.00001);
+	//std::cout << "Vector:\n" << polar << std::endl;
 	return polar;
 }
 
 PortalSpace2d::Point PortalSpace2d::Point::pointFromVector(Vector2d z) {
+	return this->getGeodesic(z)->getEndPoint();
+}
+
+std::tr1::shared_ptr<PortalSpace2d::Geodesic> PortalSpace2d::Point::getGeodesic(Vector2d z) {
 	assert(z == z);
-	std::tr1::array<double,2> coordinates = hyperbolic.getCoordinates();
+	double sin = getSin();
+	double cos = getCos();
 	Matrix2d m;
-	m <<	-getSin(),	getCos(),
-			getCos(),	getSin();
+	m <<	-sin,	cos,	//This matrix is the inverse of the other two. It turns out that it's its own inverse, so it's the same matrix.
+			cos,	sin;
 	Vector2d cartesian = m*z;
 	assert(cartesian == cartesian);
-	/*std::cout << "xangle:\n" << xangle << "\n";
-	std::cout << "m:\n" << m << "\n";
-	std::cout << "cartesian:\n" << cartesian << "\n";*/
-	return PortalSpace2d::Point(hyperbolic.pointFromVector(cartesian));
+	return std::tr1::shared_ptr<PortalSpace2d::Geodesic>(new PortalSpace2d::Geodesic(hyperbolic.getGeodesic(cartesian)));
 }
 
 void PortalSpace2d::Point::setCoordinates(double t, double thetak) {
@@ -91,31 +94,42 @@ void PortalSpace2d::Point::setCoordinates(double t, double thetak) {
 }
 
 std::pair<PortalSpace2d::Point, double> PortalSpace2d::Point::pointAndRotFromVector(Vector2d z) {
-	std::tr1::array<double,2> coordinates = hyperbolic.getCoordinates();
-	assert(coordinates[1] > 0);
-	Vector2d xangle(coordinates[0],coordinates[1]);
-	//std::cout << "position:\n" << xangle << "\n";
-	xangle.normalize();
-	Matrix2d m;
-	m <<	-getSin(),	getCos(),
-			getCos(),	getSin();
-	Vector2d cartesian = m*z;
-	std::pair<Hyperbolic2d::Point, double> pointAndRot = hyperbolic.pointAndRotFromVector(cartesian);
-	assert(hyperbolic.pointFromVector(cartesian).getCoordinates()[1] > 0);
-	assert(pointAndRot.first.getCoordinates()[1] > 0);
-	//assert(pointAndRot.first == hyperbolic.pointFromVector(cartesian));
-	PortalSpace2d::Point ypoint(pointAndRot.first);
-	double rot = -pointAndRot.second - (atan(ypoint.getT()) - atan(getT()));
-	//If I do rot like this, it's clearly broken. If I do rot the other way, the 3d extension is clearly broken.
-	/*std::cout << "pointAndRot.first:	(" << pointAndRot.first.getCoordinates()[0] << ",	" << pointAndRot.first.getCoordinates()[1] << ")\n";
-	std::cout << "pointAndRot.second:	" << pointAndRot.second << "\n";
-	std::cout << "ypoint.getT():	" << ypoint.getT() << "\n";
-	std::cout << "getT():	" << getT() << "\n";
-	std::cout << "rot:	" << rot << "\n";*/
-	/*std:: cout << "Hyperbolic2d rot:	" << pointAndRot.second << "\n";
-	std:: cout << "Hyperbolic2d vector:\n" << cartesian << "\n";
-	std:: cout << "PortalSpace2d rot:	" << rot << "\n";
-	std:: cout << "PortalSpace2d vector:\n" << z << "\n";*/
-	return std::pair<PortalSpace2d::Point, double>(ypoint,rot);
+	std::tr1::shared_ptr<PortalSpace2d::Geodesic> geodesic = this->getGeodesic(z);
+	return std::pair<PortalSpace2d::Point, double>(geodesic->getEndPoint(), geodesic->getRot());
+}
+
+Hyperbolic2d::Point PortalSpace2d::Point::getPosition() {
+	return hyperbolic;
+}
+
+std::tr1::shared_ptr<PortalSpace2d::Geodesic> PortalSpace2d::Point::getGeodesic(PortalSpace2d::Point point) {
+	return std::tr1::shared_ptr<PortalSpace2d::Geodesic>(new PortalSpace2d::Geodesic(hyperbolic.getGeodesic(point.getPosition())));
+}
+
+PortalSpace2d::Geodesic::Geodesic(std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic) {
+	this->geodesic = geodesic;
+}
+
+PortalSpace2d::Point PortalSpace2d::Geodesic::getStartPoint() {
+	return PortalSpace2d::Point(geodesic->getStartPoint());
+}
+
+PortalSpace2d::Point PortalSpace2d::Geodesic::getEndPoint() {
+	return PortalSpace2d::Point(geodesic->getEndPoint());
+}
+
+double PortalSpace2d::Geodesic::getRot() {
+	//std::cout << "x.t:\t" << getEndPoint().getT() << "\ny.t:\t" << getStartPoint().getT() << "\nhyperbolic rot:\t" << geodesic->getRot() << std::endl;
+	double rot = -geodesic->getRot() - (atan(this->getEndPoint().getT()) - atan(this->getStartPoint().getT()));
+	//std::cout << "rot:\t" << rot << std::endl;
+	return rot;
+}
+
+double PortalSpace2d::Point::operator[](int i) {
+	if(i == 0) {
+		return getT();
+	} else {
+		return getThetaK();
+	}
 }
 

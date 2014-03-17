@@ -4,13 +4,14 @@
 #include <vector>
 #include <iostream>
 #include <unistd.h>
+#include "Compound.h"
 //#include "Euclidean.h"
 //#include "Hyperbolic.h"
 //#include "R2xS1.h"
-//#include "PortalSpace.h"
-#include "SurfaceOfRevolution.h"
+//#include "PortalSpace2d2.h"
+#include "Manifold.h"
+//#include "SurfaceOfRevolution.h"
 //#include "Cylinder2d.h"
-#include "PortalSpace2d2.h"
 //#include "BlackHole2d.h"
 #include <Eigen/Core>
 #include <cstdlib>
@@ -21,11 +22,10 @@ using Eigen::Vector3d;
 
 #define KEY_ESCAPE 27
 
-Manifold* space;
-Manifold::PointOfReference* por;
-//std::tr1::shared_ptr<Manifold> space;
-//std::tr1::shared_ptr<Manifold::PointOfReference> por;
+std::tr1::shared_ptr<Manifold> space;
+Manifold::PointOfReferencePtr por;
 std::vector<Manifold::Triangle> triangleList;
+const double SPEED = 0.01;
 
 typedef struct {
     int width;
@@ -46,7 +46,6 @@ void display()
 	glLoadIdentity();
 	glTranslatef(0.0f,0.0f,-3.0f);
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-	por->vectorsFromPoint(triangleList[0][0]);
 	//std::cout << "test\n" << std::flush;
 	/*
 	 * Triangle code starts here
@@ -68,48 +67,24 @@ void display()
 		glColor3f(1.0f,0.0f,0.0f);			
 		glVertex2f( 1.0f,-1.0f);		
 	glEnd();*/
-	std::vector<Vector3d> v0list;
-	std::vector<Vector3d> v1list;
-	std::vector<Vector3d> v2list;
 	for(int i=0; i<triangleList.size(); ++i) {
-		v0list = por->vectorsFromPoint(triangleList[i][0]);
-		v1list = por->vectorsFromPoint(triangleList[i][1]);
-		v2list = por->vectorsFromPoint(triangleList[i][2]);
-		//std::cout << v0list[0] << "\n" << std::flush;
-		for(int j0=0; j0<v0list.size(); ++j0) {
-			/*int j1=-1;				//Finding j1 and j2 seems to be the most computationally intesive part.
-			double mindist2 = INFINITY;
-			for(int k=0; k<v1list.size(); ++k) {
-				if((v0list[j0]-v1list[k]).squaredNorm() < mindist2) {
-					mindist2 = (v0list[j0]-v1list[k]).squaredNorm();
-					j1 = k;
-				}
-			}
-			int j2=-1;
-			mindist2 = INFINITY;
-			for(int k=0; k<v1list.size(); ++k) {
-				if((v0list[j0]-v2list[k]).squaredNorm() < mindist2) {
-					mindist2 = (v0list[j0]-v2list[k]).squaredNorm();
-					j2 = k;
-				}
-			}*/
-			int j1 = 0;
-			int j2 = 0;
-			
-			if(v0list[j0][1] < 0 || v1list[j1][1] < 0 || v2list[j2][1] < 0)
-				continue;
-			v0list[j0] /= v0list[j0][1];
-			v1list[j1] /= v1list[j1][1];
-			v2list[j2] /= v2list[j2][1];
-			/*std::cout << v0list[j0][0] << "," << v0list[j0][1] << "," << v0list[j0][2] << "\n";
-			std::cout << v1list[j1][0] << "," << v1list[j1][1] << "," << v1list[j1][2] << "\n";
-			std::cout << v2list[j2][0] << "," << v2list[j2][1] << "," << v2list[j2][2] << "\n";*/
-			glBegin(GL_TRIANGLES);			
-				glVertex2f(v0list[j0][0],v0list[j0][2]);
-				glVertex2f(v1list[j1][0],v1list[j1][2]);
-				glVertex2f(v2list[j2][0],v2list[j2][2]);
-			glEnd();
-		}
+	Vector3d v0 = space->vectorFromPoint(por, triangleList[i][0]);
+	Vector3d v1 = space->vectorFromPoint(por, triangleList[i][1]);
+	Vector3d v2 = space->vectorFromPoint(por, triangleList[i][2]);
+	//std::cout << v0list[0] << "\n" << std::flush;
+		if(v0[1] < 0 || v1[1] < 0 || v2[1] < 0)
+			continue;
+		v0 /= v0[1];
+		v1 /= v1[1];
+		v2 /= v2[1];
+		//std::cout << v0list[j0][0] << "," << v0list[j0][1] << "," << v0list[j0][2] << "\n";
+		//std::cout << v1list[j1][0] << "," << v1list[j1][1] << "," << v1list[j1][2] << "\n";
+		//std::cout << v2list[j2][0] << "," << v2list[j2][1] << "," << v2list[j2][2] << "\n";
+		glBegin(GL_TRIANGLES);			
+			glVertex2f(v0[0],v0[2]);
+			glVertex2f(v1[0],v1[2]);
+			glVertex2f(v2[0],v2[2]);
+		glEnd();
 	}
  
 	glutSwapBuffers();
@@ -134,22 +109,24 @@ void initialize ()
 	glClearColor(0.0, 0.0, 0.0, 1.0);											// specify clear values for the color buffers						
 
 	//The part where the space is defined		TODO
-	SurfaceOfRevolution<PortalSpace2d>* sor = new SurfaceOfRevolution<PortalSpace2d>();
-	space = sor;
-	por = new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(sor);
-	/*PortalSpace* portalSpace = new PortalSpace();
-	space = portalSpace;
-	por = new PortalSpace::PointOfReference(portalSpace);*/
-	/*Hyperbolic* hyperbolic = new Hyperbolic();
-	space = hyperbolic;
-	por = new Hyperbolic::PointOfReference(hyperbolic);*/
+	Compound* compound = new Compound();
+	Euclidean* euclidean = new Euclidean();
+	space = std::tr1::shared_ptr<Manifold>(compound);
+	Manifold::PointOfReferencePtr euclidPOR(new Euclidean::PointOfReference(euclidean));
+	por = Manifold::PointOfReferencePtr(new Compound::PointOfReference(euclidPOR, compound));
+	/*SurfaceOfRevolution<PortalSpace2d>* sor = new SurfaceOfRevolution<PortalSpace2d>();
+	space = std::tr1::shared_ptr<Manifold>(sor);
+	por = Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(sor));*/
+	/*std::tr1::shared_ptr<Hyperbolic> hyperbolic(new Hyperbolic());
+	space = std::tr1::static_pointer_cast<Manifold>(hyperbolic);
+	por = std::tr1::shared_ptr<Hyperbolic::PointOfReference>(new Hyperbolic::PointOfReference(hyperbolic.get()));*/
 	/*Euclidean* euclidean = new Euclidean();
-	space = euclidean;
-	por = new Euclidean::PointOfReference(euclidean);*/
+	space = std::tr1::shared_ptr<Manifold>(euclidean);
+	por = Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean));*/
 	/*R2xS1* r2xs1 = new R2xS1();
 	space = r2xs1;
 	por = new R2xS1::PointOfReference(r2xs1);*/
-	triangleList = por->icosahedron(.1);
+	triangleList = space->icosahedron(por, .1);
 	glColor3f(1.0f,1.0f,1.0f);
 	
 	display();
@@ -182,26 +159,26 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 	switch(key) {
 		case 'w':
 			//por->move((Vector3d() << 0,01,0).finished());
-			por->move(Vector3d(0,0.01,0));
+			por = space->getPointOfReference(por,Vector3d(0,SPEED,0));
 			break;
 		case 'e':
 			//por->move(Vector3d(1/3.,2/3.,2/3.));
 			//por->move(Vector3d(0.6,0,0.8));
-			por->move(Vector3d(0,0,0.01));
+			por = space->getPointOfReference(por,Vector3d(0,0,SPEED));
 			break;
 		case 'q':
 			//por->move(Vector3d(-1/3.,-2/3.,-2/3.));
 			//por->move(Vector3d(-0.6,0,-0.8));
-			por->move(Vector3d(0,0,-0.01));
+			por = space->getPointOfReference(por,Vector3d(0,0,-SPEED));
 			break;
 		case 's':
-			por->move(Vector3d(0,-0.01,0));
+			por = space->getPointOfReference(por,Vector3d(0,-SPEED,0));
 			break;
 		case 'a':
-			por->move(Vector3d(-0.01,0,0));
+			por = space->getPointOfReference(por,Vector3d(-SPEED,0,0));
 			break;
 		case 'd':
-			por->move(Vector3d(0.01,0,0));
+			por = space->getPointOfReference(por,Vector3d(SPEED,0,0));
 			break;
 		case KEY_ESCAPE:
 			exit(0);

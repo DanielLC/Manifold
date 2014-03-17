@@ -1,16 +1,6 @@
-\documentclass[12pt]{amsart}
-\usepackage{a4}
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage{multicol}
-\usepackage{verbatim}
-\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
-\newcommand{\ignore}[1]{}
-\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
-\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
-\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
-\begin{document}
+\subsection{3d Hyperbolic Geometry}
 
-Finding the direction and distance from one point to another in $H^3$:
+\subsubsection{Finding the direction and distance from one point to another}
 
 We will use the upper half space model: $\mathbb{H}^3 \mapsto \{(x_1,x_2,x_3):x_3 > 0\}$.
 
@@ -24,11 +14,7 @@ The distance remains the same as it was in the two-dimensional case.
 
 There is a problem if $x_1 = y_1, x_2 = y_2$ because $\textbf{v}$ is undefined. In this case, $\textbf{z} = (0,0,\ln\frac{y_3}{x_3})$ %In this case, any value can be used for $\textbf{v}$, since it passes through every plane. If it's not a unit vector, it will scale the final value on the first two axes, but since it's zero on these axes, it doesn't matter. Just be careful not to use an undefined value.
 
-\bigskip
-
-Finding the point a given distance in a given direction from another:
-
-\bigskip
+\subsubsection{Finding the point a given distance in a given direction from another}
 
 Given initial point $(x_1,x_2,x_3)$ and vector $(z_1,z_2,z_3)$, we first reduce to the $\mathbb{H}^2$ case as before, unless $z_1 = z_2 = 0$. Let $u = \sqrt{z_1^2+z_2^2}, (v_1,v_2) = \frac{(z_1,z_2)}{u}$ and solve the two-dimensional case for $\textbf{y}'$ with $\textbf{x}' = (x'_1,x'_2) = (0,x_3)$ and $\textbf{z}' = (z'_1,z'_2) = (u,z_3)$.
 
@@ -45,5 +31,3 @@ This gives $\matc{v_1}{-v_2}{0}{v_2}{v_1}{0}{0}{0}{1} \matc{\cos\theta}{0}{-\sin
 %Again, if the vector is pointed straight up, any value of $\textbf{v}$ will work as long as it's not NaN or something else that behaves oddly when multiplied by zero.
 
 If $z_1 = z_2 = 0$, then $\textbf{y} = (x_1,x_2,x_3 e^{z_3})$ and there is no rotation.
-
-\end{document}
