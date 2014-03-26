@@ -50,11 +50,29 @@ class Euclidean : public Manifold {
 				Manifold::PointPtr getEndPoint();
 				Manifold::PointOfReferencePtr getEndPointOfReference();
 				Vector3d getVector();
+				PointOfReferencePtr getStart();
+				
+				double intersectionDistance(Manifold::PortalPtr portal);
+				double intersectionDistance2(Euclidean::Portal* portal);	//It says Euclidean, you moron.
 			private:
 				PointOfReferencePtr start;
 				PointPtr end;
 				Vector3d vector;
 		};
+		class Portal : public Manifold::Portal {
+			public:
+				//Portal(Vector3d center, double radius, Matrix3d orientation, bool invert);
+				Portal(Vector3d center, double radius, Manifold* space);
+				Vector3d getCenter();
+				double getRadius();
+				~Portal();
+			private:
+				Vector3d center;
+				double radius;
+				Manifold::GeodesicPtr getGeodesic(IntersectionPtr intersection);
+				IntersectionPtr getIntersection(Manifold::GeodesicPtr geodesic);
+		};
+		//typedef std::tr1::shared_ptr<Portal> PortalPtr;
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Vector3d vector);
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Manifold::PointPtr end);
 };

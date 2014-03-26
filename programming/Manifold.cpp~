@@ -1,4 +1,5 @@
 #include "Manifold.h"
+#include "Euclidean.h"
 
 std::vector<Manifold::Triangle> Manifold::icosahedron(PointOfReferencePtr por) {
 	return icosahedron(por, 1.);
@@ -93,5 +94,50 @@ Manifold* Manifold::PointOfReference::getSpace() {
 	return getPosition()->getSpace();
 }
 
-void test() {}
+Manifold* Manifold::Geodesic::getSpace() {
+	return getEndPoint()->getSpace();
+}
+
+Manifold* Manifold::Portal::getSpace() {
+	return space;
+}
+
+void Manifold::Portal::setExit(Manifold::Portal* exit) {
+	this->exit = exit;
+}
+
+void Manifold::Portal::setSpace(Manifold* space) {
+	this->space = space;
+}
+
+Manifold::GeodesicPtr Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic) {
+	assert(exit);
+	return exit->getGeodesic(getIntersection(geodesic));
+}
+
+Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
+	double distance = previous->getVector().norm();
+	int portal = -1;
+	for(int i=0; i<portals.size(); ++i) {
+		double current = previous->intersectionDistance(portals[i]);
+		//std::cout << "current:\t" << current << std::endl;
+		//std::cout << "portal:\t\t" << i << std::endl;
+		//std::cout << "current:\t" << current << std::endl;
+		assert(current > 0);
+		if(current < distance) {
+			distance = current;
+			portal = i;
+		}
+	}
+	if(portal == -1) {
+		return Manifold::GeodesicPtr();
+	} else {
+		std::cout << "teleport\nportal:\t" << portal << "\ndistance:\t" << distance << std::endl;
+		return portals[portal]->teleport(previous);
+	}
+}
+
+void Manifold::addPortal(Manifold::PortalPtr portal) {
+	portals.push_back(portal);
+}
 

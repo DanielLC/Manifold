@@ -4,7 +4,8 @@
 
 #include "Compound.h"
 #include "Manifold.h"
-#include <Eigen/Core>
+#include "Euclidean.h"
+#include <Eigen/Dense>
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "Assert.h"
@@ -33,11 +34,15 @@ std::tr1::shared_ptr<Manifold::Point> Compound::Point::getPosition() {
 }
 
 Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector) {
+	return vectorFromPointAndNearVector(point, vector, 0);
+}
+
+Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector, int i) {
 	assert(vector == vector);
 	Vector3d v1 = point->getPosition()->getVector();
 	//Vector3d v0 = point->getPosition()->getVector();
 	//assert(v0 == v0);
-	double epsilon = 0.001;
+	double epsilon = 0.000001;
 	//Manifold* space = point->getPosition()->getSpace();
 	Vector3d v0 = this->pointFromVector(vector)->getPosition()->getVector();
 	Vector3d vx = this->pointFromVector(vector + Vector3d(epsilon,0,0))->getPosition()->getVector();
@@ -63,16 +68,31 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 		//std::cout << "vector:\n" << vector << std::endl;
 		//std::cout << "delta+vector:\n" << delta+vector << std::endl;
 		//std::cout << "pointOfReference->vectorFromPoint(point):\n" << pointOfReference->vectorsFromPoint(point->getPosition())[0] << std::endl;
+		std::cout << "i:\t" << i << std::endl;
 		return delta+vector;
 	} else {
-		return vectorFromPointAndNearVector(point, delta+vector);
+		return vectorFromPointAndNearVector(point, delta+vector, i+1);
 	}
 }
 
-std::tr1::shared_ptr<Compound::Point> Compound::PointOfReference::pointFromVector(Vector3d vector) {
+Manifold::GeodesicPtr Compound::PointOfReference::getFinalGeodesic(Vector3d vector) {
 	assert(vector == vector);
 	//This will need to be made more sophisticated when Compound is made to support more than one space.
-	std::tr1::shared_ptr<Compound::Point> out(new Compound::Point(pointOfReference->getPosition()->getSpace()->pointFromVector(pointOfReference, vector)));
+	Manifold* space = pointOfReference->getPosition()->getSpace();
+	Manifold::GeodesicPtr next = space->getGeodesic(pointOfReference, vector);
+	Manifold::GeodesicPtr current;
+	do {
+		current = next;
+		space = current->getSpace();
+		next = space->nextPiece(current);
+	} while(next);
+	return current;
+}
+
+Compound::PointPtr Compound::PointOfReference::pointFromVector(Vector3d vector) {
+	Manifold::GeodesicPtr geodesic = getFinalGeodesic(vector);
+	Compound::PointPtr out(new Compound::Point(geodesic->getEndPoint()));
+	//Compound::PointPtr out(new Compound::Point(pointOfReference->getPosition()->getSpace()->pointFromVector(pointOfReference, vector)));
 	return out;
 }
 
@@ -88,7 +108,9 @@ Manifold::PointPtr Compound::PointOfReference::getPosition() {
 }
 
 void Compound::PointOfReference::move(Vector3d dir) {
-	pointOfReference = pointOfReference->getSpace()->getPointOfReference(pointOfReference, dir);
+	//pointOfReference = pointOfReference->getSpace()->getPointOfReference(pointOfReference, dir);
+	//std::cout << std::tr1::static_pointer_cast<Euclidean::PointOfReference>(pointOfReference)->getCoordinates() << std::endl;
+	pointOfReference = getFinalGeodesic(dir)->getEndPointOfReference();
 }
 
 void Compound::PointOfReference::rotate(Matrix3d rot) {

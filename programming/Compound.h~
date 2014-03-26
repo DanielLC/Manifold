@@ -21,7 +21,7 @@ class Compound {
 		class Point {
 			public:
 				Compound* getSpace();
-				Vector3d getVector();
+				//Vector3d getVector();
 				Point(Manifold::PointPtr position);
 				Point();
 				Manifold* getSubspace();
@@ -43,7 +43,8 @@ class Compound {
 				std::vector<Triangle> octahedron();
 				std::vector<Triangle> octahedron(double k);
 			private:
-				std::tr1::shared_ptr<Manifold::PointOfReference> pointOfReference;
+				Manifold::GeodesicPtr getFinalGeodesic(Vector3d vector);
+				Manifold::PointOfReferencePtr pointOfReference;
 		};
 		GeodesicPtr getGeodesic(PointOfReferencePtr start, PointPtr end);
 		GeodesicPtr getGeodesic(PointOfReferencePtr start, Vector3d vector);

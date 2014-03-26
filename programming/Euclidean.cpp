@@ -3,8 +3,10 @@
 #include <iostream>
 
 #include "Euclidean.h"
+#include "Assert.h"
 #include <Eigen/Core>
 #include <utility>
+#include <cmath>
 
 using Eigen::Matrix3d;
 using Eigen::Vector3d;
@@ -101,5 +103,89 @@ Euclidean::Geodesic::Geodesic(Euclidean::PointOfReferencePtr start, Euclidean::P
 	this->start = start;
 	this->end = end;
 	this->vector = vector;
+}
+
+Euclidean::PointOfReferencePtr Euclidean::Geodesic::getStart() {
+	return start;
+}
+
+double Euclidean::Geodesic::intersectionDistance(Manifold::PortalPtr portal) {
+	return intersectionDistance2(portal.get());
+}
+
+double Euclidean::Geodesic::intersectionDistance2(Manifold::Portal* portal) {	//I just changed this to Manifold, since you apparently can't read and keep insisting that's what the declaration says.
+	/*if(portal->getSpace() != this->getSpace()) {
+		std::cout << "wrong space" << std::endl;
+		return INFINITY;
+	}*/
+	if(vector.squaredNorm() < EPSILON) {
+		//std::cout << "Infinity case 1" << std::endl;
+		return INFINITY;
+	}
+
+	Euclidean::Portal* castedPortal = (Euclidean::Portal*) portal;
+	Vector3d displacement = castedPortal->getCenter() - start->getCoordinates();
+	double r = castedPortal->getRadius();
+	double dot = vector.normalized().dot(displacement);			//The distance to the closest the geodesic gets to the center of the portal
+	double closestSquared = displacement.squaredNorm() - dot*dot;//The square of the closest the geodesic gets to the center of the portal
+	//std::cout << "r*r-closestSquared:\t" << r*r-closestSquared << std::endl;
+	if(closestSquared > r*r-EPSILON) {
+		/*std::cout << "r:\t" << r << std::endl;
+		std::cout << "center:\n" << castedPortal->getCenter() << std::endl;
+		std::cout << "Infinity case 2" << std::endl;*/
+		return INFINITY;
+	}
+	double squareroot = sqrt(r*r-closestSquared);
+	//std::cout << "dot-squareroot:\t\t" << dot-squareroot << "\ndot+squareroot:\t\t" << dot+squareroot << std::endl;
+	if(dot-squareroot > EPSILON) {
+		return dot-squareroot;
+	} else if(dot+squareroot > EPSILON) {
+		return dot+squareroot;
+	} else {
+		//std::cout << "dot+squareroot:\t" << dot+squareroot << std::endl;
+		//std::cout << "EPSILON:\t" << EPSILON << std::endl;
+		//std::cout << "infinity" << std::endl;
+		//std::cout << "Infinity case 3" << std::endl;
+		return INFINITY;
+	}
+}
+
+Euclidean::Portal::Portal(Vector3d center, double radius, Manifold* space) {
+	this->center = center;
+	this->radius = radius;
+	this->setSpace(space);
+}
+
+Euclidean::Portal::~Portal() {
+	std::cout << "Portal destroyed" << std::endl;
+}
+
+Vector3d Euclidean::Portal::getCenter() {
+	return center;
+}
+
+double Euclidean::Portal::getRadius() {
+	return radius;
+}
+
+IntersectionPtr Euclidean::Portal::getIntersection(Manifold::GeodesicPtr geodesic) {
+	double norm = geodesic->getVector().norm();
+	Vector3d normalized = geodesic->getVector()/norm;
+	Euclidean::GeodesicPtr castedGeodesic = std::tr1::static_pointer_cast<Euclidean::Geodesic>(geodesic);
+	//std::cout << "ac" << std::endl;
+	double dist = castedGeodesic->intersectionDistance2(this);
+	//std::cout << "ad" << std::endl;
+	Euclidean::PointOfReferencePtr start = castedGeodesic->getStart();
+	Vector3d position = (start->getCoordinates() + dist*normalized - center).normalized();
+	Matrix3d orientation = start->getOrientation();
+	Vector3d vector = (norm-dist)*normalized;
+	return IntersectionPtr(new Intersection(position, orientation, vector));
+}
+
+Manifold::GeodesicPtr Euclidean::Portal::getGeodesic(IntersectionPtr intersection) {
+	//std::cout << "getGeodesic(IntersectionPtr intersection)" << std::endl;
+	PointPtr startPoint(new Euclidean::Point(center + intersection->getPosition()*radius, (Euclidean*)getSpace()));
+	PointOfReferencePtr start(new Euclidean::PointOfReference(startPoint, intersection->getOrientation()));
+	return getSpace()->getGeodesic(start, intersection->getVector());
 }
 

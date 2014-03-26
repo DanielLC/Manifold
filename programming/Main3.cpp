@@ -112,8 +112,15 @@ void initialize ()
 	space = new Compound();
 	Euclidean* euclidean = new Euclidean();
 	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new Euclidean::PointOfReference(euclidean)));
+	Manifold::Portal* portal0 = new Euclidean::Portal(Vector3d(0,0,0),1,euclidean);
+	Manifold::Portal* portal1 = new Euclidean::Portal(Vector3d(0,0,0),2,euclidean);
+	portal0->setExit(portal1);
+	portal1->setExit(portal0);
+	euclidean->addPortal(Manifold::PortalPtr(portal0));
+	euclidean->addPortal(Manifold::PortalPtr(portal1));
+	
 
-	triangleList = por->icosahedron(.1);
+	triangleList = por->icosahedron(.5);
 	glColor3f(1.0f,1.0f,1.0f);
 	
 	display();
@@ -146,26 +153,26 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 	switch(key) {
 		case 'w':
 			//por->move((Vector3d() << 0,01,0).finished());
-			por->move(Vector3d(0,0.01,0));
+			por->move(Vector3d(0,0.03,0));
 			break;
 		case 'e':
 			//por->move(Vector3d(1/3.,2/3.,2/3.));
 			//por->move(Vector3d(0.6,0,0.8));
-			por->move(Vector3d(0,0,0.01));
+			por->move(Vector3d(0,0,0.03));
 			break;
 		case 'q':
 			//por->move(Vector3d(-1/3.,-2/3.,-2/3.));
 			//por->move(Vector3d(-0.6,0,-0.8));
-			por->move(Vector3d(0,0,-0.01));
+			por->move(Vector3d(0,0,-0.03));
 			break;
 		case 's':
-			por->move(Vector3d(0,-0.01,0));
+			por->move(Vector3d(0,-0.03,0));
 			break;
 		case 'a':
-			por->move(Vector3d(-0.01,0,0));
+			por->move(Vector3d(-0.03,0,0));
 			break;
 		case 'd':
-			por->move(Vector3d(0.01,0,0));
+			por->move(Vector3d(0.03,0,0));
 			break;
 		case KEY_ESCAPE:
 			exit(0);
