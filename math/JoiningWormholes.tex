@@ -1,0 +1,161 @@
+\documentclass[12pt]{amsart}
+\usepackage{a4}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{verbatim}
+\DeclareMathOperator*{\arctanh}{arctanh}
+\DeclareMathOperator*{\sech}{sech}
+\newcommand{\ignore}[1]{}
+\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
+\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
+\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
+\begin{document}
+
+$E = G = \frac{1}{y^2}, F = 0$
+
+$E_u = G_u = 0$
+
+$E_v = G_v = -\frac{2}{y^3}$
+
+$\Gamma^1_{11} = \frac{E_u}{2E}$
+
+$= 0$
+
+$\Gamma^1_{12} = \frac{E_v}{2E}$
+
+$= -\frac{1}{y}$
+
+$\Gamma^1_{22} = -\frac{G_u}{2E}$
+
+$= 0$
+
+$\Gamma^2_{11} = -\frac{E_v}{2G}$
+
+$= \frac{1}{y}$
+
+$\Gamma^2_{12} = \frac{G_u}{2G}$
+
+$= 0$
+
+$\Gamma^2_{22} = \frac{G_v}{2G}$
+
+$= -\frac{1}{y}$
+
+$\kappa_g = \sqrt{EG-F^2}[-\Gamma^2_{11}u'^3 + \Gamma^1_{22}v'^3 - (2\Gamma^2_{12} - \Gamma^1_{11})u'^2 v' + (2\Gamma^1_{12} - \Gamma^2_{22})u'v'^2 + u''v' - v''u'] \times (Eu'^2 + 2Fu'v' + Gv'^2)^{-3/2}$
+
+$= \frac{1}{y^2}[-\frac{1}{y}u'^3 - \frac{1}{y}u'v'^2 + u''v' - v''u'] \times (\frac{1}{y^2}u'^2 + \frac{1}{y^2}v'^2)^{-3/2}$
+
+The hypercycle can be parameterized as $\alpha(t) = (t \cos \theta,t \sin \theta)$ for some $\theta$.
+
+$u' = \cos \theta, v' = \sin \theta, u'' = v'' = 0$
+
+$\kappa_g = \frac{1}{y^2}(-\frac{1}{y}\cos^3 \theta - \frac{1}{y}\cos \theta \sin^2 \theta)(\frac{1}{y^2}\cos^2 \theta + \frac{1}{y^2}\sin^2 \theta)^{-3/2}$
+
+$= \frac{1}{y^3}(-\cos^3 \theta - \cos \theta \sin^2 \theta)y^3$
+
+$= -(\cos^3 \theta + \sin^2 \theta \cos \theta)$
+
+$= -\cos\theta(\sin^2\theta + \cos^2\theta)$
+
+$= -\cos \theta$
+
+???
+
+Circumference:
+
+$C = \int_1^{e^k} \frac{1}{s\sin\theta} ds$
+
+$= k\csc\theta$
+
+???
+
+Euclidean:
+
+$C = \frac{2 \pi}{|\kappa_g|}$
+
+$k\csc\theta = 2\pi\sec\theta$
+
+$\tan\theta = \frac{2\pi}{k}$
+
+???
+
+Hyperbolic:
+
+TODO: This needs to be scaled. At the default sizes, the wormhole cannot be attached to hyperbolic geometry.
+
+A circle can be parameterized as $\alpha(\theta) = (\cos \theta, k + \sin \theta)$ for some $k$.
+
+$u' = -\sin\theta, v' = \cos\theta$
+
+$u'' = -\cos\theta, v'' = -\sin\theta$
+
+$\kappa_g = \frac{1}{y^2}[-\frac{1}{y}u'^3 - \frac{1}{y}u'v'^2 + u''v' - v''u'] \times (\frac{1}{y^2}u'^2 + \frac{1}{y^2}v'^2)^{-3/2}$
+
+$= \frac{1}{y^2}\left(\frac{1}{y}\sin^3\theta + \frac{1}{y}\sin\theta\cos^2\theta - \cos^2\theta - \sin^2\theta\right)\left(\frac{1}{y^2}\sin^2\theta + \frac{1}{y^2}\cos^2\theta\right)^{-3/2}$
+
+$= \frac{1}{y^2}\left(\frac{1}{y}\sin\theta - 1\right)\left(\frac{1}{y^2}\right)^{-3/2}$
+
+$= y\left(\frac{1}{y}\sin\theta - 1\right)$
+
+$= \sin\theta - y$
+
+$= k$
+
+Suppose a circle has radius $r$:
+
+$\frac{k+1}{k-1} = e^{2r}$
+
+$k+1 = e^{2r}k-e^{2r}$
+
+$(e^{2r}-1)k = e^{2r}+1$
+
+$k = \frac{e^{2r}+1}{e^{2r}-1}$
+
+$= \frac{1}{\tanh r}$
+
+Now to find the circumference:
+
+$C = \int_0^{2\pi} \frac{1}{k+\sin\theta} d\theta$
+
+%(2*ArcTan[(1 + k*Tan[x/2])/Sqrt[-1 + k^2]])/ Sqrt[-1 + k^2]
+
+$= \left.\frac{2\arctan \frac{1 + \tan\frac{x}{2}}{\sqrt{k^2-1}}}{\sqrt{k^2-1}}\right|_0^{2\pi}$, from Wolfram Integrator.
+
+This function has period $2\pi$, but it's not continuous.
+
+Every $2\pi$, $\tan\frac{x}{2}$ jumps from $\infty$ to $-\infty$.
+
+$\frac{1 + \tan\frac{x}{2}}{\sqrt{k^2-1}}$ jumps from $\infty$ to $-\infty$.
+
+$\arctan \frac{1 + \tan\frac{x}{2}}{\sqrt{k^2-1}}$ jumps from $\frac{\pi}{2}$ to $-\frac{\pi}{2}$.
+
+$\frac{2\arctan \frac{1 + \tan\frac{x}{2}}{\sqrt{k^2-1}}}{\sqrt{k^2-1}}$ jumps from $\frac{\pi}{\sqrt{k^2-1}}$ to $-\frac{\pi}{\sqrt{k^2-1}}$.
+
+$C = \frac{2\pi}{\sqrt{k^2-1}}$
+
+$= \frac{2\pi}{\sqrt{\frac{1}{\tanh^2 r}-1}}$
+
+$= \frac{2\pi\tanh r}{\sqrt{1-\tanh^2 r}}$
+
+$= \frac{2\pi\tanh r}{\sech r}$
+
+$= 2\pi\sinh r$
+
+???
+
+According to http://www.maths.gla.ac.uk/wws/cabripages/hyperbolic/circleformulae.html, $C = 2\pi\sinh r$
+
+$r = \arctanh\frac{1}{\kappa_g}$
+
+$C = 2\pi\sinh\arctanh\frac{1}{\kappa_g}$
+
+$= 2\pi\frac{\frac{1}{\kappa_g}}{\sqrt{1-\frac{1}{\kappa_g^2}}}$
+
+$= \frac{2\pi}{\sqrt{\kappa_g^2-1}}$
+
+$= \frac{2\pi}{\sqrt{\cos^2\theta-1}}$
+
+$= \frac{2\pi}{\sqrt{\cos^2\theta-1}}$
+
+
+\end{document}

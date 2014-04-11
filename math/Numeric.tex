@@ -1,0 +1,27 @@
+\subsection{Finding the Geodesic Between Two Points Numerically}
+
+In many manifolds, the geodesic between two points can be easily calculated symbolically. However, when two or more simple manifolds are glued together, this method quickly becomes infeasible. You would likely have to find a new equation for every combination, and it's likely that the final equation will quickly get too complicated to be solved easily.
+
+Given a point and a vector, it's still fairly easy to find the geodesic that extends that distance from that point in that direction. Simply find the geodesic in the manifold the point is in, if it intersects with another manifold find where and at what distance, extend the geodesic from there, and repeat until you run out of geodesic.
+
+There is not necessarily only one geodesic between a given pair of points. When drawing a triangle, the necessary geodesics will presumably be close to each other. This can be used to find the geodesic you're looking for.
+
+When drawing a triangle in which the geodesic reaching one of the vertices is known, it can be used for the first iteration to find the other two vertices.
+
+???
+
+Given starting point $p$, ending point $q$, and vector $\textbf{v}$ that's near the vector tangent to the geodesic with a magnitude equal to its length,
+
+Let $\psi(\textbf{u})$ be the endpoint of the geodesic starting at $p$ that is tangent to and of the same magnitude as $\textbf{u}$. We are attempting to find the value of $\psi^{-1}(q)$ that's close to $\textbf{v}$.
+
+First, make a continuous injective map, $\phi$, from the manifold to the vector field $\mathbb{R}^3$. This set of vectors has little to do with the ones being mapped from in $\psi$. In order to distinguish them, I will refer to them as $\textbf{x}, \textbf{y}$, etc. as opposed to $\textbf{u}, \textbf{v}$, etc. ???
+
+$S^3$ doesn't have such a map. I could get it to work if I remove a point. If I'm gluing it to another space, that isn't a problem because I could just glue it so the point at infinity is in the ball that's removed. If not, I can just stick it in a random spot and hope for the best.
+
+Compound manifolds also don't have such a map. Theoretically, there is no need to put a compound space inside another compound manifold. However, this will simplify programming it. I can bypass this problem by making it so that passing a compound manifold as a submanifold in a compound manifold will result in the outer manifold automatically disassembling the inner manifold and building itself out of its submanifolds.
+
+%Let $\textbf{x}_0 = \phi\circ\psi(\textbf{v})$. 
+
+Now we have $\phi\circ\psi: \mathbb{R}^3 \mapsto \mathbb{R}^3$. This can be inverted with Newton's method. Simply find $(\phi\circ\psi)^{-1}\circ\phi(q) = \psi^{-1}\circ\phi^{-1}\circ\phi(q) = \psi^{-1}(q)$. As long as the triangles are sufficiently small, $\textbf{v}$ will be sufficiently close to the preferred solution, guaranteeing that it's the solution approached.
+
+There is still the problem that one vertex may have one solution, but a nearby vertex have three. I will deal with this later. I'm pretty sure it won't come up as long as I stick to $\mathbb{E}^3, \mathbb{H}^3,$ and Wormhole.

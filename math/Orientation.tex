@@ -1,0 +1,11 @@
+\subsection{Orientation}
+
+Much of this program involves orientation. For example, a camera must have an orientation.  The orientation is essentially a linear transformation between $\mathbb{R}^3$ and the tangent space of the manifold at that point which preserves magnitude and angles. In the case of $\mathbb{E}^3$, the tangent space at any point has a natural map to $\mathbb{R}^3$, so the orientation can be thought of as a rotation from $\mathbb{R}^3$ to itself.
+
+In order to store the orientation, I use a default orientation for each point. This is commonly the orientation in the map from $\mathbb{R}^3$ to the manifold. For example, in the half-plane model of $\mathbb{H}^3$, the vector $(0,0,1)$ maps to the direction of the geodesic that approaches $(0,0,\infty)$.
+
+This is not necessarily the case. Currently the only exception is SurfaceOfRevolution, which uses a map that is not necessarily conformal, and maps from $S^2 \times \mathbb{R}$ instead of $\mathbb{R}^3$. In this case, $(0,0,0,1)$ maps along the axis, $(x,y,z,0)$ maps to the natural value, and everything else maps as necessary to make it angle-preserving.
+%???
+%I'm actually mapping from $\mathbb{R}^4$ in this case.
+
+When a point of reference moves along a path, the final orientation is not directly comparable to the initial orientation. However, the final orientation compared to the default is directly comparable to the initial orientation compared to the default. In particular, this difference rotates by a certain amount depending on the path. I generally speak of the point of reference rotating by that amount.

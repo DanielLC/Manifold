@@ -14,7 +14,7 @@ This reduces finding the geodesic on a $3$-surface of revolution to finding one 
 
 \bigskip
 
-Finding the vectors from a point:
+\subsubsection{Finding the vectors from a point:}
 
 \bigskip
 
@@ -36,7 +36,7 @@ $\textbf{z}$ is a vector between the two points.
 
 \bigskip
 
-Finding a point from a vector:
+\subsubsection{Finding a point from a vector:}
 
 \bigskip
 
@@ -76,3 +76,31 @@ $$(\textbf{e}_1,\textbf{z},\textbf{x},(\textbf{x} \times \textbf{z}))
 \left(\begin{array}{cccc} 1 & 0 & 0 & 0 \\ 0 & \cos\phi & -\sin\phi & 0 \\ 0 & \sin\phi & \cos\phi & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)
 \left(\begin{array}{cccc} 1 & 0 & 0 & 0 \\ 0 & \cos\phi & -\sin\phi & 0 \\ 0 & \sin\phi & \cos\phi & 0 \\ 0 & 0 & 0 & 1 \end{array} \right)
 (\textbf{e}_1,\textbf{z},\textbf{x},(\textbf{x} \times \textbf{z}))^T$$
+
+\bigskip
+
+\subsubsection{Portals:}
+
+The intersection tells me the orientation as embedded in $\mathbb{R}^3$. I need to convert that to $\mathbb{R}^3 \times S^2 \subseteq \mathbb{R}^4$.
+
+First, I just expand the matrix $M$ to $\matb{1}{0}{0}{M}$ to put it in $\mathbb{R}^3 \subseteq \mathbb{R}^4$.
+
+Now I need to reflect it twice.
+
+First, I will reflect along the $t$-axis, to get $\matb{-1}{0}{0}{M}$. This doesn't change anything, since that vector was orthogonal to reality, but it does guarantee that the final orientation will have the same sign.
+
+Now I need to reflect between $(1,0,0,0)$ and $(0,v)$ where $v \in S^2$ is the position of the vector.
+
+Let $w$ be a vector I am moving with this, and $R$ be the reflection matrix.
+
+$Rw = w - 2((0,v)-(1,0,0,0))\left<(0,v)-(1,0,0,0),w\right>$
+
+$= w - 2(-1,v)\left<(-1,v),w\right>$
+
+$= Iw - 2(-1,v)(-1,v)^Tw$
+
+$= (I - 2(-1,v)(-1,v)^T)w$
+
+$R = I - 2(-1,v)(-1,v)^T$
+
+This means that the final orientation is $R\matb{-1}{0}{0}{M}$.

@@ -1,0 +1,92 @@
+\documentclass[12pt]{amsart}
+\usepackage{a4}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{verbatim}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\newcommand{\ignore}[1]{}
+\newcommand{\mat}[4]{\left(\begin{array}{ccc} #1 & #2 \\#3 & #4 \end{array} \right)}
+\newcommand{\vect}[2]{\left(\begin{array}{ccc} #1 \\#2 \end{array} \right)}
+\newcommand{\matc}[9]{\left(\begin{array}{ccc} #1 & #2 & #3 \\#4 & #5 & #6 \\#7 & #8 & #9 \end{array} \right)}
+\begin{document}
+
+\ignore{
+The frame begins with the program asking for an image near $(0,0,0)$ of a point. When a point is drawn, the program automatically checks every edge that contains that point as an endpoint to see if it started drawing it yet. If not, it records that it has begun the process of drawing an edge that contains that image of that point, finds the image of the other endpoint.
+
+???
+}
+Find an image of point nearby a vector:
+
+\begin{itemize}
+
+\item Find the image of that point near 
+
+\item Check to see if you've already begun drawing that image of that point.
+
+\item If so, return it.
+
+\item Check to see if the image is too far away, or if it's too close to another image.
+
+\item If so, return null.
+
+\item Mark that you have begun drawing that image of that point.
+
+\item For each edge containing that point:
+
+\begin{itemize}
+
+%\item Check to see if you have begun drawing an edge containing that image.
+
+\item Find that edge from that point and image.
+
+\end{itemize}
+
+\end{itemize}
+
+\bigskip
+
+Find an edge from a given image of a given point:
+
+\begin{itemize}
+
+\item Check to see if you've already begun looking at that edge with that image of that point.
+
+\item If so, stop.
+
+\item Mark that you've begun looking at that edge with that image of that point.
+
+\item Find an image of the other point near the given image.
+
+\item Mark that you've begun looking at that edge with that image.
+
+\item Draw each of the polygons near that image of that edge.
+
+\end{itemize}
+
+\bigskip
+
+Draw a polygon using a given image of a given edge:
+
+\begin{itemize}
+
+\item Check to see if you've already begun drawing a polygon with that image of that edge.
+
+\item If so, stop.
+
+\item Pick one image of a point on that image of an edge, and starting from there:
+
+\begin{itemize}
+
+\item Look at the opposite point image on that edge image.
+
+\item Look at opposite edge image on that point image.
+
+\item if you have the starting point image, stop.
+
+\end{itemize}
+
+Use these three edges to draw a polygon.
+
+\end{itemize}
+
+\end{document}
