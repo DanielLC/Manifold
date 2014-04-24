@@ -39,10 +39,11 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 
 Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector, int i) {
 	assert(vector == vector);
+	//std::cout << "i:\t" << i << std::endl;
 	Vector3d v1 = point->getPosition()->getVector();
 	//Vector3d v0 = point->getPosition()->getVector();
 	//assert(v0 == v0);
-	double epsilon = 0.0001;
+	double epsilon = 0.00001;
 	//Manifold* space = point->getPosition()->getSpace();
 	Vector3d v0 = this->pointFromVector(vector)->getPosition()->getVector();
 	Vector3d vx = this->pointFromVector(vector + Vector3d(epsilon,0,0))->getPosition()->getVector();
@@ -52,8 +53,9 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 	Matrix3d jacobean;
 	jacobean << vx-v0,vy-v0,vz-v0;
 	jacobean /= epsilon;
-	jacobean.transposeInPlace();
-	/*std::cout << "v0:\n" << v0 << std::endl;
+	/*std::cout << "getPosition()->getVector():\n" << getPosition()->getVector() << std::endl;
+	std::cout << "vector:\n" << vector << std::endl;
+	std::cout << "v0:\n" << v0 << std::endl;
 	std::cout << "vx:\n" << vx << std::endl;
 	std::cout << "vy:\n" << vy << std::endl;
 	std::cout << "vz:\n" << vz << std::endl;
@@ -61,6 +63,8 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 	//Matrix3d jacobean = point.getJacobean();
 	//Better yet, maybe I'll make it so I can just get the inverse.
 	Vector3d delta = jacobean.inverse()*(v1-v0);
+	//std::cout << "v1-v0:\n" << v1-v0 << std::endl;
+	//std::cout << "delta:\n" << delta << std::endl;
 	assert(delta == delta);
 	if(delta.norm() < EPSILON) {
 		//std::cout << "v1-v0:\n" << v1-v0 << std::endl;
@@ -68,7 +72,6 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 		//std::cout << "vector:\n" << vector << std::endl;
 		//std::cout << "delta+vector:\n" << delta+vector << std::endl;
 		//std::cout << "pointOfReference->vectorFromPoint(point):\n" << pointOfReference->vectorsFromPoint(point->getPosition())[0] << std::endl;
-		std::cout << "i:\t" << i << std::endl;
 		return delta+vector;
 	} else {
 		return vectorFromPointAndNearVector(point, delta+vector, i+1);
@@ -76,10 +79,14 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 }
 
 Manifold::GeodesicPtr Compound::PointOfReference::getFinalGeodesic(Vector3d vector) {
+	//std::cout << "getFinalGeodesic(vector)" << std::endl;
 	assert(vector == vector);
 	//This will need to be made more sophisticated when Compound is made to support more than one space.
 	Manifold* space = pointOfReference->getPosition()->getSpace();
 	Manifold::GeodesicPtr next = space->getGeodesic(pointOfReference, vector);
+	if(next) {
+		std::cout << "next" << std::endl;
+	}
 	Manifold::GeodesicPtr current;
 	do {
 		current = next;

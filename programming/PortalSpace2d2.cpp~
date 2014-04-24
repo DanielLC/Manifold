@@ -60,8 +60,8 @@ Vector2d PortalSpace2d::Point::vectorFromPoint(PortalSpace2d::Point point) {
 }
 
 Vector2d PortalSpace2d::Geodesic::getVector() {
-	std::cout << "From:\t" << getStartPoint().getT() << ",\t" << getStartPoint().getThetaK() << std::endl;
-	std::cout << "To:\t" << getEndPoint().getT() << ",\t" << getEndPoint().getThetaK() << std::endl;
+	//std::cout << "From:\t" << getStartPoint().getT() << ",\t" << getStartPoint().getThetaK() << std::endl;
+	//std::cout << "To:\t" << getEndPoint().getT() << ",\t" << getEndPoint().getThetaK() << std::endl;
 	Vector2d cartesian = geodesic->getVector();
 	double sin = getStartPoint().getSin();
 	double cos = getStartPoint().getCos();
@@ -69,7 +69,7 @@ Vector2d PortalSpace2d::Geodesic::getVector() {
 	m <<	-sin,	cos,	//This matrix is the inverse of the other two. It turns out that it's its own inverse, so it's the same matrix.
 			cos,	sin;
 	Vector2d polar = m*cartesian;
-	std::cout << "Vector:\n" << polar << std::endl;
+	//std::cout << "Vector:\n" << polar << std::endl;
 	return polar;
 }
 
@@ -125,11 +125,27 @@ double PortalSpace2d::Geodesic::getRot() {
 	return rot;
 }
 
+double PortalSpace2d::Geodesic::intersectionDistance(double portal) {
+	assert(geodesic);
+	double dist = geodesic->wormholeIntersectionDistance(portal);
+	std::cout << "PortalSpace2d:\ndist:\t" << dist << std::endl;
+	assert(dist > 0);
+	return dist;
+}
+
+Intersection2d PortalSpace2d::Geodesic::getIntersection(double portal) {
+	return geodesic->wormholeGetIntersection(portal);
+}
+
 double PortalSpace2d::Point::operator[](int i) {
 	if(i == 0) {
 		return getT();
 	} else {
 		return getThetaK();
 	}
+}
+
+PortalSpace2d::GeodesicPtr getGeodesic(Intersection2d intersection, double portal) {
+	return PortalSpace2d::GeodesicPtr(new PortalSpace2d::Geodesic(Hyperbolic2d::wormholeGetGeodesic(intersection, portal)));
 }
 

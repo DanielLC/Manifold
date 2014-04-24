@@ -1,6 +1,8 @@
 #ifndef PortalSpace2d_h
 #define PortalSpace2d_h
 
+//Depricated
+
 #include <tr1/array>
 #include <tr1/memory>
 #include <Eigen/Core>
@@ -19,7 +21,6 @@ class PortalSpace2d {
 				double getT();
 				double getThetaK();
 				std::tr1::array<double,2> getCoordinates();
-				double operator[](int i);
 				void setCoordinates(double x, double y);
 				Vector2d vectorFromPoint(PortalSpace2d::Point point);
 				PortalSpace2d::Point pointFromVector(Vector2d vector);
@@ -33,14 +34,17 @@ class PortalSpace2d {
 		};
 		class Geodesic {
 			public:
-				Geodesic(std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic);
+				Geodesic(Hyperbolic2d::GeodesicPtr geodesic);
 				Point getStartPoint();
 				Point getEndPoint();
 				double getRot();
 				Vector2d getVector();
+				double intersectionDistance(double portal);
+				PortalSpace2d::Intersection getIntersection(double portal);
 			private:
 				std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic;
 		};
+		GeodesicPtr getGeodesic(Intersection2d intersection, double portal);
 };
 #endif
 

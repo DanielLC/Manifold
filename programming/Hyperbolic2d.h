@@ -5,12 +5,14 @@
 #include <tr1/memory>
 #include <Eigen/Core>
 #include <utility>
+#include "Intersection2d.h"
 
 using Eigen::Vector2d;
 
 class Hyperbolic2d {
 	public:
 		class Geodesic;
+		typedef std::tr1::shared_ptr<Geodesic> GeodesicPtr;
 		class Point {
 			public:
 				Point(double x, double y);
@@ -20,8 +22,8 @@ class Hyperbolic2d {
 				Vector2d vectorFromPoint(Point point);
 				Point pointFromVector(Vector2d z);
 				std::pair<Point, double> pointAndRotFromVector(Vector2d z);
-				std::tr1::shared_ptr<Geodesic> getGeodesic(Vector2d z);
-				std::tr1::shared_ptr<Geodesic> getGeodesic(Point end);
+				GeodesicPtr getGeodesic(Vector2d z);
+				GeodesicPtr getGeodesic(Point end);
 			private:
 				std::tr1::array<double,2> coordinates;
 		};
@@ -31,6 +33,8 @@ class Hyperbolic2d {
 				virtual Point getEndPoint() = 0;
 				virtual double getRot() = 0;
 				virtual Vector2d getVector() = 0;
+				virtual double wormholeIntersectionDistance(double portal) = 0;
+				virtual Intersection2d wormholeGetIntersection(double portal) = 0;
 		};
 		class Circle : public Geodesic {
 			public:
@@ -39,6 +43,8 @@ class Hyperbolic2d {
 				Point getEndPoint();
 				double getRot();
 				Vector2d getVector();
+				double wormholeIntersectionDistance(double portal);
+				Intersection2d wormholeGetIntersection(double portal);
 			private:
 				Hyperbolic2d::Point start;
 				Hyperbolic2d::Point end;
@@ -53,11 +59,14 @@ class Hyperbolic2d {
 				Point getEndPoint();
 				double getRot();
 				Vector2d getVector();
+				double wormholeIntersectionDistance(double portal);
+				Intersection2d wormholeGetIntersection(double portal);
 			private:
 				Hyperbolic2d::Point start;
 				Hyperbolic2d::Point end;
 				Vector2d z;
 		};
+		static GeodesicPtr wormholeGetGeodesic(Intersection2d intersection, double portal);
 };
 #endif
 

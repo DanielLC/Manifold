@@ -1,5 +1,6 @@
 #include "Manifold.h"
 #include "Euclidean.h"
+#include "Assert.h"
 
 std::vector<Manifold::Triangle> Manifold::icosahedron(PointOfReferencePtr por) {
 	return icosahedron(por, 1.);
@@ -112,6 +113,9 @@ void Manifold::Portal::setSpace(Manifold* space) {
 
 Manifold::GeodesicPtr Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic) {
 	assert(exit);
+	assert((this->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() - exit->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector()).squaredNorm() < EPSILON);
+	//std::cout << exit->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() << std::endl;
+	std::cout << "Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic)" << std::endl;
 	return exit->getGeodesic(getIntersection(geodesic));
 }
 

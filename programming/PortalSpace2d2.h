@@ -6,11 +6,13 @@
 #include <Eigen/Core>
 #include <utility>
 #include "Hyperbolic2d.h"
+#include "Intersection2d.h"
 using Eigen::Vector2d;
 
 class PortalSpace2d {
 	public:
 		class Geodesic;
+		typedef std::tr1::shared_ptr<Geodesic> GeodesicPtr;
 		class Point {
 			public:
 				Point(Hyperbolic2d::Point hyperbolic);
@@ -34,14 +36,17 @@ class PortalSpace2d {
 		};
 		class Geodesic {
 			public:
-				Geodesic(std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic);
+				Geodesic(Hyperbolic2d::GeodesicPtr geodesic);
 				Point getStartPoint();
 				Point getEndPoint();
 				double getRot();
 				Vector2d getVector();
+				double intersectionDistance(double portal);
+				Intersection2d getIntersection(double portal);
 			private:
 				std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic;
 		};
+		GeodesicPtr getGeodesic(Intersection2d intersection, double portal);
 };
 #endif
 

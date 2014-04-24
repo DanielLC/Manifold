@@ -125,11 +125,26 @@ double PortalSpace2d::Geodesic::getRot() {
 	return rot;
 }
 
+double PortalSpace2d::Geodesic::intersectionDistance(double portal) {
+	assert(geodesic);
+	double dist = geodesic->wormholeIntersectionDistance(portal);
+	assert(dist > 0);
+	return dist;
+}
+
+Intersection2d PortalSpace2d::Geodesic::getIntersection(double portal) {
+	return geodesic->wormholeGetIntersection(portal);
+}
+
 double PortalSpace2d::Point::operator[](int i) {
 	if(i == 0) {
 		return getT();
 	} else {
 		return getThetaK();
 	}
+}
+
+PortalSpace2d::GeodesicPtr getGeodesic(Intersection2d intersection, double portal) {
+	return PortalSpace2d::GeodesicPtr(new PortalSpace2d::Geodesic(Hyperbolic2d::wormholeGetGeodesic(intersection, portal)));
 }
 
