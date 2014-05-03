@@ -10,6 +10,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "Assert.h"
+using Eigen::Matrix;
 using Eigen::Matrix4d;
 using Eigen::Vector4d;
 using Eigen::Matrix3d;
@@ -409,7 +410,6 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::getGeodesic(Ma
 template <class SurfaceOfRevolution2d>
 Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::getGeodesic(Manifold::PointOfReferencePtr start, Vector3d vector){
 	double k = ((SurfaceOfRevolution<SurfaceOfRevolution2d>*) start->getPosition()->getSpace())->getK();
-	//Vector4d v(vector[0],vector[1],vector[2],0);
 	Vector4d v;
 	v << vector,0;
 	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr castedStart =
@@ -531,17 +531,26 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getGeo
 	double z = intersection->getPosition()[2];
 	SurfaceOfRevolution<SurfaceOfRevolution2d>* space = (SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace();
 	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointPtr startPoint(new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(t,x,y,z,space));
+	//std::cout << "Position of intersection after:\t" << startPoint->getT() << std::endl;
 	/*SurfaceOfRevolution<typename SurfaceOfRevolution2d>::Point* startPointPointer = new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(t,x,y,z,space);
 	SurfaceOfRevolution<typename SurfaceOfRevolution2d>::PointPtr startPoint(startPointPointer);*/
 	//SurfaceOfRevolution<typename SurfaceOfRevolution2d>::PointPtr startPoint(new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(t,intersection->getPosition()[0],intersection->getPosition()[1],intersection->getPosition()[2],(SurfaceOfRevolution<SurfaceOfRevolution2d>*)getSpace()));
-	Matrix4d orientation = Matrix4d::Zero();
-	orientation[0,3] = 1;
-	orientation.block<3,3>(1,0) = intersection->getOrientation();
+	/*MatrixXd<4,3> pre;
+	Vector3d v = intersection->getPosition();
+	pre << v,	v[0],0,0,	0,v[1],0,	0,0,v[2];*/
+	
+	Matrix4d orientation = Matrix4d::Identity();
+	orientation.block<3,3>(0,0) = intersection->getOrientation();
 	Vector4d p;
-	p << -1, intersection->getPosition();
+	p << intersection->getPosition(), -1;
 	Matrix4d reflection = Matrix4d::Identity() - p*p.transpose();
 	assert((reflection*reflection - Matrix4d::Identity()).squaredNorm() < EPSILON);
-	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,reflection*orientation));
+	Matrix4d s;
+	s <<	0,0,0,1,
+			1,0,0,0,
+			0,1,0,0,
+			0,0,1,0;
+	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,s*reflection*orientation));
 	return getSpace()->getGeodesic(start,intersection->getVector());
 }
 
@@ -554,20 +563,49 @@ IntersectionPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getIntersect
 	assert(getSpace() != NULL);
 	Manifold::PointOfReferencePtr end = getSpace()->getGeodesic(castedGeodesic->getStart(),vector)->getEndPointOfReference();
 	//There is room for optimization here. I just recalculated a new geodesic, but most of the math is the same as the old one.
+	std::cout << "Position of intersection:\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*)end->getPosition().get())->getT() << std::endl;
+	std::cout << "Position of portal:\t" << t << std::endl;
+	assert(fabs(((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*)end->getPosition().get())->getT() - t) < EPSILON);
 	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference* castedEnd = (SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference*) end.get();
 	//SurfaceOfRevolution<SurfaceOfRevolution2d>* castedEnd = (SurfaceOfRevolution<SurfaceOfRevolution2d>*) end.get();
-	Vector4d p;
-	p << -1,((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*)end->getPosition().get())->getSpherical();
 	Matrix4d orientation = castedEnd->getOrientation();
-	std::cout << "orientation before:\n" << orientation << std::endl;
+	Vector3d position = ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*)end->getPosition().get())->getSpherical();
+	assert((orientation.transpose()*(Vector4d() << 0, position).finished()).start(3).norm() < EPSILON);
+	/*Matrix<double,3,4> pre;
+	pre.block<3,1>(0,0) = position;
+	pre.block<3,3>(0,1) = Matrix3d::Identity();
+	Matrix3d final = pre*orientation.block<4,3>(0,0);
+	std::cout << "orientation:\n" << final << std::endl;
+	assert(fabs(final.determinant()-1) < EPSILON);
+	#ifndef NDEBUG
+	Matrix4d temp = -Matrix4d::Identity();
+	temp.block<3,3>(0,0) = final;
+	Vector4d p;
+	p << position, -1;
 	Matrix4d reflection = Matrix4d::Identity() - p*p.transpose();
-	orientation = reflection*orientation;
-	//A second reflection on the 3 axis would get the inverse of the rotation in the last method, but since we're ignoring that part of the matrix, there's no point in doing it. I just changed the tests to look for positive 1 instead of negative.
-	std::cout << "orientation after:\n" << orientation << std::endl;
-	assert((orientation.block<1,4>(0,0).transpose()-Vector4d(0,0,0,1)).squaredNorm() < EPSILON);
-	assert((orientation.block<4,1>(0,3)-Vector4d(1,0,0,0)).squaredNorm() < EPSILON);
-	assert(fabs(orientation.block<3,3>(1,0).determinant()-1) < EPSILON);
-	return IntersectionPtr(new Intersection(p.end<3>(), orientation.block<3,3>(1,0), geodesic->getVector()-vector));
+	assert((reflection*temp - orientation).squaredNorm() < EPSILON);
+	#endif*/
+	Vector4d p;
+	p << position, -1;
+	Matrix4d reflection = Matrix4d::Identity() - p*p.transpose();
+	Matrix4d ss;
+	ss <<	0,1,0,0,
+			0,0,1,0,
+			0,0,0,1,
+			1,0,0,0;
+	Matrix4d final = reflection*ss*orientation;
+	/*std::cout << "final:\n" << final << std::endl;
+	Vector4d v;
+	v << 0,position;
+	std::cout << "orientation*(0,0,0,1):\n" << orientation*Vector4d(0,0,0,1) << std::endl;
+	std::cout << "orientation*reflection*(0,v):\n" << orientation*reflection*v << std::endl;
+	std::cout << "final*(0,0,0,1):\n" << final*Vector4d(0,0,0,1) << std::endl;*/
+	assert((final.block<1,4>(3,0).transpose() - Vector4d(0,0,0,1)).squaredNorm() < EPSILON);
+	assert((final.block<4,1>(0,3) - Vector4d(0,0,0,1)).squaredNorm() < EPSILON);
+	/*std::cout << "Original length:\t" << geodesic->getVector().norm() << std::endl;
+	std::cout << "Distance to portal:\t" << distance << std::endl;
+	std::cout << "Remaining distance:\t" << (geodesic->getVector()-vector).norm() << std::endl;*/
+	return IntersectionPtr(new Intersection(position, final.block<3,3>(0,0), geodesic->getVector()-vector));
 }
 
 #endif

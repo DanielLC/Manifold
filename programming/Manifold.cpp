@@ -113,9 +113,16 @@ void Manifold::Portal::setSpace(Manifold* space) {
 
 Manifold::GeodesicPtr Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic) {
 	assert(exit);
-	assert((this->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() - exit->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector()).squaredNorm() < EPSILON);
+	//std::cout << "Manifold::Portal::teleport() error:\t" << (this->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() -geodesic->getEndPoint()->getVector()).squaredNorm() << std::endl;
+	//std::cout << "Manifold::Portal::teleport() error:\n" << this->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() -geodesic->getEndPoint()->getVector() << std::endl;
+	//std::cout << "Original length:\t" << geodesic->getVector().norm() << std::endl;
+	//std::cout << "Remaining distance:\t" << getGeodesic(getIntersection(geodesic))->getVector().norm() << std::endl;
+	assert((getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() - geodesic->getEndPoint()->getVector()).squaredNorm() < EPSILON*EPSILON);
+	//std::cout << "Input length:\t" << geodesic->getVector().norm() << std::endl;
+	//std::cout << "Output length:\t" << getGeodesic(getIntersection(geodesic))->getVector().norm() << std::endl;
+	//assert((exit->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() - geodesic->getEndPoint()->getVector()).squaredNorm() < EPSILON);
 	//std::cout << exit->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() << std::endl;
-	std::cout << "Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic)" << std::endl;
+	//std::cout << "Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic)" << std::endl;
 	return exit->getGeodesic(getIntersection(geodesic));
 }
 
@@ -136,8 +143,10 @@ Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
 	if(portal == -1) {
 		return Manifold::GeodesicPtr();
 	} else {
+		Manifold::GeodesicPtr next = portals[portal]->teleport(previous);
+		assert((next->getEndPoint()->getVector() - previous->getEndPoint()->getVector()).squaredNorm() < EPSILON); //TODO only works on portals that lead to themselves.
 		//std::cout << "teleport\nportal:\t" << portal << "\ndistance:\t" << distance << std::endl;
-		return portals[portal]->teleport(previous);
+		return next;
 	}
 }
 

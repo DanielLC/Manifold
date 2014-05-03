@@ -109,7 +109,7 @@ void initialize ()
 	
 	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr portal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(0.001, wormhole));
+	SurfaceOfRevolution<PortalSpace2d>::PortalPtr portal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(0.01, wormhole));
 	portal->setExit(portal.get());
 	wormhole->addPortal(portal);
 	

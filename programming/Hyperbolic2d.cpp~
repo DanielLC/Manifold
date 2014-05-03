@@ -53,6 +53,12 @@ std::tr1::shared_ptr<Hyperbolic2d::Geodesic> Hyperbolic2d::Point::getGeodesic(Hy
 	double dir1 = (c-x[0])/r;
 	double dist = log((x[1]*(r+y[0]-c))/(y[1]*(r+x[0]-c)));
 	Vector2d z(dir0*dist,dir1*dist);
+	#ifndef NDEBUG
+	std::tr1::array<double,2> yy = getGeodesic(z)->getEndPoint().getCoordinates();
+	assert(fabs(yy[0] - y[0]) < EPSILON);
+	assert(fabs(yy[1] - y[1]) < EPSILON);
+	#endif
+	//assert(fabs(fabs(log((x[1]*(r+y[0]-c))/(y[1]*(r+x[0]-c)))) - z.norm()) < EPSILON);
 	/*std::cout << "y:	(" << y[0] << ",	" << y[1] << ")\n";
 	std::cout << "c:	" << c << "\n";
 	std::cout << "r:	" << r << "\n";
@@ -157,7 +163,7 @@ double Hyperbolic2d::Circle::getRot() {
 
 double Hyperbolic2d::Line::wormholeIntersectionDistance(double portal) {
 	double edist = (start.getCoordinates()[1])/(start.getCoordinates()[0]*portal);
-	if(edist < EPSILON) {
+	if(edist < EPSILON || edist == INFINITY) {
 		return INFINITY;
 	}
 	double dist = log(edist);
@@ -167,6 +173,11 @@ double Hyperbolic2d::Line::wormholeIntersectionDistance(double portal) {
 	if(dist < EPSILON) {
 		return INFINITY;
 	} else {
+		#ifndef NDEBUG
+		std::cout << "edist:\t" << edist << std::endl;
+		std::tr1::array<double,2> intersection = start.getGeodesic(z.normalized()*dist)->getEndPoint().getCoordinates();
+		assert(intersection[1]/intersection[0] == portal);
+		#endif
 		return dist;
 	}
 }
@@ -177,8 +188,9 @@ double Hyperbolic2d::Circle::wormholeIntersectionDistance(double portal) {
 			return INFINITY;
 		}
 	}
-	double a2 = portal*portal/(portal*portal+1);
-	double b2 = c*c-a2;
+	double c2 = c*c;		//Center, but also happens to be the hypotenuse of a right triangle. Lucky.
+	double a2 = c2*portal*portal/(portal*portal+1);
+	double b2 = c2-a2;
 	double d2 = r*r-b2;
 	if(d2 < EPSILON) {
 		return INFINITY;
@@ -186,19 +198,49 @@ double Hyperbolic2d::Circle::wormholeIntersectionDistance(double portal) {
 	double a = sqrt(a2);
 	double d = sqrt(d2);
 	std::tr1::array<double,2> x = start.getCoordinates();
+	assert(fabs((x[0]-c)*(x[0]-c)+x[1]*x[1] - r*r) < EPSILON);
 	Vector2d dir;
 	dir << portal, 1;
 	dir.normalize();
-	Vector2d y0 = (a-d)*dir;
+	Vector2d y0 = (a-d)*dir;		//It's a point, but since I'm finding it like that, I thought Vector2d would be easier.
+	//std::cout << "(y0 - (Vector2d() << c,0).finished()).squaredNorm()/(r*r)-1\t" << (y0 - (Vector2d() << c,0).finished()).squaredNorm()/(r*r)-1 << std::endl;
+	/*std::cout << "c\t:" << c << std::endl;
+	std::cout << "(y0 - (c,0)).norm():\t" << (y0 - (Vector2d() << c,0).finished()).norm() << std::endl;
+	std::cout << "r\t:" << r << std::endl;*/
+	//assert(fabs((y0 - (Vector2d() << c,0).finished()).squaredNorm()/(r*r)-1) < EPSILON);
+	//This assertion is about right. The program seems to run okay. But it's off by more than EPSILON, and since I'm squaring everything, it should be within EPSILON^2.
 	double dist = INFINITY;
-	if(y0[1] > 0 && ((z[0] > 0) ^ (y0[0] < x[0]))) {
+	if(y0[1] > 0 && !((z[0] > 0) ^ (y0[0] > x[0]))) {
 		dist = fabs(log((x[1]*(r+y0[0]-c))/(y0[1]*(r+x[0]-c))));
+		assert(fabs(dist - start.getGeodesic(Hyperbolic2d::Point(y0[0],y0[1]))->getVector().norm()) < EPSILON);
+		assert((dist*z.normalized() - start.getGeodesic(Hyperbolic2d::Point(y0[0],y0[1]))->getVector()).norm() < EPSILON);
 	}
 	Vector2d y1 = (a+d)*dir;
-	if(y1[1] > 0 && ((z[0] > 0) ^ (y1[0] < x[0]))) {
-		dist = std::min(dist,fabs(log((x[1]*(r+y1[0]-c))/(y1[1]*(r+x[0]-c)))));
+	//assert(fabs((y1 - (Vector2d() << c,0).finished()).squaredNorm()/(r*r)-1) < EPSILON);
+	if(y1[1] > 0 && !((z[0] > 0) ^ (y1[0] > x[0]))) {
+		double dist2 = fabs(log((x[1]*(r+y1[0]-c))/(y1[1]*(r+x[0]-c))));
+		/*#ifndef NDEBUG
+		assert(fabs(dist2 - start.getGeodesic(Hyperbolic2d::Point(y1[0],y1[1]))->getVector().norm()) < EPSILON);
+		assert((dist2*z.normalized() - start.getGeodesic(Hyperbolic2d::Point(y1[0],y1[1]))->getVector()).norm() < EPSILON);
+		if(dist2 < INFINITY) {
+			std::tr1::array<double,2> intersection = start.getGeodesic(z.normalized()*dist2)->getEndPoint().getCoordinates();
+			std::tr1::array<double,2> intersection2 = start.getGeodesic(-z.normalized()*dist2)->getEndPoint().getCoordinates();
+			assert(intersection[0]/intersection[1] == portal || intersection2[0]/intersection2[1]);	//This assert passes if the distance is right but the direction is wrong.
+			assert(intersection[0]/intersection[1] == portal);	//This assert only passes if both are correct.
+		}
+		#endif*/
+		dist = std::min(dist,dist2);
 	}
 	assert(dist > 0);
+	#ifndef NDEBUG
+	if(dist < INFINITY) {
+		//std::cout << "Hyperbolic2d::Circle::wormholeIntersectionDistance() dist:\t" << dist << std::endl;
+		std::tr1::array<double,2> intersection = start.getGeodesic(z.normalized()*dist)->getEndPoint().getCoordinates();
+		std::tr1::array<double,2> intersection2 = start.getGeodesic(-z.normalized()*dist)->getEndPoint().getCoordinates();
+		assert(fabs(intersection[0]/intersection[1] - portal) < EPSILON || fabs(intersection2[0]/intersection2[1] - portal) < EPSILON);	//This assert passes if the distance is right but the direction is wrong.
+		assert(fabs(intersection[0]/intersection[1] - portal) < EPSILON);	//This assert only passes if both are correct.
+	}
+	#endif
 	return dist;
 }
 
@@ -216,7 +258,8 @@ Intersection2d Hyperbolic2d::Line::wormholeGetIntersection(double portal) {
 }
 
 Intersection2d Hyperbolic2d::Circle::wormholeGetIntersection(double portal) {
-	double a2 = portal*portal/(portal*portal+1);
+	double c2 = c*c;		//Center, but also happens to be the hypotenuse of a right triangle. Lucky.
+	double a2 = c2*portal*portal/(portal*portal+1);
 	double b2 = c*c-a2;
 	double d2 = r*r-b2;
 	double a = sqrt(a2);
@@ -285,7 +328,6 @@ Hyperbolic2d::Line::Line(Hyperbolic2d::Point* start, Hyperbolic2d::Point end, Ve
 	this->start = *start;
 	this->end = end;
 	this->z = z;
-	//std::cout << "z[0]:\t" << z[0] << std::endl;
 	assert(fabs(z[0]) < EPSILON);
 }
 
