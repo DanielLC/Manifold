@@ -117,9 +117,9 @@ Manifold::GeodesicPtr Compound::PointOfReference::getFinalGeodesic(Vector3d vect
 }
 
 Compound::PointPtr Compound::PointOfReference::pointFromVector(Vector3d vector) {
-	/*Manifold::GeodesicPtr geodesic = getFinalGeodesic(vector);
-	Compound::PointPtr out(new Compound::Point(geodesic->getEndPoint()));*///TODO
-	Compound::PointPtr out(new Compound::Point(pointOfReference->getPosition()->getSpace()->pointFromVector(pointOfReference, vector)));
+	Manifold::GeodesicPtr geodesic = getFinalGeodesic(vector);
+	Compound::PointPtr out(new Compound::Point(geodesic->getEndPoint()));
+	//Compound::PointPtr out(new Compound::Point(pointOfReference->getPosition()->getSpace()->pointFromVector(pointOfReference, vector)));
 	return out;
 }
 

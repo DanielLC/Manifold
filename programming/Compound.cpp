@@ -48,15 +48,15 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 	//assert(v0 == v0);
 	double epsilon = 0.00001;
 	//Manifold* space = point->getPosition()->getSpace();
-	/*Vector3d v0 = this->pointFromVector(vector)->getPosition()->getVector();
+	Vector3d v0 = this->pointFromVector(vector)->getPosition()->getVector();
 	assert((v0 - pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector()).squaredNorm() < EPSILON);
 	Vector3d vx = this->pointFromVector(vector + Vector3d(epsilon,0,0))->getPosition()->getVector();
 	Vector3d vy = this->pointFromVector(vector + Vector3d(0,epsilon,0))->getPosition()->getVector();
-	Vector3d vz = this->pointFromVector(vector + Vector3d(0,0,epsilon))->getPosition()->getVector();*/
-	Vector3d v0 = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector();
+	Vector3d vz = this->pointFromVector(vector + Vector3d(0,0,epsilon))->getPosition()->getVector();
+	/*Vector3d v0 = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector();
 	Vector3d vx = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector + Vector3d(epsilon,0,0))->getVector();
 	Vector3d vy = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector + Vector3d(0,epsilon,0))->getVector();
-	Vector3d vz = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector + Vector3d(0,0,epsilon))->getVector();
+	Vector3d vz = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector + Vector3d(0,0,epsilon))->getVector();*/
 	assert(vz == vz);
 	Matrix3d jacobean;
 	jacobean << vx-v0,vy-v0,vz-v0;

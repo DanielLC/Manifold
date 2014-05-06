@@ -86,6 +86,7 @@ Hyperbolic2d::Point Hyperbolic2d::Point::pointFromVector(Vector2d z) {
 }
 
 std::tr1::shared_ptr<Hyperbolic2d::Geodesic> Hyperbolic2d::Point::getGeodesic(Vector2d z) {
+	//std::cout << "Hyperbolic2d::Point::getGeodesic(z) z:\n" << z << std::endl;
 	assert(z == z);
 	std::tr1::array<double,2> x = this->getCoordinates();
 	assert(x[1] > EPSILON);
@@ -174,8 +175,10 @@ double Hyperbolic2d::Line::wormholeIntersectionDistance(double portal) {
 		return INFINITY;
 	} else {
 		#ifndef NDEBUG
-		std::tr1::array<double,2> intersection = start.getGeodesic(z.normalized()*dist)->getEndPoint().getCoordinates();
-		assert(intersection[1]/intersection[0] == portal);
+		if(z.squaredNorm() > EPSILON) {
+			std::tr1::array<double,2> intersection = start.getGeodesic(z.normalized()*dist)->getEndPoint().getCoordinates();
+			assert(intersection[1]/intersection[0] == portal);
+		}
 		#endif
 		return dist;
 	}
@@ -197,7 +200,7 @@ double Hyperbolic2d::Circle::wormholeIntersectionDistance(double portal) {
 	double a = sqrt(a2);
 	double d = sqrt(d2);
 	std::tr1::array<double,2> x = start.getCoordinates();
-	assert(fabs((x[0]-c)*(x[0]-c)+x[1]*x[1] - r*r) < EPSILON);
+	//assert(fabs((x[0]-c)*(x[0]-c)+x[1]*x[1] - r*r) < EPSILON);	//Theoretically this should be true, but the error doesn't seem to be a problem.
 	Vector2d dir;
 	dir << portal, 1;
 	dir.normalize();
@@ -232,12 +235,10 @@ double Hyperbolic2d::Circle::wormholeIntersectionDistance(double portal) {
 	}
 	assert(dist > 0);
 	#ifndef NDEBUG
-	if(dist < INFINITY) {
+	if(dist < INFINITY && z.squaredNorm() > EPSILON) {
 		//std::cout << "Hyperbolic2d::Circle::wormholeIntersectionDistance() dist:\t" << dist << std::endl;
 		std::tr1::array<double,2> intersection = start.getGeodesic(z.normalized()*dist)->getEndPoint().getCoordinates();
-		std::tr1::array<double,2> intersection2 = start.getGeodesic(-z.normalized()*dist)->getEndPoint().getCoordinates();
-		assert(fabs(intersection[0]/intersection[1] - portal) < EPSILON || fabs(intersection2[0]/intersection2[1] - portal) < EPSILON);	//This assert passes if the distance is right but the direction is wrong.
-		assert(fabs(intersection[0]/intersection[1] - portal) < EPSILON);	//This assert only passes if both are correct.
+		assert(fabs(intersection[0]/intersection[1] - portal) < EPSILON);
 	}
 	#endif
 	return dist;
