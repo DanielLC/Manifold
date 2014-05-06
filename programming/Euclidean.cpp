@@ -189,3 +189,15 @@ Manifold::GeodesicPtr Euclidean::Portal::getGeodesic(IntersectionPtr intersectio
 	return getSpace()->getGeodesic(start, intersection->getVector());
 }
 
+PointTransportPtr Euclidean::Portal::getTransport(Manifold::PointPtr point) {
+	Vector3d delta = ((Euclidean::Point*) point.get())->getCoordinates() - center;
+	Vector3d position = delta.normalized();
+	double distance = delta.norm()/radius - 1;
+	return PointTransportPtr(new PointTransport(position, distance));
+}
+
+Manifold::PointPtr Euclidean::Portal::getPoint(PointTransportPtr transport) {
+	Vector3d coordinates = center + radius*exp(-transport->getDistance())*transport->getPosition();
+	return Manifold::PointPtr(new Euclidean::Point(coordinates, getSpace()));
+}
+

@@ -6,6 +6,7 @@
 #include <tr1/array>
 #include <Eigen/Core>
 #include "Intersection.h"
+#include "PointTransport.h"
 using Eigen::Matrix3d;
 using Eigen::Vector3d;
 
@@ -45,12 +46,15 @@ class Manifold {
 			public:
 				Manifold* getSpace();
 				GeodesicPtr teleport(GeodesicPtr geodesic);
+				PointPtr teleport(PointPtr point);
 				void setExit(Portal* exit);
 				void setSpace(Manifold* space);
-				//virtual Portal* getExit();
+				Manifold* getExitSpace();
 			private:
 				virtual GeodesicPtr getGeodesic(IntersectionPtr intersection) = 0;
 				virtual IntersectionPtr getIntersection(GeodesicPtr geodesic) = 0;
+				virtual Manifold::PointPtr getPoint(PointTransportPtr transport) = 0;
+				virtual PointTransportPtr getTransport(Manifold::PointPtr point) = 0;
 				Portal* exit;
 				Manifold* space;
 		};
@@ -68,6 +72,7 @@ class Manifold {
 		
 		GeodesicPtr nextPiece(GeodesicPtr previous);
 		void addPortal(PortalPtr portal);
+		std::vector<PortalPtr>* getPortals();
 	private:
 		std::vector<PortalPtr> portals;
 };

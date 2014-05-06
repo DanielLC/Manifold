@@ -1,13 +1,11 @@
 #ifndef intersection_h
 #define intersection_h
 
-#include <vector>
 #include <tr1/memory>
 #include <Eigen/Core>
 using Eigen::Matrix3d;
 using Eigen::Vector3d;
 
-//TODO: It might be possible to make it a template, given the address of a constant pointer to k.
 class Intersection {
 	public:
 		Vector3d getPosition();

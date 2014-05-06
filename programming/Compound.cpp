@@ -29,15 +29,29 @@ Manifold* Compound::Point::getSubspace() {
 	return position->getSpace();
 }
 
-std::tr1::shared_ptr<Manifold::Point> Compound::Point::getPosition() {
+Manifold::PointPtr Compound::Point::getPosition() {
 	return position;
 }
 
-Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector) {
+Vector3d Compound::Point::getVector(Manifold* space) {
+	if(getPosition()->getSpace() == space) {
+		return getPosition()->getVector();
+	}
+	std::vector<Manifold::PortalPtr>* portals = getPosition()->getSpace()->getPortals();
+	for(int i=0; i<portals->size(); ++i) {
+		if((*portals)[i]->getExitSpace() == space) {
+			return (*portals)[i]->teleport(getPosition())->getVector();
+		}
+	}
+	assert(false);	//Currently only checks one degree of seperation and gives up. This will need to be improved later.
+	return Vector3d();
+}
+
+Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::PointPtr point, Vector3d vector) {
 	return vectorFromPointAndNearVector(point, vector, 0);
 }
 
-Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector, int i) {
+Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::PointPtr point, Vector3d vector, int i) {
 	if(i > 10) {
 		return Vector3d(0,0,0);
 	}
@@ -48,15 +62,11 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(std::tr1::shar
 	//assert(v0 == v0);
 	double epsilon = 0.00001;
 	//Manifold* space = point->getPosition()->getSpace();
-	/*Vector3d v0 = this->pointFromVector(vector)->getPosition()->getVector();
+	Vector3d v0 = this->pointFromVector(vector)->getPosition()->getVector();
 	assert((v0 - pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector()).squaredNorm() < EPSILON);
 	Vector3d vx = this->pointFromVector(vector + Vector3d(epsilon,0,0))->getPosition()->getVector();
 	Vector3d vy = this->pointFromVector(vector + Vector3d(0,epsilon,0))->getPosition()->getVector();
-	Vector3d vz = this->pointFromVector(vector + Vector3d(0,0,epsilon))->getPosition()->getVector();*/
-	Vector3d v0 = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector();
-	Vector3d vx = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector + Vector3d(epsilon,0,0))->getVector();
-	Vector3d vy = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector + Vector3d(0,epsilon,0))->getVector();
-	Vector3d vz = pointOfReference->getSpace()->pointFromVector(pointOfReference, vector + Vector3d(0,0,epsilon))->getVector();
+	Vector3d vz = this->pointFromVector(vector + Vector3d(0,0,epsilon))->getPosition()->getVector();
 	assert(vz == vz);
 	Matrix3d jacobean;
 	jacobean << vx-v0,vy-v0,vz-v0;
