@@ -71,6 +71,8 @@ class Euclidean : public Manifold {
 				double radius;
 				Manifold::GeodesicPtr getGeodesic(IntersectionPtr intersection);
 				IntersectionPtr getIntersection(Manifold::GeodesicPtr geodesic);
+				Manifold::PointPtr getPoint(PointTransportPtr transport);
+				PointTransportPtr getTransport(Manifold::PointPtr point);
 		};
 		//typedef std::tr1::shared_ptr<Portal> PortalPtr;
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Vector3d vector);

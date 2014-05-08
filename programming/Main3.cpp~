@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <unistd.h>
-//#include "Euclidean.h"
+#include "Euclidean.h"
 //#include "Hyperbolic.h"
 #include "SurfaceOfRevolution.h"
 #include "PortalSpace2d2.h"
@@ -69,6 +69,11 @@ void display()
 		Vector3d v0 = por->vectorFromPointAndNearVector(triangleList[i][0],zero);
 		Vector3d v1 = por->vectorFromPointAndNearVector(triangleList[i][1],zero);
 		Vector3d v2 = por->vectorFromPointAndNearVector(triangleList[i][2],zero);
+		if(v0.squaredNorm() < EPSILON) {
+			std::cout << "Vertex missed." << std::endl;
+		} else {
+			std::cout << "Vertex hit." << std::endl;
+		}
 		if(v0[1] < 0 || v1[1] < 0 || v2[1] < 0)
 			continue;
 		v0 /= v0[1];
@@ -107,13 +112,23 @@ void initialize ()
 
 	space = new Compound();
 	
+	Euclidean* euclidean = new Euclidean();
 	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
+	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean)));
+	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,2),1,euclidean));
+	euclidean->addPortal(euclideanPortal);
+	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
+	wormhole->addPortal(wormholePortal);
+	euclideanPortal->setExit(wormholePortal.get());
+	wormholePortal->setExit(euclideanPortal.get());
+	
+	/*SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr portal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(0.01, wormhole));
+	SurfaceOfRevolution<PortalSpace2d>::PortalPtr portal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(0.1, wormhole));
 	portal->setExit(portal.get());
 	wormhole->addPortal(portal);
 	
-	/*Euclidean* euclidean = new Euclidean();
+	Euclidean* euclidean = new Euclidean();
 	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new Euclidean::PointOfReference(euclidean)));
 	
 	Manifold::Portal* portal0 = new Euclidean::Portal(Vector3d(0,0,0),1,euclidean);
@@ -123,8 +138,9 @@ void initialize ()
 	euclidean->addPortal(Manifold::PortalPtr(portal0));
 	euclidean->addPortal(Manifold::PortalPtr(portal1));*/
 	
-
-	triangleList = por->icosahedron(.05);
+	
+	Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
+	triangleList = tempPor->icosahedron(1);
 	glColor3f(1.0f,1.0f,1.0f);
 	
 	display();

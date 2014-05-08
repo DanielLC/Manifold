@@ -111,7 +111,7 @@ std::tr1::shared_ptr<Hyperbolic2d::Geodesic> Hyperbolic2d::Point::getGeodesic(Ve
 	//std::cout << "z:	(" << z[0] << ",	" << z[1] << ")" << std::endl;
 	//std::cout << "|z|:\t" << sqrt(z[0]*z[0]+z[1]*z[1]) << std::endl;
 	//std::cout << "y1:\t" << y1 << std::endl;
-	assert(y1 > 0.00000001);
+	assert(y1 > EPSILON);
 	/*std::cout << "point:	(" << x[0] << ",	" << x[1] << ")\n";
 	std::cout << "2d vector:	(" << z[0] << ",	" << z[1] << ")\n";
 	std::cout << "2d point:	(" << y0 << ",	" << y1 << ")\n";

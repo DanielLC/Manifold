@@ -111,19 +111,18 @@ void Manifold::Portal::setSpace(Manifold* space) {
 	this->space = space;
 }
 
+Manifold* Manifold::Portal::getExitSpace() {
+	return exit->getSpace();
+}
+
 Manifold::GeodesicPtr Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic) {
 	assert(exit);
-	//std::cout << "Manifold::Portal::teleport() error:\t" << (this->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() -geodesic->getEndPoint()->getVector()).squaredNorm() << std::endl;
-	//std::cout << "Manifold::Portal::teleport() error:\n" << this->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() -geodesic->getEndPoint()->getVector() << std::endl;
-	std::cout << "Original length:\t" << geodesic->getVector().norm() << std::endl;
-	std::cout << "Remaining distance:\t" << getGeodesic(getIntersection(geodesic))->getVector().norm() << std::endl;
-	assert((getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() - geodesic->getEndPoint()->getVector()).squaredNorm() < EPSILON*EPSILON);
-	//std::cout << "Input length:\t" << geodesic->getVector().norm() << std::endl;
-	//std::cout << "Output length:\t" << getGeodesic(getIntersection(geodesic))->getVector().norm() << std::endl;
-	//assert((exit->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() - geodesic->getEndPoint()->getVector()).squaredNorm() < EPSILON);
-	//std::cout << exit->getGeodesic(getIntersection(geodesic))->getEndPoint()->getVector() << std::endl;
-	//std::cout << "Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic)" << std::endl;
 	return exit->getGeodesic(getIntersection(geodesic));
+}
+
+Manifold::PointPtr Manifold::Portal::teleport(Manifold::PointPtr point) {
+	assert(exit);
+	return exit->getPoint(getTransport(point));
 }
 
 Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
@@ -152,5 +151,9 @@ Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
 
 void Manifold::addPortal(Manifold::PortalPtr portal) {
 	portals.push_back(portal);
+}
+
+std::vector<PortalPtr>* Manifold::getPortals() {
+	return &portals;
 }
 

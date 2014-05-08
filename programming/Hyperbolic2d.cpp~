@@ -86,7 +86,7 @@ Hyperbolic2d::Point Hyperbolic2d::Point::pointFromVector(Vector2d z) {
 }
 
 std::tr1::shared_ptr<Hyperbolic2d::Geodesic> Hyperbolic2d::Point::getGeodesic(Vector2d z) {
-	//std::cout << "Hyperbolic2d::Point::getGeodesic(z) z:\n" << z << std::endl;
+	std::cout << "Hyperbolic2d::Point::getGeodesic(z) z:\n" << z << std::endl;
 	assert(z == z);
 	std::tr1::array<double,2> x = this->getCoordinates();
 	assert(x[1] > EPSILON);
@@ -111,7 +111,7 @@ std::tr1::shared_ptr<Hyperbolic2d::Geodesic> Hyperbolic2d::Point::getGeodesic(Ve
 	//std::cout << "z:	(" << z[0] << ",	" << z[1] << ")" << std::endl;
 	//std::cout << "|z|:\t" << sqrt(z[0]*z[0]+z[1]*z[1]) << std::endl;
 	//std::cout << "y1:\t" << y1 << std::endl;
-	assert(y1 > 0.00000001);
+	assert(y1 > EPSILON);
 	/*std::cout << "point:	(" << x[0] << ",	" << x[1] << ")\n";
 	std::cout << "2d vector:	(" << z[0] << ",	" << z[1] << ")\n";
 	std::cout << "2d point:	(" << y0 << ",	" << y1 << ")\n";
@@ -175,8 +175,10 @@ double Hyperbolic2d::Line::wormholeIntersectionDistance(double portal) {
 		return INFINITY;
 	} else {
 		#ifndef NDEBUG
-		std::tr1::array<double,2> intersection = start.getGeodesic(z.normalized()*dist)->getEndPoint().getCoordinates();
-		assert(intersection[1]/intersection[0] == portal);
+		if(z.squaredNorm() > EPSILON) {
+			std::tr1::array<double,2> intersection = start.getGeodesic(z.normalized()*dist)->getEndPoint().getCoordinates();
+			assert(intersection[1]/intersection[0] == portal);
+		}
 		#endif
 		return dist;
 	}

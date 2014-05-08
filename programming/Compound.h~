@@ -34,6 +34,7 @@ class Compound {
 			public:
 				PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference> pointOfReference);
 				Vector3d vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector);
+				Vector3d vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector, int i);
 				std::tr1::shared_ptr<Point> pointFromVector(Vector3d vector);
 				Manifold::PointPtr getPosition();
 				void rotate(Matrix3d rot);

@@ -26,6 +26,7 @@ class Compound {
 				Point();
 				Manifold* getSubspace();
 				Manifold::PointPtr getPosition();
+				Vector3d getVector(Manifold* space);
 			private:
 				Manifold::PointPtr position;
 				Compound* space;
