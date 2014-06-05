@@ -282,7 +282,7 @@ Manifold::PointOfReferencePtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Geodes
 	//std::cout << "v.end<3>().norm():	" << v.end<3>().norm() << "\n";
 	//std::cout << "v.end<3>().dot(position->spherical):	" << v.end<3>().dot(position->spherical) << "\n";
 	assert(fabs(v.end<3>().dot(spherical)) < EPSILON);
-	double rot = geodesic2d->getRot();
+	double rot = -geodesic2d->getRot();
 	//Crashes if v.end<3>() = 0;
 	Vector3d row2 = spherical;
 	Vector3d row1;
