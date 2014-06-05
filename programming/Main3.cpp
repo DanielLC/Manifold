@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <unistd.h>
+#include "Assert.h"
 #include "Euclidean.h"
 //#include "Hyperbolic.h"
 #include "SurfaceOfRevolution.h"
@@ -69,11 +70,11 @@ void display()
 		Vector3d v0 = por->vectorFromPointAndNearVector(triangleList[i][0],zero);
 		Vector3d v1 = por->vectorFromPointAndNearVector(triangleList[i][1],zero);
 		Vector3d v2 = por->vectorFromPointAndNearVector(triangleList[i][2],zero);
-		if(v0.squaredNorm() < EPSILON) {
+		/*if(v0.squaredNorm() < EPSILON) {
 			std::cout << "Vertex missed." << std::endl;
 		} else {
 			std::cout << "Vertex hit." << std::endl;
-		}
+		}*/
 		if(v0[1] < 0 || v1[1] < 0 || v2[1] < 0)
 			continue;
 		v0 /= v0[1];
@@ -112,22 +113,26 @@ void initialize ()
 
 	space = new Compound();
 	
-	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
+	/*SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
-	triangleList = por->icosahedron(0.1);
+	triangleList = por->icosahedron(0.1);*/
 	
-	/*Euclidean* euclidean = new Euclidean();
+	Euclidean* euclidean = new Euclidean();
+	//euclidean = new Euclidean();
+	//std::cout << "Euclidean:\t" << euclidean << std::endl;
 	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
+	//wormhole = new SurfaceOfRevolution<PortalSpace2d>();
+	//std::cout << "Wormhole:\t" << wormhole << std::endl;
 	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean)));
-	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,2),1,euclidean));
+	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-2.5,0),1,euclidean));
 	euclidean->addPortal(euclideanPortal);
 	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
 	wormhole->addPortal(wormholePortal);
 	euclideanPortal->setExit(wormholePortal.get());
 	wormholePortal->setExit(euclideanPortal.get());
 	
-	Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
-	triangleList = tempPor->icosahedron(1);
+	//Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
+	//triangleList = por->icosahedron(1);
 	
 	/*SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
@@ -176,26 +181,34 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 	switch(key) {
 		case 'w':
 			//por->move((Vector3d() << 0,01,0).finished());
-			por->move(Vector3d(0,0.003,0));
+			por->move(Vector3d(0,0.051,0));
 			break;
 		case 'e':
 			//por->move(Vector3d(1/3.,2/3.,2/3.));
 			//por->move(Vector3d(0.6,0,0.8));
-			por->move(Vector3d(0,0,0.003));
+			//por->move(Vector3d(0,0,0.051));
+			por->rotate((Matrix3d() <<
+					cos(0.1),	sin(0.1),	0,
+					-sin(0.1),	cos(0.1),	0,
+					0,			0,			1).finished());
 			break;
 		case 'q':
 			//por->move(Vector3d(-1/3.,-2/3.,-2/3.));
 			//por->move(Vector3d(-0.6,0,-0.8));
-			por->move(Vector3d(0,0,-0.003));
+			//por->move(Vector3d(0,0,-0.051));
+			por->rotate((Matrix3d() <<
+					cos(0.1),	-sin(0.1),	0,
+					sin(0.1),	cos(0.1),	0,
+					0,			0,			1).finished());
 			break;
 		case 's':
-			por->move(Vector3d(0,-0.003,0));
+			por->move(Vector3d(0,-0.051,0));
 			break;
 		case 'a':
-			por->move(Vector3d(-0.003,0,0));
+			por->move(Vector3d(-0.051,0,0));
 			break;
 		case 'd':
-			por->move(Vector3d(0.003,0,0));
+			por->move(Vector3d(0.051,0,0));
 			break;
 		case KEY_ESCAPE:
 			exit(0);

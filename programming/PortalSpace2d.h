@@ -45,7 +45,8 @@ class PortalSpace2d {
 			private:
 				std::tr1::shared_ptr<Hyperbolic2d::Geodesic> geodesic;
 		};
-		GeodesicPtr getGeodesic(Intersection2d intersection, double portal);
+		static std::string getType();
+		//static GeodesicPtr getGeodesic(Intersection2d intersection, double portal);
 };
 #endif
 

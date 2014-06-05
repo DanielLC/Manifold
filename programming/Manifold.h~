@@ -5,6 +5,7 @@
 #include <vector>
 #include <tr1/array>
 #include <Eigen/Core>
+#include <string>
 #include "Intersection.h"
 #include "PointTransport.h"
 using Eigen::Matrix3d;
@@ -24,6 +25,7 @@ class Manifold {
 		typedef std::tr1::array<PointPtr,3> Triangle;
 		class Point {
 			public:
+				bool isInManifold();
 				virtual Manifold* getSpace() = 0;
 				virtual Vector3d getVector() = 0;
 		};
@@ -50,6 +52,7 @@ class Manifold {
 				void setExit(Portal* exit);
 				void setSpace(Manifold* space);
 				Manifold* getExitSpace();
+				virtual bool containsPoint(Manifold::Point* point) = 0;
 			private:
 				virtual GeodesicPtr getGeodesic(IntersectionPtr intersection) = 0;
 				virtual IntersectionPtr getIntersection(GeodesicPtr geodesic) = 0;
@@ -58,6 +61,7 @@ class Manifold {
 				Portal* exit;
 				Manifold* space;
 		};
+		virtual std::string getType() = 0;
 		Vector3d vectorFromPoint(PointOfReferencePtr start, PointPtr end);		//Maybe these two should be in PointOfReference.
 		PointPtr pointFromVector(PointOfReferencePtr start, Vector3d vector);	//
 		PointOfReferencePtr getPointOfReference(PointOfReferencePtr start, Vector3d vector);

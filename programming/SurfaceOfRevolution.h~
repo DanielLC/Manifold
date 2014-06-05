@@ -80,6 +80,7 @@ class SurfaceOfRevolution : public Manifold {
 				Portal(bool side, Manifold* space);	//For attaching to Euclidean geometry. This is intended just for <Portalspace2d>
 				Portal(double t, Manifold* space);
 				double getT();
+				bool containsPoint(Manifold::Point* point);
 			private:
 				double t;
 				Manifold::GeodesicPtr getGeodesic(IntersectionPtr intersection);
@@ -87,6 +88,7 @@ class SurfaceOfRevolution : public Manifold {
 				Manifold::PointPtr getPoint(PointTransportPtr transport);
 				PointTransportPtr getTransport(Manifold::PointPtr point);
 		};
+		std::string getType();
 		//These are how you actually get geodesics.
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Vector3d vector);			//Gives the geodesic that starts at start and has the direction and distance of vector
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Manifold::PointPtr end);		//Gives a geodesic that starts at start and ends at end
@@ -143,7 +145,7 @@ template <class SurfaceOfRevolution2d>
 Vector3d SurfaceOfRevolution<SurfaceOfRevolution2d>::Point::getVector() {
 	//std::cout << "spherical:\n" << spherical << std::endl;
 	//std::cout << "t:\t" << t << std::endl;
-	return spherical*exp(t/256);
+	return spherical*exp(t);
 }
 
 template <class SurfaceOfRevolution2d>
@@ -496,7 +498,9 @@ double SurfaceOfRevolution<SurfaceOfRevolution2d>::Geodesic::intersectionDistanc
 
 template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::Geodesic::intersectionDistance2(Manifold::Portal* portal) {
+	//std::cout << "SurfaceOfRevolution.h intersectionDistance" << std::endl;
 	double dist = geodesic2d->intersectionDistance(((SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal*)portal)->getT());
+	//std::cout << "SurfaceOfRevolution.h dist:\t" << dist << std::endl;
 	assert(dist > 0);
 	return dist;
 }
@@ -507,12 +511,21 @@ Manifold::PointOfReferencePtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Geodes
 }
 
 template <class SurfaceOfRevolution2d>
+bool SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::containsPoint(Manifold::Point* point) {
+	//std::cout << "SurfaceOfRevolution.h assert\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t << std::endl;
+	std::cout << "SurfaceOfRevolution.h t\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() << std::endl;
+	std::cout << "SurfaceOfRevolution.h portal\t" << t << std::endl;
+	return (((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t > EPSILON) ^ (t < 0);
+}
+
+template <class SurfaceOfRevolution2d>
 SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::Portal(bool side, Manifold* space) {
 	setSpace(space);
-	t = 2*M_PI/(log(2*M_PI)*getSpace()->getK());
-	if(!side) {
+	t = -2*M_PI/(log(2*M_PI)*((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getK());
+	if(side) {
 		t = -t;
 	}
+	std::cout << "SurfaceOfRevolution.h portal:\t" << t << std::endl;
 }
 
 template <class SurfaceOfRevolution2d>
@@ -546,6 +559,14 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getGeo
 	Vector4d p;
 	p << intersection->getPosition(), -1;
 	Matrix4d reflection = Matrix4d::Identity() - p*p.transpose();
+	//std::cout << "a" << std::endl;
+	//std::cout << x << std::endl;
+	/*std::cout << y << std::endl;
+	std::cout << z << std::endl;
+	std::cout << intersection->getPosition() << std::endl;
+	std::cout << p << std::endl;
+	std::cout << reflection << std::endl;*/
+	//std::cout << "b" << std::endl;
 	assert((reflection*reflection - Matrix4d::Identity()).squaredNorm() < EPSILON);
 	Matrix4d s;
 	s <<	0,0,0,1,
@@ -553,6 +574,7 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getGeo
 			0,1,0,0,
 			0,0,1,0;
 	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,s*reflection*orientation));
+	//std::cout << "intersection to vector:\n" << start->getOrientation()*(Vector4d() << intersection->getVector(),0).finished() << std::endl;
 	return getSpace()->getGeodesic(start,intersection->getVector());
 }
 
@@ -605,20 +627,15 @@ IntersectionPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getIntersect
 	/*std::cout << "Original length:\t" << geodesic->getVector().norm() << std::endl;
 	std::cout << "Distance to portal:\t" << distance << std::endl;
 	std::cout << "Remaining distance:\t" << (geodesic->getVector()-vector).norm() << std::endl;*/
-	return IntersectionPtr(new Intersection(position, final.block<3,3>(0,0), geodesic->getVector()-vector));
+	IntersectionPtr intersection(new Intersection(position, final.block<3,3>(0,0), geodesic->getVector()-vector));
+	assert(intersection->getSign());
+	return intersection;
 }
 
-template <class SurfaceOfRevolution2d>
-PointTransportPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getTransport(Manifold::PointPtr point) {
-	SurfaceOfRevolution<SurfaceOfRevolution2d>::Point* castedPoint = (SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point.get();
-	return PointTransportPtr(new PointTransport(castedPoint->getSpherical(), t-castedPoint->getT()));
-}
 
 template <class SurfaceOfRevolution2d>
-Manifold::PointPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getPoint(PointTransportPtr transport) {
-	Vector3d spherical = transport->getPosition();
-	double tt = transport->getDistance() + t;
-	return Manifold::PointPtr(new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(tt, spherical[0], spherical[1], spherical[2], (SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace()));
+std::string SurfaceOfRevolution<SurfaceOfRevolution2d>::getType() {
+	return "SurfaceOfRevolution<" + SurfaceOfRevolution2d::getType() + ">";
 }
 
 #endif

@@ -4,6 +4,7 @@
 
 #include "PortalSpace2d2.h"
 #include "Hyperbolic2d.h"
+#include "SurfaceOfRevolution.h"
 #include "Assert.h"
 #include <Eigen/Dense>
 #include <utility>
@@ -18,6 +19,7 @@ PortalSpace2d::Point::Point() {
 }
 
 PortalSpace2d::Point::Point(double t, double thetak) : hyperbolic(exp(thetak)/sqrt(1/(t*t)+1)*sgn(t),exp(thetak)/sqrt(t*t+1)) {
+	//t is cot(theta).
 	//std::cout << "t:\t" << t << "\ntheta k:\t" << thetak << std::endl;
 	assert(fabs(t - getT()) < EPSILON);
 	assert(fabs(thetak - getThetaK()) < EPSILON);
@@ -126,6 +128,7 @@ double PortalSpace2d::Geodesic::getRot() {
 }
 
 double PortalSpace2d::Geodesic::intersectionDistance(double portal) {
+	//std::cout << "PortalSpace2d2.cpp intersectionDistance" << std::endl;
 	assert(geodesic);
 	double dist = geodesic->wormholeIntersectionDistance(portal);
 	assert(dist > 0);
@@ -144,7 +147,38 @@ double PortalSpace2d::Point::operator[](int i) {
 	}
 }
 
-PortalSpace2d::GeodesicPtr getGeodesic(Intersection2d intersection, double portal) {
+/*static PortalSpace2d::GeodesicPtr PortalSpace2d::getGeodesic(Intersection2d intersection, double portal) {
 	return PortalSpace2d::GeodesicPtr(new PortalSpace2d::Geodesic(Hyperbolic2d::wormholeGetGeodesic(intersection, portal)));
+}*/
+
+std::string PortalSpace2d::getType() {
+	return "PortalSpace2d";
 }
+
+//For SurfaceOfRevolution<PortalSpace2d>
+
+double getEDist(double cot) {	//I probably shouldn't make this global. I'm only using it in these next two methods.
+	double csc = sqrt(1+cot*cot);
+	return csc + cot;
+}
+
+template<>
+PointTransportPtr SurfaceOfRevolution<PortalSpace2d>::Portal::getTransport(Manifold::PointPtr point) {
+	SurfaceOfRevolution<PortalSpace2d>::Point* castedPoint = (SurfaceOfRevolution<PortalSpace2d>::Point*) point.get();
+	//std::cout << "PortalSpace2d2.cpp Portal coordinate:\t" << t << std::endl;
+	//std::cout << "PortalSpace2d2.cpp Point coordinate:\t" << castedPoint->getT() << std::endl;
+	double dist = log(getEDist(castedPoint->getT())/getEDist(t));	//TODO: there's a chance this is backwards.
+	assert(castedPoint->getT() - t > -EPSILON);
+	assert(dist > -EPSILON);
+	return PointTransportPtr(new PointTransport(castedPoint->getSpherical(), dist));
+}
+
+template<>
+Manifold::PointPtr SurfaceOfRevolution<PortalSpace2d>::Portal::getPoint(PointTransportPtr transport) {
+	Vector3d spherical = transport->getPosition();
+	double d = transport->getDistance() + log(getEDist(t));
+	double tt = (1/d-d)/2;
+	return Manifold::PointPtr(new SurfaceOfRevolution<PortalSpace2d>::Point(tt, spherical[0], spherical[1], spherical[2], (SurfaceOfRevolution<PortalSpace2d>*) getSpace()));
+}
+
 

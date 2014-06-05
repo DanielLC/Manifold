@@ -98,7 +98,7 @@ double PortalSpace2d::Point::operator[](int i) {
 
 Vector2d PortalSpace2d::Geodesic::getVector() {
 	Vector2d cartesian = geodesic->getVector();
-	double theta = geodesic->getStartPoint().getT();
+	double theta = getStartPoint().getT();
 	Matrix2d m;
 	m <<	sin(theta),	cos(theta),		//This matrix is the inverse of the other two. It turns out that it's its own inverse, so it's the same matrix.
 			cos(theta),	-sin(theta);

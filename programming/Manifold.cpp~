@@ -1,5 +1,7 @@
 #include "Manifold.h"
 #include "Euclidean.h"
+#include "SurfaceOfRevolution.h"
+#include "PortalSpace2d2.h"
 #include "Assert.h"
 
 std::vector<Manifold::Triangle> Manifold::icosahedron(PointOfReferencePtr por) {
@@ -91,6 +93,16 @@ Manifold::PointOfReferencePtr Manifold::getPointOfReference(Manifold::PointOfRef
 	return this->getGeodesic(start, vector)->getEndPointOfReference();
 }
 
+bool Manifold::Point::isInManifold() {
+	std::vector<Manifold::PortalPtr>* portals = getSpace()->getPortals();
+	for(int i=0; i<portals->size(); ++i) {
+		if((*portals)[i]->containsPoint(this)) {
+			return false;
+		}
+	}
+	return true;
+}
+
 Manifold* Manifold::PointOfReference::getSpace() {
 	return getPosition()->getSpace();
 }
@@ -126,13 +138,19 @@ Manifold::PointPtr Manifold::Portal::teleport(Manifold::PointPtr point) {
 }
 
 Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
+	assert(this == previous->getSpace());
+	std::cout << "Manifold.cpp Space:\t" << getType() << std::endl;
+	/*std::cout << "Manifold.cpp Length:\t" << previous->getVector().norm() << std::endl;*/
+	assert(previous->getStart()->getPosition()->isInManifold());
+	if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
+		std::cout << "Manifold.cpp t before:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) previous->getStart()->getPosition().get())->getT() << std::endl;
+	}
 	double distance = previous->getVector().norm();
 	int portal = -1;
 	for(int i=0; i<portals.size(); ++i) {
 		double current = previous->intersectionDistance(portals[i]);
-		//std::cout << "current:\t" << current << std::endl;
-		//std::cout << "portal:\t\t" << i << std::endl;
-		//std::cout << "current:\t" << current << std::endl;
+		//std::cout << "Manifold.cpp current:\t" << current << std::endl;
+		//std::cout << "Manifold.cpp portal:\t\t" << i << std::endl;
 		assert(current > 0);
 		if(current < distance) {
 			distance = current;
@@ -140,10 +158,13 @@ Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
 		}
 	}
 	if(portal == -1) {
+		if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
+			std::cout << "Manifold.cpp t after:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) previous->getEndPoint().get())->getT() << std::endl;
+		}
+		assert(previous->getEndPoint()->isInManifold());
 		return Manifold::GeodesicPtr();
 	} else {
 		Manifold::GeodesicPtr next = portals[portal]->teleport(previous);
-		assert((next->getEndPoint()->getVector() - previous->getEndPoint()->getVector()).squaredNorm() < EPSILON); //TODO only works on portals that lead to themselves.
 		//std::cout << "teleport\nportal:\t" << portal << "\ndistance:\t" << distance << std::endl;
 		return next;
 	}
@@ -153,7 +174,7 @@ void Manifold::addPortal(Manifold::PortalPtr portal) {
 	portals.push_back(portal);
 }
 
-std::vector<PortalPtr>* Manifold::getPortals() {
+std::vector<Manifold::PortalPtr>* Manifold::getPortals() {
 	return &portals;
 }
 

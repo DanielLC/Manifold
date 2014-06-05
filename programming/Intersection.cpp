@@ -33,3 +33,7 @@ void Intersection::invert() {
 	orientation = reflection*orientation;
 }
 
+bool Intersection::getSign() {
+	return (orientation.transpose()*vector).dot(position) > 0;
+}
+

@@ -14,6 +14,7 @@ class Intersection {
 		Intersection(Vector3d position, Matrix3d orientation, Vector3d vector);
 		void rotate(Matrix3d rotation);
 		void invert();
+		bool getSign();
 	private:
 		Vector3d position;
 		Matrix3d orientation;
