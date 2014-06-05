@@ -141,7 +141,7 @@ Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
 	assert(this == previous->getSpace());
 	std::cout << "Manifold.cpp Space:\t" << getType() << std::endl;
 	/*std::cout << "Manifold.cpp Length:\t" << previous->getVector().norm() << std::endl;*/
-	assert(previous->getStart()->getPosition()->isInManifold());
+	//assert(previous->getStart()->getPosition()->isInManifold());
 	if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
 		std::cout << "Manifold.cpp t before:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) previous->getStart()->getPosition().get())->getT() << std::endl;
 	}

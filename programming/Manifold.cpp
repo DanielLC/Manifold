@@ -139,12 +139,12 @@ Manifold::PointPtr Manifold::Portal::teleport(Manifold::PointPtr point) {
 
 Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
 	assert(this == previous->getSpace());
-	std::cout << "Manifold.cpp Space:\t" << getType() << std::endl;
+	//std::cout << "Manifold.cpp Space:\t" << getType() << std::endl;
 	/*std::cout << "Manifold.cpp Length:\t" << previous->getVector().norm() << std::endl;*/
 	//assert(previous->getStart()->getPosition()->isInManifold());
-	if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
+	/*if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
 		std::cout << "Manifold.cpp t before:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) previous->getStart()->getPosition().get())->getT() << std::endl;
-	}
+	}*/
 	double distance = previous->getVector().norm();
 	int portal = -1;
 	for(int i=0; i<portals.size(); ++i) {
@@ -158,9 +158,9 @@ Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
 		}
 	}
 	if(portal == -1) {
-		if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
+		/*if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
 			std::cout << "Manifold.cpp t after:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) previous->getEndPoint().get())->getT() << std::endl;
-		}
+		}*/
 		assert(previous->getEndPoint()->isInManifold());
 		return Manifold::GeodesicPtr();
 	} else {
