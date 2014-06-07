@@ -117,21 +117,21 @@ void initialize ()
 	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
 	triangleList = por->icosahedron(0.1);*/
 	
-	//Euclidean* euclidean = new Euclidean();
-	//euclidean = new Euclidean();
+	Euclidean* euclidean = new Euclidean();
+	euclidean = new Euclidean();
 	//std::cout << "Euclidean:\t" << euclidean << std::endl;
 	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	//wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	//std::cout << "Wormhole:\t" << wormhole << std::endl;
-	//por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean)));
-	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
-	por->move(Vector3d(0.1,0,0));
-	/*Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-2.5,0),1,euclidean));
+	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean)));
+	//por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
+	//por->move(Vector3d(1,0,0));
+	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-2.5,0),1,euclidean));
 	euclidean->addPortal(euclideanPortal);
 	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
 	wormhole->addPortal(wormholePortal);
 	euclideanPortal->setExit(wormholePortal.get());
-	wormholePortal->setExit(euclideanPortal.get());*/
+	wormholePortal->setExit(euclideanPortal.get());
 	
 	//Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
 	triangleList = por->icosahedron(0.1);

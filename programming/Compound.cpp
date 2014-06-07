@@ -58,7 +58,9 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::Poin
 		//return vector;
 		return Vector3d(0,0,0);
 	}
-	assert(vector == vector);
+	if(vector != vector) {
+		return Vector3d(0,0,0);
+	}
 	Vector3d v1 = point->getPosition()->getVector();
 	//Vector3d v0 = point->getPosition()->getVector();
 	//assert(v0 == v0);
@@ -83,7 +85,9 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::Poin
 	Vector3d delta = jacobean.inverse()*(v1-v0);
 	//std::cout << "v1-v0:\n" << v1-v0 << std::endl;
 	//std::cout << "delta:\n" << delta << std::endl;
-	assert(delta == delta);
+	if(delta != delta) {
+		return Vector3d(0,0,0);
+	}
 	//std::cout << "delta.norm():\t" << delta.norm() << std::endl;
 	double squaredNorm = delta.squaredNorm();
 	double max = 5;
