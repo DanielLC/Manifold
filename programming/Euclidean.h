@@ -67,6 +67,8 @@ class Euclidean : public Manifold {
 				double getRadius();
 				~Portal();
 				bool containsPoint(Manifold::Point* point);
+				double getRadiusOfCurvature();
+				double getCircumference();
 			private:
 				Vector3d center;
 				double radius;

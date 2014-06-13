@@ -121,15 +121,22 @@ void initialize ()
 	euclidean = new Euclidean();
 	//std::cout << "Euclidean:\t" << euclidean << std::endl;
 	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
+	std::cout << "Main3.cpp wormhole bottleneck:\t" << wormhole->getBottleneckCircumference() << std::endl;
 	//wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	//std::cout << "Wormhole:\t" << wormhole << std::endl;
 	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean)));
 	//por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
 	//por->move(Vector3d(1,0,0));
-	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-2.5,0),1,euclidean));
-	euclidean->addPortal(euclideanPortal);
 	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
 	wormhole->addPortal(wormholePortal);
+	//std::cout << "Main3.cpp portal radius:\t" << wormholePortal->getRadiusOfCurvature() << std::endl;
+	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),-wormholePortal->getRadiusOfCurvature(),euclidean));
+	//Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-2.5,0),1,euclidean));
+	/*std::cout << "Main3.cpp wormholePortal circumference:\t" << wormholePortal->getCircumference() << std::endl;
+	std::cout << "Main3.cpp euclideanPortal circumference:\t" << euclideanPortal->getCircumference() << std::endl;
+	std::cout << "Main3.cpp difference:\t" << fabs(wormholePortal->getCircumference()-euclideanPortal->getCircumference()) << std::endl;*/
+	assert(fabs(wormholePortal->getCircumference() - euclideanPortal->getCircumference()) < EPSILON);
+	euclidean->addPortal(euclideanPortal);
 	euclideanPortal->setExit(wormholePortal.get());
 	wormholePortal->setExit(euclideanPortal.get());
 	
@@ -183,7 +190,7 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 	switch(key) {
 		case 'w':
 			//por->move((Vector3d() << 0,01,0).finished());
-			por->move(Vector3d(0,0.051,0));
+			por->move(Vector3d(0,0.05,0));
 			break;
 		case 'e':
 			//por->move(Vector3d(1/3.,2/3.,2/3.));
@@ -204,13 +211,13 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 					0,			0,			1).finished());
 			break;
 		case 's':
-			por->move(Vector3d(0,-0.051,0));
+			por->move(Vector3d(0,-0.05,0));
 			break;
 		case 'a':
-			por->move(Vector3d(-0.051,0,0));
+			por->move(Vector3d(-0.05,0,0));
 			break;
 		case 'd':
-			por->move(Vector3d(0.051,0,0));
+			por->move(Vector3d(0.05,0,0));
 			break;
 		case KEY_ESCAPE:
 			exit(0);
@@ -219,7 +226,7 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 		default:
 			break;
 	}
-	
+	//std::cout << "Main3.cpp space:\t" << por->getPosition()->getSpace()->getType() << std::endl;
 	display();
 }
 

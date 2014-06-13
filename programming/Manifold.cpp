@@ -129,6 +129,7 @@ Manifold* Manifold::Portal::getExitSpace() {
 
 Manifold::GeodesicPtr Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic) {
 	assert(exit);
+	//std::cout << "Manifold.cpp teleport from " << getSpace()->getType() << std::endl;
 	return exit->getGeodesic(getIntersection(geodesic));
 }
 

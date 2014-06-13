@@ -54,6 +54,8 @@ class Manifold {
 				void setSpace(Manifold* space);
 				Manifold* getExitSpace();
 				virtual bool containsPoint(Manifold::Point* point) = 0;
+				virtual double getRadiusOfCurvature() = 0;
+				virtual double getCircumference() = 0;
 			private:
 				virtual GeodesicPtr getGeodesic(IntersectionPtr intersection) = 0;
 				virtual IntersectionPtr getIntersection(GeodesicPtr geodesic) = 0;

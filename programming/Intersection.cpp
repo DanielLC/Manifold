@@ -34,6 +34,10 @@ void Intersection::invert() {
 }
 
 bool Intersection::getSign() {
-	return (orientation.transpose()*vector).dot(position) > 0;
+	/*std::cout << "Intersection.cpp orientation:\t" << (orientation*vector).normalized().dot(position) << std::endl;
+	std::cout << "Intersection.cpp orientation.transpose():\t" << (orientation.transpose()*vector).normalized().dot(position) << std::endl;
+	std::cout << "Intersection.cpp " << (orientation*vector).dot(position) << std::endl;
+	std::cout << "Intersection.cpp " << ((orientation*vector).dot(position) > 0) << std::endl;*/
+	return (orientation*vector).dot(position) > 0;
 }
 

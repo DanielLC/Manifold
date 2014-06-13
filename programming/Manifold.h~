@@ -39,6 +39,7 @@ class Manifold {
 			public:
 				virtual PointPtr getEndPoint() = 0;
 				virtual PointOfReferencePtr getEndPointOfReference() = 0;
+				virtual PointOfReferencePtr getStart() = 0;
 				virtual Vector3d getVector() = 0;
 				Manifold* getSpace();
 				

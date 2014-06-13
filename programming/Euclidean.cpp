@@ -126,7 +126,7 @@ double Euclidean::Geodesic::intersectionDistance2(Manifold::Portal* portal) {	//
 	Euclidean::Portal* castedPortal = (Euclidean::Portal*) portal;
 	Vector3d displacement = castedPortal->getCenter() - start->getCoordinates();
 	double r = castedPortal->getRadius();
-	double dot = vector.normalized().dot(displacement);			//The distance to the closest the geodesic gets to the center of the portal
+	double dot = (start->getOrientation()*vector).normalized().dot(displacement);			//The distance to the closest the geodesic gets to the center of the portal
 	double closestSquared = displacement.squaredNorm() - dot*dot;//The square of the closest the geodesic gets to the center of the portal
 	//std::cout << "r*r-closestSquared:\t" << r*r-closestSquared << std::endl;
 	if(closestSquared > r*r-EPSILON) {
@@ -137,9 +137,13 @@ double Euclidean::Geodesic::intersectionDistance2(Manifold::Portal* portal) {	//
 	}
 	double squareroot = sqrt(r*r-closestSquared);
 	//std::cout << "dot-squareroot:\t\t" << dot-squareroot << "\ndot+squareroot:\t\t" << dot+squareroot << std::endl;
-	if(dot-squareroot > EPSILON) {
+	if(dot-squareroot > 0.00001) {
+		//std::cout << "Euclidean.cpp dot-squareroot:\t" << dot-squareroot << std::endl;
+		//Should be this if it's entering the sphere.
 		return dot-squareroot;
-	} else if(dot+squareroot > EPSILON) {
+	} else if(dot+squareroot > 0.00001) {
+		//std::cout << "Euclidean.cpp dot+squareroot:\t" << dot+squareroot << std::endl;
+		//Should be this if it's leaving the sphere.
 		return dot+squareroot;
 	} else {
 		//std::cout << "dot+squareroot:\t" << dot+squareroot << std::endl;
@@ -178,6 +182,7 @@ IntersectionPtr Euclidean::Portal::getIntersection(Manifold::GeodesicPtr geodesi
 	Euclidean::GeodesicPtr castedGeodesic = std::tr1::static_pointer_cast<Euclidean::Geodesic>(geodesic);
 	//std::cout << "ac" << std::endl;
 	double dist = castedGeodesic->intersectionDistance2(this);
+	assert(dist > EPSILON);
 	//std::cout << "ad" << std::endl;
 	Euclidean::PointOfReference* start = (Euclidean::PointOfReference*) castedGeodesic->getStart().get();
 	Vector3d position = (start->getCoordinates() + dist*normalized - center).normalized();
@@ -206,6 +211,14 @@ PointTransportPtr Euclidean::Portal::getTransport(Manifold::PointPtr point) {
 Manifold::PointPtr Euclidean::Portal::getPoint(PointTransportPtr transport) {
 	Vector3d coordinates = center + radius*exp(-transport->getDistance())*transport->getPosition();
 	return Manifold::PointPtr(new Euclidean::Point(coordinates, (Euclidean*) getSpace()));
+}
+
+double Euclidean::Portal::getRadiusOfCurvature() {
+	return radius;
+}
+
+double Euclidean::Portal::getCircumference() {
+	return 2*M_PI*radius;
 }
 
 std::string Euclidean::getType() {

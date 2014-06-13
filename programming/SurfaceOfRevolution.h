@@ -21,6 +21,7 @@ template <class SurfaceOfRevolution2d>
 class SurfaceOfRevolution : public Manifold {
 	public:
 		double getK();								//the circumference of the bottleneck = log(2*pi*k)
+		double getBottleneckCircumference();
 		class Point;
 		class PointOfReference;
 		class Geodesic;
@@ -81,6 +82,8 @@ class SurfaceOfRevolution : public Manifold {
 				Portal(double t, Manifold* space);
 				double getT();
 				bool containsPoint(Manifold::Point* point);
+				double getRadiusOfCurvature();
+				double getCircumference();
 			private:
 				double t;
 				Manifold::GeodesicPtr getGeodesic(IntersectionPtr intersection);
@@ -96,8 +99,13 @@ class SurfaceOfRevolution : public Manifold {
 
 template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getK() {
-	//return exp(2*M_PI)/(2*M_PI);
-	return 1;
+	return exp(2*M_PI)/(2*M_PI);
+	//return 1;
+}
+
+template <class SurfaceOfRevolution2d>
+double SurfaceOfRevolution<SurfaceOfRevolution2d>::getBottleneckCircumference() {
+	return log(2*M_PI*getK());
 }
 
 template <class SurfaceOfRevolution2d>
@@ -513,19 +521,19 @@ Manifold::PointOfReferencePtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Geodes
 template <class SurfaceOfRevolution2d>
 bool SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::containsPoint(Manifold::Point* point) {
 	//std::cout << "SurfaceOfRevolution.h assert\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t << std::endl;
-	std::cout << "SurfaceOfRevolution.h t\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() << std::endl;
-	std::cout << "SurfaceOfRevolution.h portal\t" << t << std::endl;
+	//std::cout << "SurfaceOfRevolution.h t\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() << std::endl;
+	//std::cout << "SurfaceOfRevolution.h portal\t" << t << std::endl;
 	return (((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t > EPSILON) ^ (t < 0);
 }
 
-template <class SurfaceOfRevolution2d>
+template <class SurfaceOfRevolution2d>	//This should probably be moved to PortalSpace2d2.cpp and made specifically with that <>
 SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::Portal(bool side, Manifold* space) {
 	setSpace(space);
-	t = -2*M_PI/(log(2*M_PI)*((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getK());
+	t = -2*M_PI/((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getBottleneckCircumference();
 	if(side) {
 		t = -t;
 	}
-	std::cout << "SurfaceOfRevolution.h portal:\t" << t << std::endl;
+	//std::cout << "SurfaceOfRevolution.h portal:\t" << t << std::endl;
 }
 
 template <class SurfaceOfRevolution2d>
@@ -630,6 +638,16 @@ IntersectionPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getIntersect
 	IntersectionPtr intersection(new Intersection(position, final.block<3,3>(0,0), geodesic->getVector()-vector));
 	assert(intersection->getSign());
 	return intersection;
+}
+
+template <class SurfaceOfRevolution2d>
+double SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getRadiusOfCurvature() {
+	return -sqrt(1+1/(t*t));
+}
+
+template <class SurfaceOfRevolution2d>
+double SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getCircumference() {
+	return fabs(((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getBottleneckCircumference()*sqrt(1+t*t));
 }
 
 

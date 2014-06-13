@@ -220,9 +220,14 @@ double Hyperbolic2d::Circle::wormholeIntersectionDistance(double portal) {
 	double dist = INFINITY;
 	if(y0[1] > 0 && !((z[0] > 0) ^ (y0[0] > x[0]))) {
 		dist = fabs(log((x[1]*(r+y0[0]-c))/(y0[1]*(r+x[0]-c))));
+		if(dist < EPSILON) {
+			dist = INFINITY;
+		}
 		//std::cout << "Hyperbolic2d.cpp dist:\t" << dist << std::endl;
-		assert(fabs(dist - start.getGeodesic(Hyperbolic2d::Point(y0[0],y0[1]))->getVector().norm()) < EPSILON);
-		assert((dist*z.normalized() - start.getGeodesic(Hyperbolic2d::Point(y0[0],y0[1]))->getVector()).norm() < EPSILON);
+		if(dist < INFINITY) {
+			assert(fabs(dist - start.getGeodesic(Hyperbolic2d::Point(y0[0],y0[1]))->getVector().norm()) < EPSILON);
+			assert((dist*z.normalized() - start.getGeodesic(Hyperbolic2d::Point(y0[0],y0[1]))->getVector()).norm() < EPSILON);
+		}
 	}
 	Vector2d y1 = (a+d)*dir;
 	//assert(fabs((y1 - (Vector2d() << c,0).finished()).squaredNorm()/(r*r)-1) < EPSILON);
@@ -241,7 +246,9 @@ double Hyperbolic2d::Circle::wormholeIntersectionDistance(double portal) {
 			assert(intersection[0]/intersection[1] == portal);	//This assert only passes if both are correct.
 		}
 		#endif*/
-		dist = std::min(dist,dist2);
+		if(dist2 > EPSILON) {
+			dist = std::min(dist,dist2);
+		}
 	}
 	#ifndef NDEBUG
 	if(dist <= 0) {
