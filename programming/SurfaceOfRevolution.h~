@@ -105,6 +105,7 @@ double SurfaceOfRevolution<SurfaceOfRevolution2d>::getK() {
 
 template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getBottleneckCircumference() {
+	//return log(2*M_PI)*getK();
 	return log(2*M_PI*getK());
 }
 
@@ -529,6 +530,7 @@ bool SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::containsPoint(Manifold:
 template <class SurfaceOfRevolution2d>	//This should probably be moved to PortalSpace2d2.cpp and made specifically with that <>
 SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::Portal(bool side, Manifold* space) {
 	setSpace(space);
+	//t = -2*M_PI/(log(2*M_PI)*((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getK());
 	t = -2*M_PI/((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getBottleneckCircumference();
 	if(side) {
 		t = -t;
@@ -553,7 +555,7 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getGeo
 	double y = intersection->getPosition()[1];
 	double z = intersection->getPosition()[2];
 	SurfaceOfRevolution<SurfaceOfRevolution2d>* space = (SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace();
-	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointPtr startPoint(new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(t-EPSILON,x,y,z,space));
+	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointPtr startPoint(new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(t,x,y,z,space));
 	//std::cout << "Position of intersection after:\t" << startPoint->getT() << std::endl;
 	/*SurfaceOfRevolution<typename SurfaceOfRevolution2d>::Point* startPointPointer = new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(t,x,y,z,space);
 	SurfaceOfRevolution<typename SurfaceOfRevolution2d>::PointPtr startPoint(startPointPointer);*/
@@ -649,7 +651,6 @@ template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getCircumference() {
 	return fabs(((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getBottleneckCircumference()*sqrt(1+t*t));
 }
-
 
 template <class SurfaceOfRevolution2d>
 std::string SurfaceOfRevolution<SurfaceOfRevolution2d>::getType() {

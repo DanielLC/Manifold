@@ -105,6 +105,7 @@ double SurfaceOfRevolution<SurfaceOfRevolution2d>::getK() {
 
 template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getBottleneckCircumference() {
+	//return log(2*M_PI)*getK();
 	return log(2*M_PI*getK());
 }
 
@@ -529,7 +530,8 @@ bool SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::containsPoint(Manifold:
 template <class SurfaceOfRevolution2d>	//This should probably be moved to PortalSpace2d2.cpp and made specifically with that <>
 SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::Portal(bool side, Manifold* space) {
 	setSpace(space);
-	t = -2*M_PI/((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getBottleneckCircumference();
+	t = -2*M_PI/(log(2*M_PI)*((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getK());
+	//t = -2*M_PI/((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getBottleneckCircumference();
 	if(side) {
 		t = -t;
 	}
@@ -649,7 +651,6 @@ template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getCircumference() {
 	return fabs(((SurfaceOfRevolution<SurfaceOfRevolution2d>*) getSpace())->getBottleneckCircumference()*sqrt(1+t*t));
 }
-
 
 template <class SurfaceOfRevolution2d>
 std::string SurfaceOfRevolution<SurfaceOfRevolution2d>::getType() {
