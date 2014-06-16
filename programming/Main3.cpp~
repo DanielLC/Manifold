@@ -130,12 +130,12 @@ void initialize ()
 	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
 	wormhole->addPortal(wormholePortal);
 	//std::cout << "Main3.cpp portal radius:\t" << wormholePortal->getRadiusOfCurvature() << std::endl;
-	//Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),-wormholePortal->getRadiusOfCurvature(),euclidean));
+	//Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),-wormholePortal->getRadiusOfCurvature(),euclidean));//TODO: Should work with this instead of the next line.
 	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),sqrt(2),euclidean));
 	/*std::cout << "Main3.cpp wormholePortal circumference:\t" << wormholePortal->getCircumference() << std::endl;
 	std::cout << "Main3.cpp euclideanPortal circumference:\t" << euclideanPortal->getCircumference() << std::endl;
 	std::cout << "Main3.cpp difference:\t" << fabs(wormholePortal->getCircumference()-euclideanPortal->getCircumference()) << std::endl;*/
-	//assert(fabs(wormholePortal->getCircumference() - euclideanPortal->getCircumference()) < EPSILON);
+	//assert(fabs(wormholePortal->getCircumference() - euclideanPortal->getCircumference()) < EPSILON);//TODO: Should pass this assert.
 	euclidean->addPortal(euclideanPortal);
 	euclideanPortal->setExit(wormholePortal.get());
 	wormholePortal->setExit(euclideanPortal.get());
@@ -227,6 +227,9 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 			break;
 	}
 	std::cout << "Main3.cpp space:\t" << por->getPosition()->getSpace()->getType() << std::endl;
+	if(por->getPosition()->getSpace()->getType() == "SurfaceOfRevolution<PortalSpace2d>") {
+		std::cout << "Main3.cpp t:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) por->getPosition().get())->getT() << std::endl;
+	}
 	display();
 }
 
