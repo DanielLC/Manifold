@@ -36,10 +36,13 @@ class Compound {
 				PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference> pointOfReference);
 				Vector3d vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector);
 				Vector3d vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector, int i);
-				std::tr1::shared_ptr<Point> pointFromVector(Vector3d vector);
+				PointPtr pointFromVector(Vector3d vector);
+				PointOfReferencePtr pointOfReferenceFromVector(Vector3d vector);
 				Manifold::PointPtr getPosition();
 				void rotate(Matrix3d rot);
 				void move(Vector3d dir);
+				PointPtr cylindrical(double r, double theta, double h);
+				std::vector<Triangle> helix(double k);
 				std::vector<Triangle> icosahedron();
 				std::vector<Triangle> icosahedron(double k);
 				std::vector<Triangle> octahedron();
@@ -47,6 +50,7 @@ class Compound {
 			private:
 				Manifold::GeodesicPtr getFinalGeodesic(Vector3d vector);
 				Manifold::PointOfReferencePtr pointOfReference;
+				PointPtr cylidrical(double r, double theta, double h);
 		};
 		GeodesicPtr getGeodesic(PointOfReferencePtr start, PointPtr end);
 		GeodesicPtr getGeodesic(PointOfReferencePtr start, Vector3d vector);

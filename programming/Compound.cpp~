@@ -58,7 +58,9 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::Poin
 		//return vector;
 		return Vector3d(0,0,0);
 	}
-	assert(vector == vector);
+	if(vector != vector) {
+		return Vector3d(0,0,0);
+	}
 	Vector3d v1 = point->getPosition()->getVector();
 	//Vector3d v0 = point->getPosition()->getVector();
 	//assert(v0 == v0);
@@ -139,7 +141,12 @@ Manifold::GeodesicPtr Compound::PointOfReference::getFinalGeodesic(Vector3d vect
 Compound::PointPtr Compound::PointOfReference::pointFromVector(Vector3d vector) {
 	Manifold::GeodesicPtr geodesic = getFinalGeodesic(vector);
 	Compound::PointPtr out(new Compound::Point(geodesic->getEndPoint()));
-	//Compound::PointPtr out(new Compound::Point(pointOfReference->getPosition()->getSpace()->pointFromVector(pointOfReference, vector)));
+	return out;
+}
+
+Compound::PointOfReferencePtr Compound::PointOfReference::pointOfReferenceFromVector(Vector3d vector) {
+	Manifold::GeodesicPtr geodesic = getFinalGeodesic(vector);
+	Compound::PointOfReferencePtr out(new Compound::PointOfReference(geodesic->getEndPointOfReference()));
 	return out;
 }
 
@@ -177,14 +184,42 @@ std::vector<Compound::Triangle> Compound::PointOfReference::octahedron() {
 	return octahedron(1.);
 }
 
+Compound::PointPtr Compound::PointOfReference::cylindrical(double r, double theta, double h) {
+	Compound::PointOfReferencePtr height = pointOfReferenceFromVector(Vector3d(0,h,0));
+	return height->pointFromVector(Vector3d(r*cos(theta),0,r*sin(theta)));
+}
+
+std::vector<Compound::Triangle> Compound::PointOfReference::helix(double k) {
+	double r = k/4;
+	double dtheta = M_PI*0.9;
+	double dh = k/10;
+	double theta = 0;
+	double h = -k;
+	std::vector<Compound::Triangle> out;
+	Compound::PointPtr v0 = cylindrical(r, theta, h);
+	theta += dtheta;
+	h += dh;
+	Compound::PointPtr v1 = cylindrical(r, theta, h);
+	for(int i=-8; i<=10; ++i) {
+		theta += dtheta;
+		h += dh;
+		Compound::PointPtr v2 = cylindrical(r, theta, h);
+		Triangle triangle = {v0,v1,v2};
+		out.push_back(triangle);
+		v0 = v1;
+		v1 = v2;
+	}
+	return out;
+}
+
 std::vector<Compound::Triangle> Compound::PointOfReference::octahedron(double k) {
 	std::vector<Compound::Triangle> out;
-	std::tr1::shared_ptr<Compound::Point> xp = pointFromVector(Vector3d(1,0,0));
-	std::tr1::shared_ptr<Compound::Point> xm = pointFromVector(Vector3d(-1,0,0));
-	std::tr1::shared_ptr<Compound::Point> yp = pointFromVector(Vector3d(0,1,0));
-	std::tr1::shared_ptr<Compound::Point> ym = pointFromVector(Vector3d(0,-1,0));
-	std::tr1::shared_ptr<Compound::Point> zp = pointFromVector(Vector3d(0,0,1));
-	std::tr1::shared_ptr<Compound::Point> zm = pointFromVector(Vector3d(0,0,-1));
+	Compound::PointPtr xp = pointFromVector(Vector3d(1,0,0));
+	Compound::PointPtr xm = pointFromVector(Vector3d(-1,0,0));
+	Compound::PointPtr yp = pointFromVector(Vector3d(0,1,0));
+	Compound::PointPtr ym = pointFromVector(Vector3d(0,-1,0));
+	Compound::PointPtr zp = pointFromVector(Vector3d(0,0,1));
+	Compound::PointPtr zm = pointFromVector(Vector3d(0,0,-1));
 	Triangle triangle0 = {xp,yp,zp};
 	Triangle triangle1 = {xp,yp,zm};
 	Triangle triangle2 = {xp,ym,zp};
@@ -207,18 +242,18 @@ std::vector<Compound::Triangle> Compound::PointOfReference::octahedron(double k)
 std::vector<Compound::Triangle> Compound::PointOfReference::icosahedron(double k) {
 	double phi = k*(-1.+sqrt(5.))/2.;
 	std::vector<Compound::Triangle> out;
-	std::tr1::shared_ptr<Compound::Point> va0 = pointFromVector(Vector3d(0,k,phi));
-	std::tr1::shared_ptr<Compound::Point> va1 = pointFromVector(Vector3d(0,k,-phi));
-	std::tr1::shared_ptr<Compound::Point> va2 = pointFromVector(Vector3d(0,-k,phi));
-	std::tr1::shared_ptr<Compound::Point> va3 = pointFromVector(Vector3d(0,-k,-phi));
-	std::tr1::shared_ptr<Compound::Point> vb0 = pointFromVector(Vector3d(k,phi,0));
-	std::tr1::shared_ptr<Compound::Point> vb1 = pointFromVector(Vector3d(k,-phi,0));
-	std::tr1::shared_ptr<Compound::Point> vb2 = pointFromVector(Vector3d(-k,phi,0));
-	std::tr1::shared_ptr<Compound::Point> vb3 = pointFromVector(Vector3d(-k,-phi,0));
-	std::tr1::shared_ptr<Compound::Point> vc0 = pointFromVector(Vector3d(phi,0,k));
-	std::tr1::shared_ptr<Compound::Point> vc1 = pointFromVector(Vector3d(-phi,0,k));
-	std::tr1::shared_ptr<Compound::Point> vc2 = pointFromVector(Vector3d(phi,0,-k));
-	std::tr1::shared_ptr<Compound::Point> vc3 = pointFromVector(Vector3d(-phi,0,-k));
+	Compound::PointPtr va0 = pointFromVector(Vector3d(0,k,phi));
+	Compound::PointPtr va1 = pointFromVector(Vector3d(0,k,-phi));
+	Compound::PointPtr va2 = pointFromVector(Vector3d(0,-k,phi));
+	Compound::PointPtr va3 = pointFromVector(Vector3d(0,-k,-phi));
+	Compound::PointPtr vb0 = pointFromVector(Vector3d(k,phi,0));
+	Compound::PointPtr vb1 = pointFromVector(Vector3d(k,-phi,0));
+	Compound::PointPtr vb2 = pointFromVector(Vector3d(-k,phi,0));
+	Compound::PointPtr vb3 = pointFromVector(Vector3d(-k,-phi,0));
+	Compound::PointPtr vc0 = pointFromVector(Vector3d(phi,0,k));
+	Compound::PointPtr vc1 = pointFromVector(Vector3d(-phi,0,k));
+	Compound::PointPtr vc2 = pointFromVector(Vector3d(phi,0,-k));
+	Compound::PointPtr vc3 = pointFromVector(Vector3d(-phi,0,-k));
 	Triangle triangle0 = {va0,va1,vb0};
 	Triangle triangle1 = {va0,va1,vb2};
 	Triangle triangle2 = {va2,va3,vb1};
