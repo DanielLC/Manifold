@@ -120,28 +120,28 @@ void initialize ()
 	Euclidean* euclidean = new Euclidean();
 	euclidean = new Euclidean();
 	//std::cout << "Euclidean:\t" << euclidean << std::endl;
-	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
-	std::cout << "Main3.cpp wormhole bottleneck:\t" << wormhole->getBottleneckCircumference() << std::endl;
+//	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
+	//std::cout << "Main3.cpp wormhole bottleneck:\t" << wormhole->getBottleneckCircumference() << std::endl;
 	//wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	//std::cout << "Wormhole:\t" << wormhole << std::endl;
 	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean)));
 	//por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
 	//por->move(Vector3d(1,0,0));
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
+/*	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
 	wormhole->addPortal(wormholePortal);
 	//std::cout << "Main3.cpp portal radius:\t" << wormholePortal->getRadiusOfCurvature() << std::endl;
 	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),-wormholePortal->getRadiusOfCurvature(),euclidean));//TODO: Should work with this instead of the next line.
 	//Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),sqrt(2),euclidean));
-	/*std::cout << "Main3.cpp wormholePortal circumference:\t" << wormholePortal->getCircumference() << std::endl;
-	std::cout << "Main3.cpp euclideanPortal circumference:\t" << euclideanPortal->getCircumference() << std::endl;
-	std::cout << "Main3.cpp difference:\t" << fabs(wormholePortal->getCircumference()-euclideanPortal->getCircumference()) << std::endl;*/
+	//std::cout << "Main3.cpp wormholePortal circumference:\t" << wormholePortal->getCircumference() << std::endl;
+	//std::cout << "Main3.cpp euclideanPortal circumference:\t" << euclideanPortal->getCircumference() << std::endl;
+	//std::cout << "Main3.cpp difference:\t" << fabs(wormholePortal->getCircumference()-euclideanPortal->getCircumference()) << std::endl;
 	assert(fabs(wormholePortal->getCircumference() - euclideanPortal->getCircumference()) < EPSILON);//TODO: Should pass this assert.
 	euclidean->addPortal(euclideanPortal);
 	euclideanPortal->setExit(wormholePortal.get());
-	wormholePortal->setExit(euclideanPortal.get());
+	wormholePortal->setExit(euclideanPortal.get());*/
 	
 	//Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
-	triangleList = por->icosahedron(0.1);
+	triangleList = por->helix(0.1);
 	
 	/*SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));

@@ -99,14 +99,13 @@ class SurfaceOfRevolution : public Manifold {
 
 template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getK() {
-	return 2*M_PI/log(2*M_PI);
-	//return 1;
+	//return 2*M_PI/log(2*M_PI);
+	return 1;
 }
 
 template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getBottleneckCircumference() {
-	return log(2*M_PI)*getK();
-	//return log(2*M_PI*getK());
+	return 2*M_PI*getK();
 }
 
 template <class SurfaceOfRevolution2d>
