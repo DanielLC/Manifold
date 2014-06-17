@@ -127,7 +127,8 @@ void initialize ()
 	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean)));
 	//por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
 	//por->move(Vector3d(1,0,0));
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
+	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(true, wormhole));
+	wormholePortal->setInvert(true);
 	wormhole->addPortal(wormholePortal);
 	//std::cout << "Main3.cpp portal radius:\t" << wormholePortal->getRadiusOfCurvature() << std::endl;
 	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),-wormholePortal->getRadiusOfCurvature(),euclidean));//TODO: Should work with this instead of the next line.
@@ -137,8 +138,7 @@ void initialize ()
 	//std::cout << "Main3.cpp difference:\t" << fabs(wormholePortal->getCircumference()-euclideanPortal->getCircumference()) << std::endl;
 	assert(fabs(wormholePortal->getCircumference() - euclideanPortal->getCircumference()) < EPSILON);//TODO: Should pass this assert.
 	euclidean->addPortal(euclideanPortal);
-	euclideanPortal->setExit(wormholePortal.get());
-	wormholePortal->setExit(euclideanPortal.get());
+	euclideanPortal->setMutualExits(wormholePortal.get());
 	
 	//Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
 	triangleList = por->helix(0.1);
@@ -226,10 +226,10 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 		default:
 			break;
 	}
-	std::cout << "Main3.cpp space:\t" << por->getPosition()->getSpace()->getType() << std::endl;
+	/*std::cout << "Main3.cpp space:\t" << por->getPosition()->getSpace()->getType() << std::endl;
 	if(por->getPosition()->getSpace()->getType() == "SurfaceOfRevolution<PortalSpace2d>") {
 		std::cout << "Main3.cpp t:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) por->getPosition().get())->getT() << std::endl;
-	}
+	}*/
 	display();
 }
 

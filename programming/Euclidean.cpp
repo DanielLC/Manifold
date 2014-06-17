@@ -155,7 +155,12 @@ double Euclidean::Geodesic::intersectionDistance2(Manifold::Portal* portal) {	//
 }
 
 bool Euclidean::Portal::containsPoint(Manifold::Point* point) {
-	return (((Euclidean::Point*) point)->getCoordinates() - center).squaredNorm() - radius*radius < -EPSILON;
+	double x = (((Euclidean::Point*) point)->getCoordinates() - center).squaredNorm() - radius*radius;
+	if(getInvert()) {
+		return x > EPSILON;
+	} else {
+		return x < -EPSILON;
+	}
 }
 
 Euclidean::Portal::Portal(Vector3d center, double radius, Manifold* space) {

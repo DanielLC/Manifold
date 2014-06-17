@@ -47,22 +47,31 @@ class Manifold {
 		};
 		class Portal {		//Currently, this only supports spheres. It could be generalized to generalized spheres. This would require another kind of intersection.
 			public:
+				Portal();
 				Manifold* getSpace();
 				GeodesicPtr teleport(GeodesicPtr geodesic);
 				PointPtr teleport(PointPtr point);
-				void setExit(Portal* exit);
+				void setMutualExits(Portal* exit);
+				void setMutualExits(Portal* exit, Matrix3d rotation);
 				void setSpace(Manifold* space);
 				Manifold* getExitSpace();
 				virtual bool containsPoint(Manifold::Point* point) = 0;
 				virtual double getRadiusOfCurvature() = 0;
 				virtual double getCircumference() = 0;
+				void setInvert(bool invert);
+				bool getInvert();
 			private:
 				virtual GeodesicPtr getGeodesic(IntersectionPtr intersection) = 0;
 				virtual IntersectionPtr getIntersection(GeodesicPtr geodesic) = 0;
 				virtual Manifold::PointPtr getPoint(PointTransportPtr transport) = 0;
 				virtual PointTransportPtr getTransport(Manifold::PointPtr point) = 0;
+				void setExit(Portal* exit);
+				void setExit(Portal* exit, Matrix3d rotation);
 				Portal* exit;
 				Manifold* space;
+				Matrix3d rotation;
+				bool rotate;
+				bool invert;
 		};
 		virtual std::string getType() = 0;
 		Vector3d vectorFromPoint(PointOfReferencePtr start, PointPtr end);		//Maybe these two should be in PointOfReference.

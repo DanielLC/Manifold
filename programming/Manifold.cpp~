@@ -115,8 +115,34 @@ Manifold* Manifold::Portal::getSpace() {
 	return space;
 }
 
+Manifold* Manifold::Portal::Portal() {
+	rotate = false;
+	invert = false;
+}
+
 void Manifold::Portal::setExit(Manifold::Portal* exit) {
 	this->exit = exit;
+	rotate = false;
+}
+
+void Manifold::Portal::setExit(Manifold::Portal* exit, Matrix3d rotation) {
+	this->exit = exit;
+	if(rotation == Matrix3d() || rotation == Matrix3d::Identity()) {
+		rotate = false;
+	} else {
+		this->rotation = rotation;
+		rotate = true;
+	}
+}
+
+void Manifold::Portal::setMutualExits(Manifold::Portal* exit) {
+	setExit(exit);
+	exit->setExit(this);
+}
+
+void Manifold::Portal::setMutualExits(Manifold::Portal* exit, Matrix3d rotation) {
+	setExit(exit, rotation);
+	exit->setExit(this, rotation.transpose());
 }
 
 void Manifold::Portal::setSpace(Manifold* space) {
@@ -127,10 +153,25 @@ Manifold* Manifold::Portal::getExitSpace() {
 	return exit->getSpace();
 }
 
+void Manifold::Portal::setInvert(bool invert) {
+	this->invert = invert;
+}
+
+bool Manifold::Portal::getInvert() {
+	return invert;
+}
+
 Manifold::GeodesicPtr Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic) {
 	assert(exit);
-	std::cout << "Manifold.cpp teleport from " << getSpace()->getType() << std::endl;
-	return exit->getGeodesic(getIntersection(geodesic));
+	//std::cout << "Manifold.cpp teleport from " << getSpace()->getType() << std::endl;
+	IntersectionPtr intersection = getIntersection(geodesic);
+	if(rotate) {
+		intersection->rotate(rotation);
+	}
+	if(invert ^ exit->getInvert()) {
+		intersection->invert();
+	}
+	return exit->getGeodesic(intersection);
 }
 
 Manifold::PointPtr Manifold::Portal::teleport(Manifold::PointPtr point) {

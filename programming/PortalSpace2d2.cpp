@@ -168,8 +168,9 @@ PointTransportPtr SurfaceOfRevolution<PortalSpace2d>::Portal::getTransport(Manif
 	//std::cout << "PortalSpace2d2.cpp Portal coordinate:\t" << t << std::endl;
 	//std::cout << "PortalSpace2d2.cpp Point coordinate:\t" << castedPoint->getT() << std::endl;
 	double dist = log(getEDist(castedPoint->getT())/getEDist(t));	//TODO: there's a chance this is backwards.
-	assert(castedPoint->getT() - t > -EPSILON);
-	assert(dist > -EPSILON);
+	if(getInvert()) {
+		dist = -dist;
+	}
 	return PointTransportPtr(new PointTransport(castedPoint->getSpherical(), dist));
 }
 

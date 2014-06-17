@@ -26,10 +26,10 @@ void Intersection::rotate(Matrix3d rotation) {
 }
 
 void Intersection::invert() {
-	Matrix3d reflection;
-	reflection <<	Vector3d(1,0,0) - 2*position[0]*position,
+	Matrix3d reflection = Matrix3d::Identity() - 2*position*position.transpose();
+	/*reflection <<	Vector3d(1,0,0) - 2*position[0]*position,
 					Vector3d(0,1,0) - 2*position[1]*position,
-					Vector3d(0,0,1) - 2*position[2]*position;
+					Vector3d(0,0,1) - 2*position[2]*position;*/
 	orientation = reflection*orientation;
 }
 
