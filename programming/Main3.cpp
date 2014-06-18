@@ -127,16 +127,18 @@ void initialize ()
 	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean)));
 	//por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
 	//por->move(Vector3d(1,0,0));
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(true, wormhole));
-	wormholePortal->setInvert(true);
+	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
+	//wormholePortal->setInvert(true);
 	wormhole->addPortal(wormholePortal);
 	//std::cout << "Main3.cpp portal radius:\t" << wormholePortal->getRadiusOfCurvature() << std::endl;
-	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),-wormholePortal->getRadiusOfCurvature(),euclidean));//TODO: Should work with this instead of the next line.
+	Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),-wormholePortal->getRadiusOfCurvature(),euclidean));
+	/*Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal->getRadiusOfCurvature()),euclidean));
+	euclideanPortal->setInvert(true);*/
 	//Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),sqrt(2),euclidean));
 	//std::cout << "Main3.cpp wormholePortal circumference:\t" << wormholePortal->getCircumference() << std::endl;
 	//std::cout << "Main3.cpp euclideanPortal circumference:\t" << euclideanPortal->getCircumference() << std::endl;
 	//std::cout << "Main3.cpp difference:\t" << fabs(wormholePortal->getCircumference()-euclideanPortal->getCircumference()) << std::endl;
-	assert(fabs(wormholePortal->getCircumference() - euclideanPortal->getCircumference()) < EPSILON);//TODO: Should pass this assert.
+	assert(fabs(wormholePortal->getCircumference() - euclideanPortal->getCircumference()) < EPSILON);
 	euclidean->addPortal(euclideanPortal);
 	euclideanPortal->setMutualExits(wormholePortal.get());
 	

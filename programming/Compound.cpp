@@ -95,12 +95,13 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::Poin
 		delta = max*delta/sqrt(squaredNorm);
 	}
 	if(squaredNorm < EPSILON*EPSILON) {
-		//std::cout << "v1-v0:\n" << v1-v0 << std::endl;
-		//std::cout << "delta:\n" << delta << std::endl;
-		//std::cout << "vector:\n" << vector << std::endl;
-		//std::cout << "delta+vector:\n" << delta+vector << std::endl;
-		//std::cout << "pointOfReference->vectorFromPoint(point):\n" << pointOfReference->vectorsFromPoint(point->getPosition())[0] << std::endl;
-		assert((this->pointFromVector(delta+vector)->getPosition()->getVector() - point->getPosition()->getVector()).squaredNorm() < EPSILON);
+		/*std::cout << "v1-v0:\n" << v1-v0 << std::endl;
+		std::cout << "delta:\n" << delta << std::endl;
+		std::cout << "vector:\n" << vector << std::endl;
+		std::cout << "delta+vector:\n" << delta+vector << std::endl;
+		std::cout << "pointOfReference->vectorFromPoint(point):\n" << pointOfReference->getGeodesic(point->getPosition())->getVector() << std::endl;*/
+		assert(pointFromVector(delta+vector)->getPosition()->getSpace() == point->getPosition()->getSpace());
+		assert((pointFromVector(delta+vector)->getPosition()->getVector() - point->getPosition()->getVector()).squaredNorm() < EPSILON);
 		/*assert((pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector() - point->getPosition()->getVector()).squaredNorm() < EPSILON);
 		assert((this->pointFromVector(delta+vector)->getPosition()->getVector() - pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector()).squaredNorm() < EPSILON);
 		assert((delta+vector - pointOfReference->getSpace()->vectorFromPoint(pointOfReference, point->getPosition())).squaredNorm() < EPSILON);*/	//Only for portals that connect to themselves.

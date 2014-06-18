@@ -95,12 +95,13 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::Poin
 		delta = max*delta/sqrt(squaredNorm);
 	}
 	if(squaredNorm < EPSILON*EPSILON) {
-		//std::cout << "v1-v0:\n" << v1-v0 << std::endl;
-		//std::cout << "delta:\n" << delta << std::endl;
-		//std::cout << "vector:\n" << vector << std::endl;
-		//std::cout << "delta+vector:\n" << delta+vector << std::endl;
-		//std::cout << "pointOfReference->vectorFromPoint(point):\n" << pointOfReference->vectorsFromPoint(point->getPosition())[0] << std::endl;
-		assert((this->pointFromVector(delta+vector)->getPosition()->getVector() - point->getPosition()->getVector()).squaredNorm() < EPSILON);
+		/*std::cout << "v1-v0:\n" << v1-v0 << std::endl;
+		std::cout << "delta:\n" << delta << std::endl;
+		std::cout << "vector:\n" << vector << std::endl;
+		std::cout << "delta+vector:\n" << delta+vector << std::endl;
+		std::cout << "pointOfReference->vectorFromPoint(point):\n" << pointOfReference->getGeodesic(point->getPosition())->getVector() << std::endl;*/
+		assert(pointFromVector(delta+vector)->getSpace() == point->getSpace());
+		assert((pointFromVector(delta+vector)->getPosition()->getVector() - point->getPosition()->getVector()).squaredNorm() < EPSILON);
 		/*assert((pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector() - point->getPosition()->getVector()).squaredNorm() < EPSILON);
 		assert((this->pointFromVector(delta+vector)->getPosition()->getVector() - pointOfReference->getSpace()->pointFromVector(pointOfReference, vector)->getVector()).squaredNorm() < EPSILON);
 		assert((delta+vector - pointOfReference->getSpace()->vectorFromPoint(pointOfReference, point->getPosition())).squaredNorm() < EPSILON);*/	//Only for portals that connect to themselves.
@@ -185,8 +186,8 @@ std::vector<Compound::Triangle> Compound::PointOfReference::octahedron() {
 }
 
 Compound::PointPtr Compound::PointOfReference::cylindrical(double r, double theta, double h) {
-	Compound::PointOfReferencePtr height = pointOfReferenceFromVector(Vector3d(0,h,0));
-	return height->pointFromVector(Vector3d(r*cos(theta),0,r*sin(theta)));
+	Compound::PointOfReferencePtr height = pointOfReferenceFromVector(Vector3d(0,0,h));
+	return height->pointFromVector(Vector3d(r*cos(theta),r*sin(theta),0));
 }
 
 std::vector<Compound::Triangle> Compound::PointOfReference::helix(double k) {

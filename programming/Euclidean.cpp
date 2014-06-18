@@ -194,7 +194,7 @@ IntersectionPtr Euclidean::Portal::getIntersection(Manifold::GeodesicPtr geodesi
 	Matrix3d orientation = start->getOrientation();
 	Vector3d vector = (norm-dist)*normalized;
 	IntersectionPtr intersection(new Intersection(position, orientation, vector));
-	assert(!intersection->getSign());
+	assert(!intersection->getSign() ^ getInvert());
 	return intersection;
 }
 
@@ -207,14 +207,22 @@ Manifold::GeodesicPtr Euclidean::Portal::getGeodesic(IntersectionPtr intersectio
 
 PointTransportPtr Euclidean::Portal::getTransport(Manifold::PointPtr point) {
 	Vector3d delta = ((Euclidean::Point*) point.get())->getCoordinates() - center;
-	std::cout << "Euclidean.cpp delta:\n" << delta << std::endl;
+	//std::cout << "Euclidean.cpp delta:\n" << delta << std::endl;
 	Vector3d position = delta.normalized();
-	double distance = delta.norm()/radius - 1;
+	double distance = delta.norm() - radius;
+	if(getInvert()) {
+		distance = -distance;
+	}
 	return PointTransportPtr(new PointTransport(position, distance));
 }
 
 Manifold::PointPtr Euclidean::Portal::getPoint(PointTransportPtr transport) {
-	Vector3d coordinates = center + radius*exp(-transport->getDistance())*transport->getPosition();
+	Vector3d coordinates;
+	if(getInvert()) {
+		coordinates = center + (radius+transport->getDistance())*transport->getPosition();
+	} else {
+		coordinates = center + radius*exp(-transport->getDistance())*transport->getPosition();
+	}
 	return Manifold::PointPtr(new Euclidean::Point(coordinates, (Euclidean*) getSpace()));
 }
 
