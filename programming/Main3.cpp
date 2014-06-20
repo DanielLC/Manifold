@@ -146,7 +146,7 @@ void initialize ()
 	euclidean->addPortal(euclideanPortal0);
 	euclidean->addPortal(euclideanPortal1);
 	euclideanPortal0->setMutualExits(wormholePortal0.get());
-	euclideanPortal1->setMutualExits(wormholePortal1.get());
+	euclideanPortal1->setMutualExits(wormholePortal1.get(), -Matrix3d::Identity());
 	
 	//Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
 	triangleList = por->helix(0.1);
