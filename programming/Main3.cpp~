@@ -133,8 +133,8 @@ void initialize ()
 	wormholePortal1->setInvert(true);
 	wormhole->addPortal(wormholePortal1);
 	//std::cout << "Main3.cpp portal radius:\t" << wormholePortal->getRadiusOfCurvature() << std::endl;
-	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,3,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean));
-	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean));
+	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean));
+	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,3,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean));
 	/*Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal->getRadiusOfCurvature()),euclidean));
 	euclideanPortal->setInvert(true);*/
 	//Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),sqrt(2),euclidean));
@@ -146,7 +146,7 @@ void initialize ()
 	euclidean->addPortal(euclideanPortal0);
 	euclidean->addPortal(euclideanPortal1);
 	euclideanPortal0->setMutualExits(wormholePortal0.get());
-	euclideanPortal1->setMutualExits(wormholePortal1.get(), -Matrix::Identity());
+	euclideanPortal1->setMutualExits(wormholePortal1.get(), -Matrix3d::Identity());
 	
 	//Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
 	triangleList = por->helix(0.1);

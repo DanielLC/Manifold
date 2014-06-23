@@ -133,8 +133,8 @@ void initialize ()
 	wormholePortal1->setInvert(true);
 	wormhole->addPortal(wormholePortal1);
 	//std::cout << "Main3.cpp portal radius:\t" << wormholePortal->getRadiusOfCurvature() << std::endl;
-	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,3,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean));
-	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean));
+	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean));
+	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,3,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean));
 	/*Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal->getRadiusOfCurvature()),euclidean));
 	euclideanPortal->setInvert(true);*/
 	//Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),sqrt(2),euclidean));
@@ -234,12 +234,12 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 		default:
 			break;
 	}
-	std::cout << "Main3.cpp space:\t" << por->getPosition()->getSpace()->getType() << std::endl;
+	/*std::cout << "Main3.cpp space:\t" << por->getPosition()->getSpace()->getType() << std::endl;
 	if(por->getPosition()->getSpace()->getType() == "SurfaceOfRevolution<PortalSpace2d>") {
 		std::cout << "Main3.cpp t:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) por->getPosition().get())->getT() << std::endl;
 	} else {
 		std::cout << "Main3.cpp y:\t" << ((Euclidean::Point*) por->getPosition().get())->getCoordinates()[1] << std::endl;
-	}
+	}*/
 	display();
 }
 

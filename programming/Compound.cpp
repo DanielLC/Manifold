@@ -33,19 +33,42 @@ Manifold::PointPtr Compound::Point::getPosition() {
 	return position;
 }
 
-Vector3d Compound::Point::getVector(Manifold* space) {
-	if(getPosition()->getSpace() == space) {
-		return getPosition()->getVector();
-	}
-	std::vector<Manifold::PortalPtr>* portals = getPosition()->getSpace()->getPortals();
-	for(int i=0; i<portals->size(); ++i) {
-		if((*portals)[i]->getExitSpace() == space) {
-			assert((*portals)[i]->teleport(getPosition())->getSpace() == space);
-			return (*portals)[i]->teleport(getPosition())->getVector();
+std::pair<bool,Vector3d> Compound::Point::getVector(Manifold* space, int i) {
+	//std::cout << "Compound.cpp space:\t" << getPosition()->getSpace()->getType() << std::endl;
+	//std::cout << "Compound.cpp i:\t" << i << std::endl;
+	//std::cout << "Compound.cpp getPosition()->getSpace():\t" << getPosition()->getSpace() << std::endl;
+	//std::cout << "Compound.cpp space:\t" << space << std::endl;
+	if(i <= 0) {
+		//std::cout << "Compound.cpp i <= 0" << std::endl;
+		if(getPosition()->getSpace() == space) {
+			//std::cout << "Compound.cpp getPosition()->getSpace() == space" << std::endl;
+			return std::make_pair(true,getPosition()->getVector());
+		} else {
+			//std::cout << "Compound.cpp getPosition()->getSpace() != space" << std::endl;
+			return std::make_pair(false,Vector3d());
 		}
 	}
-	assert(false);	//Currently only checks one degree of seperation and gives up. This will need to be improved later.
-	return Vector3d();
+	//std::cout << "Compound.cpp i > 0" << std::endl;
+	std::vector<Manifold::PortalPtr>* portals = getPosition()->getSpace()->getPortals();
+	for(int j=0; j<portals->size(); ++j) {
+		std::pair<bool,Vector3d> out = Compound::Point((*portals)[j]->teleport(getPosition())).getVector(space, i-1);
+		if(out.first) {
+			return out;
+		}
+	}
+	return std::make_pair(false,Vector3d());
+}
+
+Vector3d Compound::Point::getVector(Manifold* space) {
+	for(int i=0; i<5; ++i) {
+		std::pair<bool,Vector3d> out = getVector(space, i);
+		if(out.first) {
+			//std::cout << "Compound.cpp Vector:\t" << out.second << std::endl;
+			return out.second;
+		}
+	}
+	std::cout << "Compound.cpp No connection to space found." << std::endl;
+	return Vector3d(0,0,0);
 }
 
 Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::PointPtr point, Vector3d vector) {

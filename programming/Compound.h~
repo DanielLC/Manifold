@@ -4,6 +4,7 @@
 #include <vector>
 #include <tr1/array>
 #include <tr1/memory>
+#include <tr1/tuple>
 #include "Manifold.h"
 #include <Eigen/Core>
 using Eigen::Vector3d;
@@ -28,8 +29,9 @@ class Compound {
 				Manifold::PointPtr getPosition();
 				Vector3d getVector(Manifold* space);
 			private:
+				std::tr1::pair<bool,Vector3d> getVector(Manifold* space, int i);
 				Manifold::PointPtr position;
-				Compound* space;
+				//Compound* space;
 		};
 		class PointOfReference {
 			public:
@@ -41,6 +43,7 @@ class Compound {
 				Manifold::PointPtr getPosition();
 				void rotate(Matrix3d rot);
 				void move(Vector3d dir);
+				PointPtr cylindrical(double r, double theta, double h);
 				std::vector<Triangle> helix(double k);
 				std::vector<Triangle> icosahedron();
 				std::vector<Triangle> icosahedron(double k);
