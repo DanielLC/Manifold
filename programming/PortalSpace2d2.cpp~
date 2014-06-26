@@ -158,7 +158,7 @@ std::string PortalSpace2d::getType() {
 //For SurfaceOfRevolution<PortalSpace2d>
 
 double getEDist(double cot) {	//I probably shouldn't make this global. I'm only using it in these next two methods.
-	double csc = sqrt(1+cot*cot);
+	double csc = sqrt(cot*cot+1);
 	return csc + cot;
 }
 
@@ -168,15 +168,41 @@ PointTransportPtr SurfaceOfRevolution<PortalSpace2d>::Portal::getTransport(Manif
 	//std::cout << "PortalSpace2d2.cpp Portal coordinate:\t" << t << std::endl;
 	//std::cout << "PortalSpace2d2.cpp Point coordinate:\t" << castedPoint->getT() << std::endl;
 	double dist = log(getEDist(castedPoint->getT())/getEDist(t));	//TODO: there's a chance this is backwards.
+	if(getInvert()) {
+		dist = -dist;
+	}
 	return PointTransportPtr(new PointTransport(castedPoint->getSpherical(), dist));
 }
 
 template<>
 Manifold::PointPtr SurfaceOfRevolution<PortalSpace2d>::Portal::getPoint(PointTransportPtr transport) {
 	Vector3d spherical = transport->getPosition();
-	double d = transport->getDistance() + log(getEDist(t));
-	double tt = (1/d-d)/2;
-	return Manifold::PointPtr(new SurfaceOfRevolution<PortalSpace2d>::Point(tt, spherical[0], spherical[1], spherical[2], (SurfaceOfRevolution<PortalSpace2d>*) getSpace()));
+	//std::cout << "PortalSpace2d2.cpp t:\t" << t << std::endl;
+	double d = getEDist(t);
+	if(getInvert()) {
+		 d *= exp(transport->getDistance());
+	} else {
+		d *= exp(-transport->getDistance());
+	}
+	double tt = (d-1/d)/2;
+	//std::cout << "PortalSpace2d2.cpp portal dist:\t" << log(getEDist(t)) << std::endl;
+	//std::cout << "PortalSpace2d2.cpp distance:\t" << transport->getDistance() << std::endl;
+	//std::cout << "PortalSpace2d2.cpp invert:\t" << getInvert() << std::endl;
+	//std::cout << "PortalSpace2d2.cpp tt:\t" << tt << std::endl;
+	Manifold::PointPtr out(new SurfaceOfRevolution<PortalSpace2d>::Point(tt, spherical[0], spherical[1], spherical[2], (SurfaceOfRevolution<PortalSpace2d>*) getSpace()));
+	#ifndef NDEBUG
+	SurfaceOfRevolution<PortalSpace2d>::PointPtr testPoint(new SurfaceOfRevolution<PortalSpace2d>::Point(t, spherical[0], spherical[1], spherical[2], (SurfaceOfRevolution<PortalSpace2d>*) getSpace()));
+	Manifold::PointOfReferencePtr testPointOfReference(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(testPoint, Matrix4d::Identity()));
+	SurfaceOfRevolution<PortalSpace2d>::PointPtr otherTestPoint(new SurfaceOfRevolution<PortalSpace2d>::Point(0, spherical[0], spherical[1], spherical[2], (SurfaceOfRevolution<PortalSpace2d>*) getSpace()));
+	//The following assertions assume getInvert() is true.
+	/*assert(fabs(getSpace()->getGeodesic(testPointOfReference, otherTestPoint)->getVector().norm() - log(getEDist(t))) < EPSILON);
+	assert(fabs(log(getEDist(tt)/getEDist(t)) - transport->getDistance()) < EPSILON);
+	//std::cout << "PortalSpace2d2.cpp getSpace()->getGeodesic(testPointOfReference, out)->getVector().norm():\t" << getSpace()->getGeodesic(testPointOfReference, out)->getVector().norm() << std::endl;
+	//std::cout << "transport->getDistance():\t" << transport->getDistance() << std::endl;
+	assert(fabs(getSpace()->getGeodesic(testPointOfReference, out)->getVector().norm() - transport->getDistance()) < EPSILON);*/
+	#endif
+	assert(containsPoint(out.get()));
+	return out;
 }
 
 

@@ -135,7 +135,7 @@ void initialize ()
 	wormhole->addPortal(wormholePortal1);
 	//std::cout << "Main3.cpp portal radius:\t" << wormholePortal->getRadiusOfCurvature() << std::endl;
 	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean0));
-	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
+	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
 	/*Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal->getRadiusOfCurvature()),euclidean));
 	euclideanPortal->setInvert(true);*/
 	//Euclidean::PortalPtr euclideanPortal = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,-3,0),sqrt(2),euclidean));
@@ -149,8 +149,9 @@ void initialize ()
 	euclideanPortal0->setMutualExits(wormholePortal0.get());
 	euclideanPortal1->setMutualExits(wormholePortal1.get(), -Matrix3d::Identity());
 	
-	//Compound::PointOfReferencePtr tempPor = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
-	triangleList = por->icosahedron(0.1);
+	Compound::PointOfReference tempPor(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
+	//Compound::PointOfReference tempPor(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean1)));
+	triangleList = tempPor.icosahedron(0.2);
 	
 	/*SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	por = new Compound::PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference>(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));

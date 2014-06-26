@@ -203,6 +203,7 @@ Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
 		/*if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
 			std::cout << "Manifold.cpp t after:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) previous->getEndPoint().get())->getT() << std::endl;
 		}*/
+		//std::cout << "Manifold.cpp " << getType() << std::endl;
 		assert(previous->getEndPoint()->isInManifold());
 		return Manifold::GeodesicPtr();
 	} else {

@@ -520,14 +520,14 @@ Manifold::PointOfReferencePtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Geodes
 
 template <class SurfaceOfRevolution2d>
 bool SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::containsPoint(Manifold::Point* point) {
-	//std::cout << "SurfaceOfRevolution.h assert\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t << std::endl;
-	//std::cout << "SurfaceOfRevolution.h t\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() << std::endl;
-	//std::cout << "SurfaceOfRevolution.h portal\t" << t << std::endl;
+	std::cout << "SurfaceOfRevolution.h assert\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t << std::endl;
+	std::cout << "SurfaceOfRevolution.h t\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() << std::endl;
+	std::cout << "SurfaceOfRevolution.h portal\t" << t << std::endl;
 	double x = ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t;
 	if(getInvert()) {
-		return x > EPSILON;
+		return x > 0.0001;
 	} else {
-		return x < -EPSILON;
+		return x < -0.0001;
 	}
 	//return (((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t > EPSILON) ^ (t < 0);
 }
@@ -643,7 +643,7 @@ IntersectionPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getIntersect
 	std::cout << "Distance to portal:\t" << distance << std::endl;
 	std::cout << "Remaining distance:\t" << (geodesic->getVector()-vector).norm() << std::endl;*/
 	IntersectionPtr intersection(new Intersection(position, final.block<3,3>(0,0), geodesic->getVector()-vector));
-	assert(! intersection->getSign() ^ getInvert());
+	assert(intersection->getSign() ^ getInvert());
 	return intersection;
 }
 

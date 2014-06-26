@@ -520,14 +520,14 @@ Manifold::PointOfReferencePtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Geodes
 
 template <class SurfaceOfRevolution2d>
 bool SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::containsPoint(Manifold::Point* point) {
-	//std::cout << "SurfaceOfRevolution.h assert\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t << std::endl;
-	//std::cout << "SurfaceOfRevolution.h t\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() << std::endl;
-	//std::cout << "SurfaceOfRevolution.h portal\t" << t << std::endl;
+	/*std::cout << "SurfaceOfRevolution.h assert\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t << std::endl;
+	std::cout << "SurfaceOfRevolution.h t\t" << ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() << std::endl;
+	std::cout << "SurfaceOfRevolution.h portal\t" << t << std::endl;*/
 	double x = ((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t;
 	if(getInvert()) {
-		return x > EPSILON;
+		return x > 0.0001;
 	} else {
-		return x < -EPSILON;
+		return x < -0.0001;
 	}
 	//return (((SurfaceOfRevolution<SurfaceOfRevolution2d>::Point*) point)->getT() - t > EPSILON) ^ (t < 0);
 }
