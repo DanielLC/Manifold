@@ -386,6 +386,7 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::getGeodesic(Ma
 	Vector3d yy;
 	assert(fabs(dot) < 1+EPSILON);
 	if(fabs(dot) > 1-EPSILON) {		//If yy ends up undefined, presumably because x and y have the same or opposite position in spherical geometry. It doesn't matter what value you use.
+		dot = 1;
 		Vector3d rand;
 		rand.setRandom();
 		//std::cout << "rand:\n" << rand << "\n";
@@ -498,7 +499,7 @@ std::tr1::shared_ptr<typename SurfaceOfRevolution2d::Geodesic> SurfaceOfRevoluti
 
 template <class SurfaceOfRevolution2d>
 void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::rotate(Matrix3d rot) {
-	orientation.block<3,3>(0,0) = rot*orientation.block<3,3>(0,0);
+	orientation.block<3,3>(0,0) = orientation.block<3,3>(0,0)*rot; answers.
 }
 
 template <class SurfaceOfRevolution2d>

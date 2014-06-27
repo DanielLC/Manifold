@@ -499,7 +499,7 @@ std::tr1::shared_ptr<typename SurfaceOfRevolution2d::Geodesic> SurfaceOfRevoluti
 
 template <class SurfaceOfRevolution2d>
 void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::rotate(Matrix3d rot) {
-	orientation.block<3,3>(0,0) = rot*orientation.block<3,3>(0,0);
+	orientation.block<3,3>(0,0) = orientation.block<3,3>(0,0)*rot;
 }
 
 template <class SurfaceOfRevolution2d>

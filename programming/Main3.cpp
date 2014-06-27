@@ -156,6 +156,16 @@ void initialize ()
 	euclideanPortal0->setMutualExits(wormholePortal0.get());
 	euclideanPortal1->setMutualExits(wormholePortal1.get(), -Matrix3d::Identity());
 	
+	/*Matrix3d randrot;		//Randomizes the rotation.
+	do {
+		randrot.setRandom();
+		while((randrot*randrot.transpose()-Matrix3d::Identity()).norm() > EPSILON) {
+			randrot += randrot.inverse().transpose();
+			randrot /= 2;
+		}
+	} while(randrot.determinant() <= 0);
+	por->rotate(randrot);*/
+	
 	//Compound::PointOfReference tempPor(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
 	//Compound::PointOfReference tempPor(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean1)));
 	//triangleList = tempPor.icosahedron(0.2);

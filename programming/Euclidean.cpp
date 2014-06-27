@@ -96,7 +96,7 @@ Manifold::PointOfReferencePtr Euclidean::Geodesic::getEndPointOfReference() {
 }
 
 void Euclidean::PointOfReference::rotate(Matrix3d rot) {
-	orientation = rot*orientation;
+	orientation = orientation*rot;
 }
 
 Euclidean::Geodesic::Geodesic(Euclidean::PointOfReferencePtr start, Euclidean::PointPtr end, Vector3d vector) {
