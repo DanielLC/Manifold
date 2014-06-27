@@ -8,9 +8,9 @@
 //#include "Euclidean.h"
 //#include "Hyperbolic.h"
 //#include "R2xS1.h"
-//#include "PortalSpace2d2.h"
+#include "PortalSpace2d2.h"
 #include "Manifold.h"
-//#include "SurfaceOfRevolution.h"
+#include "SurfaceOfRevolution.h"
 //#include "Cylinder2d.h"
 //#include "BlackHole2d.h"
 #include <Eigen/Core>
@@ -25,7 +25,7 @@ using Eigen::Vector3d;
 std::tr1::shared_ptr<Manifold> space;
 Manifold::PointOfReferencePtr por;
 std::vector<Manifold::Triangle> triangleList;
-const double SPEED = 0.01;
+const double SPEED = 0.1;
 
 typedef struct {
     int width;
@@ -109,14 +109,14 @@ void initialize ()
 	glClearColor(0.0, 0.0, 0.0, 1.0);											// specify clear values for the color buffers						
 
 	//The part where the space is defined		TODO
-	Compound* compound = new Compound();
+	/*Compound* compound = new Compound();
 	Euclidean* euclidean = new Euclidean();
 	space = std::tr1::shared_ptr<Manifold>(compound);
 	Manifold::PointOfReferencePtr euclidPOR(new Euclidean::PointOfReference(euclidean));
-	por = Manifold::PointOfReferencePtr(new Compound::PointOfReference(euclidPOR));
-	/*SurfaceOfRevolution<PortalSpace2d>* sor = new SurfaceOfRevolution<PortalSpace2d>();
+	por = Manifold::PointOfReferencePtr(new Compound::PointOfReference(euclidPOR, compound));*/
+	SurfaceOfRevolution<PortalSpace2d>* sor = new SurfaceOfRevolution<PortalSpace2d>();
 	space = std::tr1::shared_ptr<Manifold>(sor);
-	por = Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(sor));*/
+	por = Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(sor));
 	/*std::tr1::shared_ptr<Hyperbolic> hyperbolic(new Hyperbolic());
 	space = std::tr1::static_pointer_cast<Manifold>(hyperbolic);
 	por = std::tr1::shared_ptr<Hyperbolic::PointOfReference>(new Hyperbolic::PointOfReference(hyperbolic.get()));*/
@@ -126,7 +126,7 @@ void initialize ()
 	/*R2xS1* r2xs1 = new R2xS1();
 	space = r2xs1;
 	por = new R2xS1::PointOfReference(r2xs1);*/
-	triangleList = space->icosahedron(por, .1);
+	triangleList = space->icosahedron(por, 1);
 	glColor3f(1.0f,1.0f,1.0f);
 	
 	display();
