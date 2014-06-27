@@ -3,6 +3,7 @@
 #include <GL/glut.h>
 #include <vector>
 #include <iostream>
+#include <ctime>
 #include <unistd.h>
 #include "Assert.h"
 #include "Euclidean.h"
@@ -24,6 +25,12 @@ Compound* space;
 Compound::PointOfReference* por;
 
 int main(int argc, char* argv[]){
+	
+    std::clock_t start;
+    double duration;
+
+    start = std::clock();
+
 	space = new Compound();
 	
 	/*SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
@@ -32,12 +39,9 @@ int main(int argc, char* argv[]){
 	
 	Euclidean* euclidean0 = new Euclidean();
 	Euclidean* euclidean1 = new Euclidean();
-	Compound::PointOfReferencePtr tempPor;
-	Compound::PointOfReference tempPor0(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean0)));
-	Compound::PointOfReference tempPor1(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean1)));
 	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean0)));
-	por->move(Vector3d(0,-3,0));
+	por->move(Vector3d(0,-2,0));
 	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal0 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
 	wormhole->addPortal(wormholePortal0);
 	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal1 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(true, wormhole));
@@ -67,21 +71,45 @@ int main(int argc, char* argv[]){
 		double x = (i*2.0/WIDTH-1.0);
 		for(int j=0; j<HEIGHT; ++j) {
 			double z = (1.0-j*2.0/HEIGHT);
-			//Vector3d dir = Vector3d(x,1.0,y).normalized();
 			//(*image)[j][i] = Color(0.0,0.0,0.0);
-			double r = sqrt(x*x + 1 + z*z);
-			double theta = acos(z/r);
-			double phi = atan2(1,x);
-			double theta01 = theta/M_PI;
-			double phi01 = phi/(2*M_PI);
-			if((int)(floor(10*theta01) + floor(10*phi01)) % 2 == 0) {
-				(*image)[j][i] = Color(0.0,0.0,0.0);
+			
+			Vector3d dir = Vector3d(x,1.0,z).normalized();
+			Compound::PointOfReferencePtr a = por->pointOfReferenceFromVector(100*dir);
+			Manifold::PointOfReferencePtr b = a->getPointOfReference();
+			if(b->getSpace() != euclidean0 && b->getSpace() != euclidean1) {
+				(*image)[j][i] = Color(0.5,0.5,0.5);
+				//std::cout << "Main4.cpp other" << std::endl;
 			} else {
-				(*image)[j][i] = Color(1.0,1.0,1.0);
+				Euclidean::PointOfReference* c = (Euclidean::PointOfReference*) b.get();
+				Vector3d outDir = c->getOrientation()*dir;
+
+				double theta = acos(outDir[2]);
+				double phi = atan2(outDir[1],outDir[0]);
+				double theta01 = theta/M_PI;
+				double phi01 = phi/(2*M_PI);
+				if((int)(floor(10*theta01) + floor(10*phi01)) % 2 == 0) {
+					if(b->getSpace() == euclidean0) {
+						(*image)[j][i] = Color(0.0,0.0,0.0);
+					} else {
+						(*image)[j][i] = Color(1.0,0.0,0.0);
+						//std::cout << "Main4.cpp euclidean1" << std::endl;
+					}
+				} else {
+					if(b->getSpace() == euclidean0) {
+						(*image)[j][i] = Color(1.0,1.0,1.0);
+					} else {
+						(*image)[j][i] = Color(0.0,0.0,1.0);
+						//std::cout << "Main4.cpp euclidean1" << std::endl;
+					}
+				}
 			}
 		}
 	}
 	ImageOut::draw(image,"output.png");
+
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    
+    std::cout << "Running time: " << duration << " seconds." << std::endl;
 	return 0;
 }
 

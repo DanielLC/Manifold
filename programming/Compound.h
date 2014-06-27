@@ -41,6 +41,7 @@ class Compound {
 				PointPtr pointFromVector(Vector3d vector);
 				PointOfReferencePtr pointOfReferenceFromVector(Vector3d vector);
 				Manifold::PointPtr getPosition();
+				Manifold::PointOfReferencePtr getPointOfReference();
 				void rotate(Matrix3d rot);
 				void move(Vector3d dir);
 				PointPtr cylindrical(double r, double theta, double h);

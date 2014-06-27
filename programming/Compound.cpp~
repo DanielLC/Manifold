@@ -33,8 +33,11 @@ Manifold::PointPtr Compound::Point::getPosition() {
 	return position;
 }
 
+Manifold::PointOfReferencePtr Compound::PointOfReference::getPointOfReference() {
+	return pointOfReference;
+}
+
 std::pair<bool,Vector3d> Compound::Point::getVector(Manifold* space, int i) {
-	assert(getPosition()->isInManifold());
 	//std::cout << "Compound.cpp space:\t" << getPosition()->getSpace()->getType() << std::endl;
 	//std::cout << "Compound.cpp i:\t" << i << std::endl;
 	//std::cout << "Compound.cpp getPosition()->getSpace():\t" << getPosition()->getSpace() << std::endl;

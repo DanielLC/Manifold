@@ -185,6 +185,10 @@ Manifold::PointPtr Compound::PointOfReference::getPosition() {
 	return pointOfReference->getPosition();
 }
 
+Manifold::PointOfReferencePtr Compound::PointOfReference::getPointOfReference() {
+	return pointOfReference;
+}
+
 void Compound::PointOfReference::move(Vector3d dir) {
 	//pointOfReference = pointOfReference->getSpace()->getPointOfReference(pointOfReference, dir);
 	//std::cout << std::tr1::static_pointer_cast<Euclidean::PointOfReference>(pointOfReference)->getCoordinates() << std::endl;

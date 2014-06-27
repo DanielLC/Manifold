@@ -29,7 +29,7 @@ class Compound {
 				Manifold::PointPtr getPosition();
 				Vector3d getVector(Manifold* space);
 			private:
-				std::tr1::pair<bool,Vector3d> getVector(Manifold* space, int i);
+				std::pair<bool,Vector3d> getVector(Manifold* space, int i);
 				Manifold::PointPtr position;
 				//Compound* space;
 		};
