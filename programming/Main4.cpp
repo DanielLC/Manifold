@@ -66,9 +66,19 @@ int main(int argc, char* argv[]){
 	for(int i=0; i<WIDTH; ++i) {
 		double x = (i*2.0/WIDTH-1.0);
 		for(int j=0; j<HEIGHT; ++j) {
-			double y = (1.0-j*2.0/HEIGHT);
-			//(*image)[j][i] = getLightRay(x,y)->getColor();
-			(*image)[j][i] = Color(0.0,0.0,0.0);
+			double z = (1.0-j*2.0/HEIGHT);
+			//Vector3d dir = Vector3d(x,1.0,y).normalized();
+			//(*image)[j][i] = Color(0.0,0.0,0.0);
+			double r = sqrt(x*x + 1 + z*z);
+			double theta = acos(z/r);
+			double phi = atan2(1,x);
+			double theta01 = theta/M_PI;
+			double phi01 = phi/(2*M_PI);
+			if((int)(floor(10*theta01) + floor(10*phi01)) % 2 == 0) {
+				(*image)[j][i] = Color(0.0,0.0,0.0);
+			} else {
+				(*image)[j][i] = Color(1.0,1.0,1.0);
+			}
 		}
 	}
 	ImageOut::draw(image,"output.png");
