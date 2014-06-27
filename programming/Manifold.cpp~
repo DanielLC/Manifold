@@ -176,6 +176,7 @@ Manifold::GeodesicPtr Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic)
 
 Manifold::PointPtr Manifold::Portal::teleport(Manifold::PointPtr point) {
 	assert(exit);
+	assert(point->isInManifold());
 	return exit->getPoint(getTransport(point));
 }
 
@@ -200,9 +201,9 @@ Manifold::GeodesicPtr Manifold::nextPiece(Manifold::GeodesicPtr previous) {
 		}
 	}
 	if(portal == -1) {
-		if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
+		/*if(getType() == "SurfaceOfRevolution<PortalSpace2d>") {
 			std::cout << "Manifold.cpp t after:\t" << ((SurfaceOfRevolution<PortalSpace2d>::Point*) previous->getEndPoint().get())->getT() << std::endl;
-		}
+		}*/
 		//std::cout << "Manifold.cpp " << getType() << std::endl;
 		assert(previous->getEndPoint()->isInManifold());
 		return Manifold::GeodesicPtr();

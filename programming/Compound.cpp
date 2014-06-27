@@ -51,9 +51,11 @@ std::pair<bool,Vector3d> Compound::Point::getVector(Manifold* space, int i) {
 	//std::cout << "Compound.cpp i > 0" << std::endl;
 	std::vector<Manifold::PortalPtr>* portals = getPosition()->getSpace()->getPortals();
 	for(int j=0; j<portals->size(); ++j) {
-		std::pair<bool,Vector3d> out = Compound::Point((*portals)[j]->teleport(getPosition())).getVector(space, i-1);
-		if(out.first) {
-			return out;
+		if(!(*portals)[j]->containsPoint(getPosition().get())) {
+			std::pair<bool,Vector3d> out = Compound::Point((*portals)[j]->teleport(getPosition())).getVector(space, i-1);
+			if(out.first) {
+				return out;
+			}
 		}
 	}
 	return std::make_pair(false,Vector3d());
@@ -61,6 +63,7 @@ std::pair<bool,Vector3d> Compound::Point::getVector(Manifold* space, int i) {
 
 Vector3d Compound::Point::getVector(Manifold* space) {
 	for(int i=0; i<5; ++i) {
+		assert(getPosition()->isInManifold());
 		std::pair<bool,Vector3d> out = getVector(space, i);
 		if(out.first) {
 			//std::cout << "Compound.cpp Vector:\t" << out.second << std::endl;
@@ -76,12 +79,9 @@ Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::Poin
 }
 
 Vector3d Compound::PointOfReference::vectorFromPointAndNearVector(Compound::PointPtr point, Vector3d vector, int i) {
-	if(i > 100) {
+	if(i > 10 | vector.squaredNorm() > 10000 | vector != vector) {
 		//std::cout << "Compound.cpp vector:\n" << vector << std::endl;
 		//return vector;
-		return Vector3d(0,0,0);
-	}
-	if(vector != vector) {
 		return Vector3d(0,0,0);
 	}
 	Vector3d v1 = point->getPosition()->getVector();

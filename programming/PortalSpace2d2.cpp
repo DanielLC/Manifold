@@ -158,19 +158,23 @@ std::string PortalSpace2d::getType() {
 //For SurfaceOfRevolution<PortalSpace2d>
 
 double getEDist(double cot) {	//I probably shouldn't make this global. I'm only using it in these next two methods.
+								//This gets called with Portal::getT() a lot. Considering that Portal::getT() is constant, I can optimize by making it just keep track of this too.
 	double csc = sqrt(cot*cot+1);
 	return csc + cot;
 }
 
 template<>
 PointTransportPtr SurfaceOfRevolution<PortalSpace2d>::Portal::getTransport(Manifold::PointPtr point) {
+	assert(!containsPoint(point.get()));
 	SurfaceOfRevolution<PortalSpace2d>::Point* castedPoint = (SurfaceOfRevolution<PortalSpace2d>::Point*) point.get();
 	//std::cout << "PortalSpace2d2.cpp Portal coordinate:\t" << t << std::endl;
 	//std::cout << "PortalSpace2d2.cpp Point coordinate:\t" << castedPoint->getT() << std::endl;
-	double dist = log(getEDist(castedPoint->getT())/getEDist(t));	//TODO: there's a chance this is backwards.
+	double dist = log(getEDist(castedPoint->getT())/getEDist(t));
 	if(getInvert()) {
 		dist = -dist;
 	}
+	//std::cout << "PortalSpace2d2.cpp dist:\t" << dist << std::endl;
+	assert(dist > -0.0001);
 	return PointTransportPtr(new PointTransport(castedPoint->getSpherical(), dist));
 }
 

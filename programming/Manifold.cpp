@@ -176,6 +176,7 @@ Manifold::GeodesicPtr Manifold::Portal::teleport(Manifold::GeodesicPtr geodesic)
 
 Manifold::PointPtr Manifold::Portal::teleport(Manifold::PointPtr point) {
 	assert(exit);
+	//assert(point->isInManifold());
 	return exit->getPoint(getTransport(point));
 }
 

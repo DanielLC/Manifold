@@ -384,7 +384,9 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::getGeodesic(Ma
 	assert(fabs(y.norm()-1) < EPSILON);
 	double dot = x.dot(y);
 	Vector3d yy;
-	if(fabs(dot) == 1) {		//If yy ends up undefined, presumably because x and y have the same or opposite position in spherical geometry. It doesn't matter what value you use.
+	assert(fabs(dot) < 1+EPSILON);
+	if(fabs(dot) > 1-EPSILON) {		//If yy ends up undefined, presumably because x and y have the same or opposite position in spherical geometry. It doesn't matter what value you use.
+		dot = 1;
 		Vector3d rand;
 		rand.setRandom();
 		//std::cout << "rand:\n" << rand << "\n";
@@ -398,6 +400,7 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::getGeodesic(Ma
 	assert(yy == yy);
 
 	double theta = acos(dot);
+	assert(theta == theta);
 	typename SurfaceOfRevolution2d::Point x2d(s->getT(),0.0);
 	//std::cout << "p->t:	" << p->t << "\n";
 	//std::cout << "theta*k:	" << theta*k << "\n";
