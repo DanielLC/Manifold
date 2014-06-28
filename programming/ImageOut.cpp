@@ -18,5 +18,5 @@ void ImageOut::draw(ImagePtr image, std::string file) {
 			//image2[y][x] = png::rgb_pixel(0, 0, 0);
 		}
 	}
-	image2.write("rgb.png");
+	image2.write(file);
 }

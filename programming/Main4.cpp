@@ -21,50 +21,10 @@ using Eigen::Vector3d;
 
 //Raytracer
 
-Compound* space;
-Compound::PointOfReference* por;
+Euclidean* euclidean0;
+Euclidean* euclidean1;
 
-int main(int argc, char* argv[]){
-	
-    std::clock_t start;
-    double duration;
-
-    start = std::clock();
-
-	space = new Compound();
-	
-	/*SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
-	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole)));
-	triangleList = por->icosahedron(0.1);*/
-	
-	Euclidean* euclidean0 = new Euclidean();
-	Euclidean* euclidean1 = new Euclidean();
-	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
-	por = new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean0)));
-	por->move(Vector3d(0,-2.5,0));
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal0 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
-	wormhole->addPortal(wormholePortal0);
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal1 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(true, wormhole));
-	wormholePortal1->setInvert(true);
-	wormhole->addPortal(wormholePortal1);
-	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean0));
-	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
-	assert(fabs(wormholePortal0->getCircumference() - euclideanPortal0->getCircumference()) < EPSILON);
-	assert(fabs(wormholePortal1->getCircumference() - euclideanPortal1->getCircumference()) < EPSILON);
-	euclidean0->addPortal(euclideanPortal0);
-	euclidean1->addPortal(euclideanPortal1);
-	euclideanPortal0->setMutualExits(wormholePortal0.get());
-	euclideanPortal1->setMutualExits(wormholePortal1.get(), -Matrix3d::Identity());
-	
-	/*Matrix3d randrot;		//Randomizes the rotation.
-	do {
-		randrot.setRandom();
-		while((randrot*randrot.transpose()-Matrix3d::Identity()).norm() > EPSILON) {
-			randrot += randrot.inverse().transpose();
-			randrot /= 2;
-		}
-	} while(randrot.determinant() <= 0);
-	por->rotate(randrot);*/
+void draw(Compound::PointOfReferencePtr por, int n) {
 	
 	ImagePtr image(new Image);
 	for(int i=0; i<WIDTH; ++i) {
@@ -74,7 +34,7 @@ int main(int argc, char* argv[]){
 			//(*image)[j][i] = Color(0.0,0.0,0.0);
 			
 			Vector3d dir = Vector3d(x,1.0,z).normalized();
-			Compound::PointOfReferencePtr a = por->pointOfReferenceFromVector(100*dir);
+			Compound::PointOfReferencePtr a = por->pointOfReferenceFromVector(10*dir);
 			Manifold::PointOfReferencePtr b = a->getPointOfReference();
 			if(b->getSpace() != euclidean0 && b->getSpace() != euclidean1) {
 				(*image)[j][i] = Color(0.5,0.5,0.5);
@@ -105,11 +65,59 @@ int main(int argc, char* argv[]){
 			}
 		}
 	}
-	ImageOut::draw(image,"output.png");
+	char buffer[4];
+	sprintf(buffer, "%03d", n);
+	ImageOut::draw(image,"video/" + std::string(buffer) + ".png");
+}
 
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    
-    std::cout << "Running time: " << duration << " seconds." << std::endl;
+int main(int argc, char* argv[]){
+	std::clock_t start;
+	start = std::clock();
+
+	//std::Compound space = new Compound();
+	
+	euclidean0 = new Euclidean();
+	euclidean1 = new Euclidean();
+	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
+	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal0 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
+	wormhole->addPortal(wormholePortal0);
+	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal1 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(true, wormhole));
+	wormholePortal1->setInvert(true);
+	wormhole->addPortal(wormholePortal1);
+	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2.5,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean0));
+	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
+	assert(fabs(wormholePortal0->getCircumference() - euclideanPortal0->getCircumference()) < EPSILON);
+	assert(fabs(wormholePortal1->getCircumference() - euclideanPortal1->getCircumference()) < EPSILON);
+	euclidean0->addPortal(euclideanPortal0);
+	euclidean1->addPortal(euclideanPortal1);
+	euclideanPortal0->setMutualExits(wormholePortal0.get());
+	euclideanPortal1->setMutualExits(wormholePortal1.get(), -Matrix3d::Identity());
+	
+	const double FRAMES = 32;
+	const double DISTANCE = 5-2*sqrt(2)+log(3+2*sqrt(2));
+	
+	for(int i=0; i<FRAMES; ++i) {
+		std::clock_t startFrame;
+		startFrame = std::clock();
+		
+		double distance = i*DISTANCE/(FRAMES-1);
+		
+		Compound::PointOfReferencePtr por(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean0))));
+		por->move(Vector3d(0,distance,0));
+		double theta = i*M_PI/(FRAMES-1);
+		por->rotate((Matrix3d() <<
+				cos(theta),	sin(theta),	0,
+				-sin(theta),cos(theta),	0,
+				0,			0,			1).finished());
+
+		draw(por, i);
+
+		double duration = (std::clock() - startFrame) / (double) CLOCKS_PER_SEC;
+		std::cout << "Frame " << i+1 << "/" << FRAMES << ":\t" << duration << " seconds." << std::endl;
+	}
+
+	double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+	std::cout << "\nTotal time: " << (int) floor(duration/60) << " minutes, " << ((int) floor(duration))%60 << " seconds." << std::endl;
 	return 0;
 }
 

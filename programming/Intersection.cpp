@@ -23,6 +23,7 @@ Intersection::Intersection(Vector3d position, Matrix3d orientation, Vector3d vec
 void Intersection::rotate(Matrix3d rotation) {
 	position = rotation*position;
 	orientation = rotation*orientation;
+	//orientation = orientation*rotation;
 }
 
 void Intersection::invert() {
@@ -31,6 +32,7 @@ void Intersection::invert() {
 					Vector3d(0,1,0) - 2*position[1]*position,
 					Vector3d(0,0,1) - 2*position[2]*position;*/
 	orientation = reflection*orientation;
+	//orientation = orientation*reflection;
 }
 
 bool Intersection::getSign() {
