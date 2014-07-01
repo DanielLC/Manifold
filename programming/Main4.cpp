@@ -73,6 +73,8 @@ void draw(Compound::PointOfReferencePtr por, int n) {
 int main(int argc, char* argv[]){
 	std::clock_t start;
 	start = std::clock();
+	std::clock_t previous = start;
+	std::clock_t current;
 
 	//std::Compound space = new Compound();
 	
@@ -85,26 +87,28 @@ int main(int argc, char* argv[]){
 	wormholePortal1->setInvert(true);
 	wormhole->addPortal(wormholePortal1);
 	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2.5,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean0));
-	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,0,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
+	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2.5,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
 	assert(fabs(wormholePortal0->getCircumference() - euclideanPortal0->getCircumference()) < EPSILON);
 	assert(fabs(wormholePortal1->getCircumference() - euclideanPortal1->getCircumference()) < EPSILON);
 	euclidean0->addPortal(euclideanPortal0);
 	euclidean1->addPortal(euclideanPortal1);
 	euclideanPortal0->setMutualExits(wormholePortal0.get());
-	euclideanPortal1->setMutualExits(wormholePortal1.get(), -Matrix3d::Identity());
+	euclideanPortal1->setMutualExits(wormholePortal1.get());
 	
-	const double FRAMES = 32;
+	const double FRAMES = 16;
 	const double DISTANCE = 5-2*sqrt(2)+log(3+2*sqrt(2));
 	
 	for(int i=0; i<FRAMES; ++i) {
-		std::clock_t startFrame;
-		startFrame = std::clock();
 		
 		double distance = i*DISTANCE/(FRAMES-1);
+		//double distance = i*DISTANCE/(FRAMES-1) - DISTANCE/2;
 		
 		Compound::PointOfReferencePtr por(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean0))));
+		//Compound::PointOfReferencePtr por(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
 		por->move(Vector3d(0,distance,0));
+		//por->move(Vector3d(distance,0,0));
 		double theta = i*M_PI/(FRAMES-1);
+		//double theta = i*M_PI/(FRAMES-1) - M_PI/2;
 		por->rotate((Matrix3d() <<
 				cos(theta),	sin(theta),	0,
 				-sin(theta),cos(theta),	0,
@@ -112,11 +116,13 @@ int main(int argc, char* argv[]){
 
 		draw(por, i);
 
-		double duration = (std::clock() - startFrame) / (double) CLOCKS_PER_SEC;
+		current = std::clock();
+		double duration = (current - previous) / (double) CLOCKS_PER_SEC;
 		std::cout << "Frame " << i+1 << "/" << FRAMES << ":\t" << duration << " seconds." << std::endl;
+		previous = current;
 	}
 
-	double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+	double duration = (current - start) / (double) CLOCKS_PER_SEC;
 	std::cout << "\nTotal time: " << (int) floor(duration/60) << " minutes, " << ((int) floor(duration))%60 << " seconds." << std::endl;
 	return 0;
 }

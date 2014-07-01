@@ -104,3 +104,23 @@ $= (I - (v,-1)(v,-1)^T)w$
 $R = I - (v,-1)(v,-1)^T$
 
 This means that the final orientation is $R\mat{M}{0}{0}{-1}$.
+
+???
+
+Let $\textbf{w}$ be the direction you're moving from your own point of reference.
+
+$M\textbf{w}$ is the direction you'd end up going in Euclidean geometry.
+
+In the surface of revolution, the program pads a $0$ at the end, signifying that you are not moving at all perpendicular to reality. This means the direction from your point of reference is $(\textbf{w},0)$.
+
+If you're lucky enough that $M\textbf{w}$ is tangent to the portal, then you only have to deal with changing coordinates, and the direction you'll end up going is $(0,M\textbf{w})$.
+
+Thus, you can think of it as $(\textbf{w},0) \mapsto (0,M\textbf{w}), (\textbf{0},1) \mapsto (1,\textbf{0})$, which is represented by the linear transformation $\mat{\textbf{0}^T}{1}{M}{\textbf{0}}$.
+
+If $M\textbf{w}$ is perpendicular to the portal, $(w,0)$ should move to $(\|w\|,\textbf{0})$. The previous transformation sends it to $(0,M\textbf{w})$ instead. We need to reflect between these two, while preserving anything perpendicular to them.
+
+Assuming for simplicity that $M\textbf{w}$ is unit. Since we're looking at a unit vector perpendicular to the portal, we've already narrowed it down to a specific vector, so we can just call it $\textbf{v}$. We need to reflect between $(1,\textbf{0})$ and $(0,\textbf{v})$.
+
+This gives $R = I - (-1,\textbf{v})(-1,\textbf{v})^T$.
+
+Thus, the final matrix is $R\mat{\textbf{0}^T}{1}{M}{\textbf{0}}$.

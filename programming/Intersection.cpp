@@ -17,6 +17,7 @@ Intersection::Intersection(Vector3d position, Matrix3d orientation, Vector3d vec
 	this->position = position;
 	assert(fabs(position.squaredNorm()-1) < EPSILON);
 	this->orientation = orientation;
+	assert((orientation*orientation.transpose() - Matrix3d::Identity()).squaredNorm() < EPSILON);
 	this->vector = vector;
 }
 

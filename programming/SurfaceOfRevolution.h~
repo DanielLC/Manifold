@@ -178,93 +178,6 @@ SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::PointOfReference(S
 	this->position = position;
 }
 
-/*template <class SurfaceOfRevolution2d>
-std::vector<Vector3d> SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::vectorsFromPoint(std::tr1::shared_ptr<Manifold::Point> point) {	//Don't forget to check if they're on the same vertical line. Also, show more points.
-	assert(point->getSpace() == position->space);
-	double k = position->space->getK();
-	Vector3d x = position->spherical;
-	std::tr1::shared_ptr<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point> p = std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(point);
-	if(fabs(p->t - position->t) < EPSILON && ((p->spherical - position->spherical).norm() < EPSILON) || ((p->spherical + position->spherical).norm() < EPSILON)) {
-		//Change that to squared norm.
-		//There are other vectors that work, but they're in literally every direction. It's a "shortest path between North and South pole" kind of thing.
-		std::vector<Vector3d> outVector;
-		outVector.push_back(Vector3d(0,0,0));
-		return outVector;
-	}
-	Vector3d y = p->spherical;
-	assert(fabs(x.norm()-1) < EPSILON);
-	assert(y == y);
-	assert(fabs(y.norm()-1) < EPSILON);
-	double dot = x.dot(y);
-	Vector3d yy;
-	if(fabs(dot) == 1) {		//If yy ends up undefined, presumably because x and y have the same or opposite position in spherical geometry. It doesn't matter what value you use.
-		Vector3d rand;
-		rand.setRandom();
-		//std::cout << "rand:\n" << rand << "\n";
-		double dot2 = x.dot(rand);
-		yy = rand-dot2*x;
-		//std::cout << "yy:\n" << yy << "\n";
-	} else {
-		yy = y-dot*x;
-	}
-	yy.normalize();			//yy is the normalization of the component of y perpendicular to x. This makes it the spherical component of the direction towards y.
-	assert(yy == yy);
-
-	double theta = acos(dot);
-	typename SurfaceOfRevolution2d::Point x2d(position->t,0.);
-	//std::cout << "p->t:	" << p->t << "\n";
-	//std::cout << "theta*k:	" << theta*k << "\n";
-	typename SurfaceOfRevolution2d::Point y2d(p->t,theta*k);
-	Vector2d z2d = x2d.vectorFromPoint(y2d);
-	//std::cout << "z2d:\n" << z2d << "\n";
-	//std::cout << "theta*k:\n" << theta*k << "\n";
-	//std::cout << "z:\n" << z << "\n";
-	Vector4d out;
-	out << z2d[0], z2d[1]*yy;
-	out = orientation.transpose()*out;
-	assert(out == out);
-	assert(abs(out[3]) < EPSILON);
-	std::vector<Vector3d> outVector;
-	//std::cout << "out: " << out << "\n" << std::flush;
-	outVector.push_back(out.start<3>());
-	assert(fabs(std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->t - p->t) < EPSILON);
-	//std::cout << "position->t:	" << position->t << "\n";
-	assert((std::tr1::static_pointer_cast<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point>(this->pointFromVector(outVector[0]))->spherical - p->spherical).norm() < EPSILON);
-	
-	return outVector;
-}*/
-
-/*template <class SurfaceOfRevolution2d>
-std::tr1::shared_ptr<Manifold::Point> SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::pointFromVector(Vector3d vector) {
-	assert(fabs(position->spherical.norm()-1) < EPSILON);
-	assert(vector == vector);
-	double k = position->space->getK();
-	Vector4d v;
-	v << vector, 0;
-	v = orientation*v;
-	assert(fabs(position->spherical.dot(v.end<3>())) < EPSILON);
-	//std::cout << "v:\n" << v << "\n";
-	typename SurfaceOfRevolution2d::Point x2d(position->t,0.);
-	Vector2d z2d(v[0],v.end<3>().norm());
-	assert(z2d == z2d);
-	std::tr1::array<double,2> y2d = x2d.pointFromVector(z2d).getCoordinates();
-	Vector4d y;
-	Vector3d ytail;
-	if(y2d[1] == 0) {
-		ytail = position->spherical;
-	} else {
-		ytail = position->spherical*cos(y2d[1]/k)+v.end<3>().normalized()*sin(y2d[1]/k);
-		//If yd2[1] is zero, then v.end<3>() is zero, so normalizing it gives nan. Multiplying by zero doesn't make this go away.
-	}
-	y << y2d[0], ytail;
-	assert(y == y);
-	assert(fabs(ytail.norm()-1) < EPSILON);	//TODO:Assertion failed.
-	std::tr1::shared_ptr<SurfaceOfRevolution<SurfaceOfRevolution2d>::Point> out = std::tr1::shared_ptr<SurfaceOfRevolution::Point>(new SurfaceOfRevolution<SurfaceOfRevolution2d>::Point(y[0],y[1],y[2],y[3],position->space));
-	//std::cout << "out->t:	" << out->t << "\n";
-	//assert((vectorsFromPoint(out)[0]-vector).norm() < EPSILON);
-	return out;
-}*/
-
 template <class SurfaceOfRevolution2d>
 Manifold::PointPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::getPosition() {
 	return std::tr1::static_pointer_cast<Manifold::Point>(position);
@@ -499,7 +412,11 @@ std::tr1::shared_ptr<typename SurfaceOfRevolution2d::Geodesic> SurfaceOfRevoluti
 
 template <class SurfaceOfRevolution2d>
 void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::rotate(Matrix3d rot) {
-	orientation.block<3,3>(0,0) = orientation.block<3,3>(0,0)*rot; answers.
+	//orientation.block<3,3>(0,0) = orientation.block<3,3>(0,0)*rot;
+	Matrix4d rotate = Matrix4d::Identity();
+	rotate.block<3,3>(0,0) = rot;
+	orientation = orientation*rotate;
+	assert((orientation.transpose()*(Vector4d() << 0, position->getSpherical()).finished()).start(3).norm() < EPSILON);
 }
 
 template <class SurfaceOfRevolution2d>
@@ -574,6 +491,9 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getGeo
 	
 	Matrix4d orientation = Matrix4d::Identity();
 	orientation.block<3,3>(0,0) = intersection->getOrientation();
+	/*Matrix4d orientation = Matrix4d::Zero();
+	orientation.block<3,3>(0,1) = intersection->getOrientation();
+	orientation.block<1,1>(3,0) << 1;*/
 	Vector4d p;
 	p << intersection->getPosition(), -1;
 	Matrix4d reflection = Matrix4d::Identity() - p*p.transpose();
@@ -592,6 +512,12 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getGeo
 			0,1,0,0,
 			0,0,1,0;
 	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,s*reflection*orientation));
+	//SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,reflection*orientation));
+	/*SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start2(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,s*reflection));
+	start2->rotate(intersection->getOrientation());
+	std::cout << "SurfaceOfRevolution.h start->getOrientation():\n" << start->getOrientation() << std::endl;
+	std::cout << "SurfaceOfRevolution.h start2->getOrientation():\n" << start2->getOrientation() << std::endl;
+	assert((start->getOrientation() - start2->getOrientation()).squaredNorm() < EPSILON);*/
 	//std::cout << "intersection to vector:\n" << start->getOrientation()*(Vector4d() << intersection->getVector(),0).finished() << std::endl;
 	return getSpace()->getGeodesic(start,intersection->getVector());
 }
@@ -633,19 +559,21 @@ IntersectionPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getIntersect
 			0,0,1,0,
 			0,0,0,1,
 			1,0,0,0;
-	Matrix4d final = reflection*ss*orientation;
+	Matrix4d finalm = reflection*ss*orientation;
+	//Matrix4d finalm = reflection*orientation;
 	/*std::cout << "final:\n" << final << std::endl;
 	Vector4d v;
 	v << 0,position;
 	std::cout << "orientation*(0,0,0,1):\n" << orientation*Vector4d(0,0,0,1) << std::endl;
 	std::cout << "orientation*reflection*(0,v):\n" << orientation*reflection*v << std::endl;
 	std::cout << "final*(0,0,0,1):\n" << final*Vector4d(0,0,0,1) << std::endl;*/
-	assert((final.block<1,4>(3,0).transpose() - Vector4d(0,0,0,1)).squaredNorm() < EPSILON);
-	assert((final.block<4,1>(0,3) - Vector4d(0,0,0,1)).squaredNorm() < EPSILON);
+	assert((finalm.block<1,4>(3,0).transpose() - Vector4d(0,0,0,1)).squaredNorm() < EPSILON);
+	assert((finalm.block<4,1>(0,3) - Vector4d(0,0,0,1)).squaredNorm() < EPSILON);
 	/*std::cout << "Original length:\t" << geodesic->getVector().norm() << std::endl;
 	std::cout << "Distance to portal:\t" << distance << std::endl;
 	std::cout << "Remaining distance:\t" << (geodesic->getVector()-vector).norm() << std::endl;*/
-	IntersectionPtr intersection(new Intersection(position, final.block<3,3>(0,0), geodesic->getVector()-vector));
+	IntersectionPtr intersection(new Intersection(position, finalm.block<3,3>(0,0), geodesic->getVector()-vector));
+	//IntersectionPtr intersection(new Intersection(position, finalm.block<3,3>(0,1), geodesic->getVector()-vector));
 	assert(intersection->getSign() ^ getInvert());
 	return intersection;
 }

@@ -25,7 +25,7 @@ using Eigen::Vector3d;
 std::tr1::shared_ptr<Manifold> space;
 Manifold::PointOfReferencePtr por;
 std::vector<Manifold::Triangle> triangleList;
-const double SPEED = 0.1;
+const double SPEED = 0.05;
 
 typedef struct {
     int width;
@@ -126,7 +126,7 @@ void initialize ()
 	/*R2xS1* r2xs1 = new R2xS1();
 	space = r2xs1;
 	por = new R2xS1::PointOfReference(r2xs1);*/
-	triangleList = space->icosahedron(por, 1);
+	triangleList = space->icosahedron(por, 0.2);
 	glColor3f(1.0f,1.0f,1.0f);
 	
 	display();
