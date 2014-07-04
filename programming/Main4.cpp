@@ -34,7 +34,20 @@ void draw(Compound::PointOfReferencePtr por, int n) {
 			//(*image)[j][i] = Color(0.0,0.0,0.0);
 			
 			Vector3d dir = Vector3d(x,1.0,z).normalized();
-			Compound::PointOfReferencePtr a = por->pointOfReferenceFromVector(10*dir);
+			
+			Compound::PointOfReferencePtr por2 = por;
+			//Bug bypass
+			Matrix3d rot = Matrix3d::Identity();
+			if(por->getPosition()->getSpace() == euclidean0 || por->getPosition()->getSpace() == euclidean1) {
+				Euclidean::PointOfReference* castedPor = (Euclidean::PointOfReference*) por->getPointOfReference().get();
+				rot = castedPor->getOrientation();
+				//std::cout << "Main4.cpp rot:\n" << rot << std::endl;
+				por2 = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(Euclidean::PointPtr(new Euclidean::Point(castedPor->getCoordinates(), (Euclidean*) castedPor->getSpace())), Matrix3d::Identity()))));
+				dir = rot*dir;
+			}
+			//End bug bypass
+			
+			Compound::PointOfReferencePtr a = por2->pointOfReferenceFromVector(10*dir);
 			Manifold::PointOfReferencePtr b = a->getPointOfReference();
 			if(b->getSpace() != euclidean0 && b->getSpace() != euclidean1) {
 				(*image)[j][i] = Color(0.5,0.5,0.5);
@@ -95,7 +108,7 @@ int main(int argc, char* argv[]){
 	euclideanPortal0->setMutualExits(wormholePortal0.get());
 	euclideanPortal1->setMutualExits(wormholePortal1.get());
 	
-	const double FRAMES = 16;
+	const double FRAMES = 128;
 	const double DISTANCE = 5-2*sqrt(2)+log(3+2*sqrt(2));
 	
 	for(int i=0; i<FRAMES; ++i) {
@@ -108,11 +121,17 @@ int main(int argc, char* argv[]){
 		por->move(Vector3d(0,distance,0));
 		//por->move(Vector3d(distance,0,0));
 		double theta = i*M_PI/(FRAMES-1);
+		//double theta = i*2*M_PI/FRAMES;
+		//double theta = 1;
 		//double theta = i*M_PI/(FRAMES-1) - M_PI/2;
 		por->rotate((Matrix3d() <<
 				cos(theta),	sin(theta),	0,
 				-sin(theta),cos(theta),	0,
 				0,			0,			1).finished());
+		/*por->rotate((Matrix3d() <<
+				cos(theta),	0,	sin(theta),
+				0,			1,			0,
+				-sin(theta),0,	cos(theta)).finished());*/
 
 		draw(por, i);
 

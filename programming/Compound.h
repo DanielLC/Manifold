@@ -35,9 +35,9 @@ class Compound {
 		};
 		class PointOfReference {
 			public:
-				PointOfReference(std::tr1::shared_ptr<Manifold::PointOfReference> pointOfReference);
-				Vector3d vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector);
-				Vector3d vectorFromPointAndNearVector(std::tr1::shared_ptr<Compound::Point> point, Vector3d vector, int i);
+				PointOfReference(Manifold::PointOfReferencePtr pointOfReference);
+				Vector3d vectorFromPointAndNearVector(PointPtr point, Vector3d vector);
+				Vector3d vectorFromPointAndNearVector(PointPtr point, Vector3d vector, int i);
 				PointPtr pointFromVector(Vector3d vector);
 				PointOfReferencePtr pointOfReferenceFromVector(Vector3d vector);
 				Manifold::PointPtr getPosition();

@@ -413,9 +413,9 @@ std::tr1::shared_ptr<typename SurfaceOfRevolution2d::Geodesic> SurfaceOfRevoluti
 template <class SurfaceOfRevolution2d>
 void SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference::rotate(Matrix3d rot) {
 	//orientation.block<3,3>(0,0) = orientation.block<3,3>(0,0)*rot;
-	Matrix4d rotate = Matrix4d::Identity();
-	rotate.block<3,3>(0,0) = rot;
-	orientation = orientation*rotate;
+	Matrix4d rot4d = Matrix4d::Identity();
+	rot4d.block<3,3>(0,0) = rot;
+	orientation = orientation*rot4d;
 	assert((orientation.transpose()*(Vector4d() << 0, position->getSpherical()).finished()).start(3).norm() < EPSILON);
 }
 

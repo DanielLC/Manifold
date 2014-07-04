@@ -513,11 +513,11 @@ Manifold::GeodesicPtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Portal::getGeo
 			0,0,1,0;
 	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,s*reflection*orientation));
 	//SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,reflection*orientation));
-	/*SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start2(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,s*reflection));
+	SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReferencePtr start2(new SurfaceOfRevolution<SurfaceOfRevolution2d>::PointOfReference(startPoint,s*reflection));
 	start2->rotate(intersection->getOrientation());
-	std::cout << "SurfaceOfRevolution.h start->getOrientation():\n" << start->getOrientation() << std::endl;
-	std::cout << "SurfaceOfRevolution.h start2->getOrientation():\n" << start2->getOrientation() << std::endl;
-	assert((start->getOrientation() - start2->getOrientation()).squaredNorm() < EPSILON);*/
+	//std::cout << "SurfaceOfRevolution.h start->getOrientation():\n" << start->getOrientation() << std::endl;
+	//std::cout << "SurfaceOfRevolution.h start2->getOrientation():\n" << start2->getOrientation() << std::endl;
+	assert((start->getOrientation() - start2->getOrientation()).squaredNorm() < EPSILON);
 	//std::cout << "intersection to vector:\n" << start->getOrientation()*(Vector4d() << intersection->getVector(),0).finished() << std::endl;
 	return getSpace()->getGeodesic(start,intersection->getVector());
 }
