@@ -36,7 +36,7 @@ void draw(Compound::PointOfReferencePtr por, int n) {
 			Vector3d dir = Vector3d(x,1.0,z).normalized();
 			
 			Compound::PointOfReferencePtr por2 = por;
-			//Bug bypass
+			/*//Bug bypass
 			Matrix3d rot = Matrix3d::Identity();
 			if(por->getPosition()->getSpace() == euclidean0 || por->getPosition()->getSpace() == euclidean1) {
 				Euclidean::PointOfReference* castedPor = (Euclidean::PointOfReference*) por->getPointOfReference().get();
@@ -45,7 +45,7 @@ void draw(Compound::PointOfReferencePtr por, int n) {
 				por2 = Compound::PointOfReferencePtr(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(Euclidean::PointPtr(new Euclidean::Point(castedPor->getCoordinates(), (Euclidean*) castedPor->getSpace())), Matrix3d::Identity()))));
 				dir = rot*dir;
 			}
-			//End bug bypass
+			//End bug bypass*/
 			
 			Compound::PointOfReferencePtr a = por2->pointOfReferenceFromVector(10*dir);
 			Manifold::PointOfReferencePtr b = a->getPointOfReference();
@@ -93,6 +93,15 @@ int main(int argc, char* argv[]){
 	
 	euclidean0 = new Euclidean();
 	euclidean1 = new Euclidean();
+	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2,0),1,euclidean0));
+	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2,0),1,euclidean1));
+	euclideanPortal1->setInvert(true);
+	euclidean0->addPortal(euclideanPortal0);
+	euclidean1->addPortal(euclideanPortal1);
+	euclideanPortal0->setMutualExits(euclideanPortal1.get());
+	
+	/*euclidean0 = new Euclidean();
+	euclidean1 = new Euclidean();
 	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
 	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal0 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
 	wormhole->addPortal(wormholePortal0);
@@ -106,9 +115,9 @@ int main(int argc, char* argv[]){
 	euclidean0->addPortal(euclideanPortal0);
 	euclidean1->addPortal(euclideanPortal1);
 	euclideanPortal0->setMutualExits(wormholePortal0.get());
-	euclideanPortal1->setMutualExits(wormholePortal1.get());
+	euclideanPortal1->setMutualExits(wormholePortal1.get());*/
 	
-	const double FRAMES = 128;
+	const double FRAMES = 16;
 	const double DISTANCE = 5-2*sqrt(2)+log(3+2*sqrt(2));
 	
 	for(int i=0; i<FRAMES; ++i) {
@@ -118,20 +127,20 @@ int main(int argc, char* argv[]){
 		
 		Compound::PointOfReferencePtr por(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean0))));
 		//Compound::PointOfReferencePtr por(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
-		por->move(Vector3d(0,distance,0));
+		//por->move(Vector3d(0,distance,0));
 		//por->move(Vector3d(distance,0,0));
-		double theta = i*M_PI/(FRAMES-1);
-		//double theta = i*2*M_PI/FRAMES;
+		//double theta = i*M_PI/(FRAMES-1);
+		double theta = i*2*M_PI/FRAMES;
 		//double theta = 1;
 		//double theta = i*M_PI/(FRAMES-1) - M_PI/2;
-		por->rotate((Matrix3d() <<
+		/*por->rotate((Matrix3d() <<
 				cos(theta),	sin(theta),	0,
 				-sin(theta),cos(theta),	0,
-				0,			0,			1).finished());
-		/*por->rotate((Matrix3d() <<
+				0,			0,			1).finished());*/
+		por->rotate((Matrix3d() <<
 				cos(theta),	0,	sin(theta),
 				0,			1,			0,
-				-sin(theta),0,	cos(theta)).finished());*/
+				-sin(theta),0,	cos(theta)).finished());
 
 		draw(por, i);
 

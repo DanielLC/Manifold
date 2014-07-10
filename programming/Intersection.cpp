@@ -14,6 +14,7 @@ Vector3d Intersection::getVector() {
 }
 
 Intersection::Intersection(Vector3d position, Matrix3d orientation, Vector3d vector) {
+	//std::cout << "Intersection.cpp position:\n" << position << std::endl;
 	this->position = position;
 	assert(fabs(position.squaredNorm()-1) < EPSILON);
 	this->orientation = orientation;

@@ -165,28 +165,44 @@ void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
 			//por->move(Vector3d(1/3.,2/3.,2/3.));
 			//por->move(Vector3d(0.6,0,0.8));
 			//por = space->getPointOfReference(por,Vector3d(0,0,SPEED));
-			por->rotate((Matrix3d() <<
+			/*por->rotate((Matrix3d() <<
 					cos(0.1),	sin(0.1),	0,
 					-sin(0.1),	cos(0.1),	0,
-					0,			0,			1).finished());
+					0,			0,			1).finished());*/
+			por->rotate((Matrix3d() <<
+					1,			0,			0,
+					0,			cos(0.1),	sin(0.1),
+					0,			-sin(0.1),	cos(0.1)).finished());
 			break;
 		case 'q':
 			//por->move(Vector3d(-1/3.,-2/3.,-2/3.));
 			//por->move(Vector3d(-0.6,0,-0.8));
 			//por = space->getPointOfReference(por,Vector3d(0,0,-SPEED));
-			por->rotate((Matrix3d() <<
+			/*por->rotate((Matrix3d() <<
 					cos(0.1),	-sin(0.1),	0,
 					sin(0.1),	cos(0.1),	0,
-					0,			0,			1).finished());
+					0,			0,			1).finished());*/
+			por->rotate((Matrix3d() <<
+					1,			0,			0,
+					0,			cos(0.1),	-sin(0.1),
+					0,			sin(0.1),	cos(0.1)).finished());
 			break;
 		case 's':
 			por = space->getPointOfReference(por,Vector3d(0,-SPEED,0));
 			break;
 		case 'a':
-			por = space->getPointOfReference(por,Vector3d(-SPEED,0,0));
+			//por = space->getPointOfReference(por,Vector3d(-SPEED,0,0));
+			por->rotate((Matrix3d() <<
+					cos(0.1),	-sin(0.1),	0,
+					sin(0.1),	cos(0.1),	0,
+					0,			0,			1).finished());
 			break;
 		case 'd':
-			por = space->getPointOfReference(por,Vector3d(SPEED,0,0));
+			//por = space->getPointOfReference(por,Vector3d(SPEED,0,0));
+			por->rotate((Matrix3d() <<
+					cos(0.1),	sin(0.1),	0,
+					-sin(0.1),	cos(0.1),	0,
+					0,			0,			1).finished());
 			break;
 		case KEY_ESCAPE:
 			exit(0);

@@ -190,7 +190,7 @@ IntersectionPtr Euclidean::Portal::getIntersection(Manifold::GeodesicPtr geodesi
 	assert(dist > EPSILON);
 	//std::cout << "ad" << std::endl;
 	Euclidean::PointOfReference* start = (Euclidean::PointOfReference*) castedGeodesic->getStart().get();
-	Vector3d position = (start->getCoordinates() + dist*normalized - center).normalized();
+	Vector3d position = (start->getCoordinates() + start->getOrientation()*dist*normalized - center).normalized();
 	Matrix3d orientation = start->getOrientation();
 	Vector3d vector = (norm-dist)*normalized;
 	IntersectionPtr intersection(new Intersection(position, orientation, vector));
