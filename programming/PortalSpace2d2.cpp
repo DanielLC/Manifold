@@ -157,10 +157,18 @@ std::string PortalSpace2d::getType() {
 
 //For SurfaceOfRevolution<PortalSpace2d>
 
-double getEDist(double cot) {	//I probably shouldn't make this global. I'm only using it in these next two methods.
+template <>
+double SurfaceOfRevolution<PortalSpace2d>::Portal::getEDist(double cot) {	//I probably shouldn't make this global. I'm only using it in these next two methods.
 								//This gets called with Portal::getT() a lot. Considering that Portal::getT() is constant, I can optimize by making it just keep track of this too.
 	double csc = sqrt(cot*cot+1);
 	return csc + cot;
+}
+
+template <>
+double SurfaceOfRevolution<PortalSpace2d>::Portal::getDistance(Manifold::PortalPtr portal) {
+	assert(getSpace() == portal->getSpace());
+	return fabs(log(getEDist(getT())/getEDist(((SurfaceOfRevolution<PortalSpace2d>::Portal*) portal.get())->getT())));
+	//return fabs(log(getEDist(getT())/getEDist(portal->getT())));
 }
 
 template<>

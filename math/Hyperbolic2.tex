@@ -4,30 +4,33 @@
 
 We will use the upper half space model: $\mathbb{H}^3 \mapsto \{(x_1,x_2,x_3):x_3 > 0\}$.
 
-Given points $\textbf{x} = (x_1,x_2,x_3)$ and $\textbf{y} = (y_1,y_2,y_3)$, the first step is to find the vertical plane that intersects both of them. This way, the problem can be reduced to a problem in $\mathbb{H}^2$. Unless $x_1 = y_1$ and $x_2 = y_2$, we let $u = \sqrt{(y_1-x_1)^2 + (y_2-x_2)^2}$, then set $\textbf{v} = (v_1,v_2) = (y_1-x_1,y_2-x_2)/u$. We can now work with $(x'_1,x'_2) = (0,x_3)$ and $(y'_1,y'_2) = (u,y_3)$.
+Given points $\textbf{x} = (x_1,x_2,x_3)$ and $\textbf{y} = (y_1,y_2,y_3)$, the first step is to find the vertical half-plane that intersects both points. This way, the problem can be reduced to a problem in $\mathbb{H}^2$. Unless both points are on the same vertical line i.e. $x_1 = y_1$ and $x_2 = y_2$, we let the horizontal distance between the two points be $u = \sqrt{(y_1-x_1)^2 + (y_2-x_2)^2}$, then set $\textbf{w} = (w_1,w_2) = (y_1-x_1,y_2-x_2)/u$ to be the unit $2$-vector on the horizontal plane in the direction from $\textbf{x}$ to $\textbf{y}$. We can now work with $(x'_1,x'_2) = (0,x_3)$ and $(y'_1,y'_2) = (u,y_3)$.
 
-Once we have two points on a plane $\textbf{x}', \textbf{y}'$, we can use the two-dimensional solution to find the vector $\textbf{z}' = (z'_1,z'_2)$ representing the direction and distance from $\textbf{x}'$ to $\textbf{y}'$.
+Once we have two points on a half-plane $\textbf{x}', \textbf{y}'$, we can use the two-dimensional solution to find the vector $\textbf{v}' = (v'_1,v'_2)$ representing the direction and distance from $\textbf{x}'$ to $\textbf{y}'$.
 
-Translating the vector back from the plane is simple. You just use $\textbf{z} = (z_1,z_2,z_3) = (z'_1v_1,z'_1v_2,z'_2)$.
+We now translate the vector back from the half-plane using $\textbf{v} = (v_1,v_2,v_3) = (v'_1w_1,v'_1w_2,v'_2)$.
 
 The distance remains the same as it was in the two-dimensional case.
 
-There is a problem if $x_1 = y_1, x_2 = y_2$ because $\textbf{v}$ is undefined. In this case, $\textbf{z} = (0,0,\ln\frac{y_3}{x_3})$ %In this case, any value can be used for $\textbf{v}$, since it passes through every plane. If it's not a unit vector, it will scale the final value on the first two axes, but since it's zero on these axes, it doesn't matter. Just be careful not to use an undefined value.
+There is a problem if $x_1 = y_1, x_2 = y_2$ because $\textbf{w}$ is undefined. In this case, $\textbf{v} = (0,0,\ln\frac{y_3}{x_3})$. Alternately, we could use any unit vector for $\textbf{w}$ above, since the horizontal displacement is zero in any direction.
 
 \subsubsection{Finding the point a given distance in a given direction from another}
 
-Given initial point $(x_1,x_2,x_3)$ and vector $(z_1,z_2,z_3)$, we first reduce to the $\mathbb{H}^2$ case as before, unless $z_1 = z_2 = 0$. Let $u = \sqrt{z_1^2+z_2^2}, (v_1,v_2) = \frac{(z_1,z_2)}{u}$ and solve the two-dimensional case for $\textbf{y}'$ with $\textbf{x}' = (x'_1,x'_2) = (0,x_3)$ and $\textbf{z}' = (z'_1,z'_2) = (u,z_3)$.
+Given initial point $\textbf{x} = (x_1,x_2,x_3)$ and vector $\textbf{v} = (v_1,v_2,v_3)$, we first reduce to the $\mathbb{H}^2$ case as before, unless $v_1 = v_2 = 0$. Let $u = \sqrt{v_1^2+v_2^2}, \textbf{w} = (w_1,w_2) = \frac{(v_1,v_2)}{u}$ and solve the two-dimensional case using the point $\textbf{x}' = (x'_1,x'_2) = (0,x_3) \in \mathbb{H}^2$ and vector $\textbf{v}' = (v'_1,v'_2) = (u,v_3) \in \mathbb{R}^2$ to obtain the point $\textbf{y}' \in \mathbb{H}^2$ and the angle of rotation $\theta$.
 
-Now we just need to map $\textbf{y}'$ back to $\mathbb{H}^3$, which is done via $(y_1,y_2,y_3) = (x'_1,x'_2,y'_2)+y'_1(v_1,v_2,0) = (x'_1+y'_1v_1,x'_2+y'_1v_2,y'_2)$.
+%Now we just need to map $\textbf{y}'$ back to $\mathbb{H}^3$, which is done via $(y_1,y_2,y_3) = (x'_1,x'_2,y'_2)+y'_1(v_1,v_2,0) = (x'_1+y'_1w_1,x'_2+y'_1w_2,y'_2)$.
+%Seems to be wrong.
 
-We will also need to find the change in orientation.
+Now we just need to map $\textbf{y}'$ back to $\mathbb{H}^3$. The first two coordinates are $(x_1,x_2) + y'_1\textbf{w} = (x_1+y'_1w_1,x_2+y'_1w_2)$. The third coordinate is $y'_2$. This gives the full coordinates as $(x_1+y'_1w_1,x_2+y'_1w_2,y'_2)$.
 
-Our solution in the two-dimensional version gave us an angle which we will call $\theta$. This corresponds to the point of reference being rotated with the rotation matrix $\mat{\cos\theta}{-\sin\theta}{\sin\theta}{\cos\theta}$.
+We will also need to find the change in orientation. Our solution in the two-dimensional analogue gave us the angle of rotation, $\theta$. This corresponds to the point of reference being rotated with the rotation matrix $\mat{\cos\theta}{-\sin\theta}{\sin\theta}{\cos\theta}$.
 
-You can then expand this to a $3 \times 3$ matrix with $\mat{a}{b}{c}{d} \mapsto \matc{a}{0}{b}{0}{1}{0}{c}{0}{d}$ and conjugate it with $\matc{v_1}{v_2}{0}{-v_2}{v_1}{0}{0}{0}{1}$ to get the $3 \times 3$ rotation matrix.
+If $\textbf{w}$ happens to be $(1,0)$, then the $\mathbb{H}^2$ we're using is the subspace of $\mathbb{H}^3$ where the second coordinate is constant. In this case, we're just performing that rotation on the first and third coordinates, resulting in the matrix $M = \matc{\cos\theta}{0}{-\sin\theta}{0}{1}{0}{\sin\theta}{0}{\cos\theta}$.
 
-This gives $\matc{v_1}{-v_2}{0}{v_2}{v_1}{0}{0}{0}{1} \matc{\cos\theta}{0}{-\sin\theta}{0}{0}{0}{\sin\theta}{0}{\cos\theta} \matc{v_1}{v_2}{0}{-v_2}{v_1}{0}{0}{0}{1}$
+In general, we can rotate the coordinate system so that $\textbf{w} = (1,0)$, perform the rotation $M$, and then rotate it back. This is equivalent to conjugating $M$ with $\matc{w_1}{w_2}{0}{-w_2}{w_1}{0}{0}{0}{1}$. This gives $$\matc{w_1}{-w_2}{0}{w_2}{w_1}{0}{0}{0}{1} \matc{\cos\theta}{0}{-\sin\theta}{0}{1}{0}{\sin\theta}{0}{\cos\theta} \matc{w_1}{w_2}{0}{-w_2}{w_1}{0}{0}{0}{1}.$$
+
+%You can then expand this to a $3 \times 3$ matrix with $\mat{a}{b}{c}{d} \mapsto \matc{a}{0}{b}{0}{1}{0}{c}{0}{d}$ and conjugate it with $\matc{w_1}{w_2}{0}{-w_2}{w_1}{0}{0}{0}{1}$ to get the $3 \times 3$ rotation matrix.
 
 %Again, if the vector is pointed straight up, any value of $\textbf{v}$ will work as long as it's not NaN or something else that behaves oddly when multiplied by zero.
 
-If $z_1 = z_2 = 0$, then $\textbf{y} = (x_1,x_2,x_3 e^{z_3})$ and there is no rotation.
+If $v_1 = v_2 = 0$, then $\textbf{y} = (x_1,x_2,x_3 e^{v_3})$ and there is no rotation.

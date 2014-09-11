@@ -1,16 +1,36 @@
 \subsection{Surface Of Revolution}
 
-Consider a point $x$ on a $3$-surface $U$ that is a surface of revolution and a vector $v$ in the tangent space $U_x$.
+In a $2$-dimensional surface of revolution, a curve is rotated around an axis and each point traces out a circle. This results in a surface that is preserved under rotation. That is to say, it has the symmetries of a circle. A surface of revolution can easily be generalized to higher dimensions by rotating a curve around an axis so each point traces an $n$-sphere in $\mathbb{R}^{n+2}$.
+
+My program relies largely on intrinsic geometry, so it would be helpful to modify this definition to use the intrinsic geometry of a manifold. Rather than looking at how the manifold is formed, I will look at the symmetries it inherits.
+
+Let $G \leq \Aut(S^n \times \mathbb{R})$ be the subgroup of automorphisms on $S^n \times \mathbb{R}$ that fix the $\mathbb{R}$ coordinate.
+
+A possible generalization of a $n$-surface of revolution as a manifold $M$ such that there exists a homeomorphism $f:S^{n-1} \times \mathbb{R} \to M$ that preserves the automorphisms in $G$.
+
+This definition introduces a few problems. For example, $\mathbb{S}^2$ would not be considered a surface of revolution, since there is no homeomorphism from $\mathbb{S}^1 \times \mathbb{R}$ to $S^2$. We can fix this by not requiring $f$ to be injective.
+
+Instead, I define an $n$-surface of revolution to be a manifold $M$ such that there exists a continuous function $f:S^{n-1} \times \mathbb{R} \to M$ where given any automorphism $g$ in $G$, $f(x) \mapsto f \circ g(x)$ is well-defined and is an automorphism.
+
+In Section \ref{Wormhole}, we discussed working with Wormhole. This was a special case of a method for working with $3$-surfaces of revolution.
+
+We can reduce the problem of working on a $3$-surface of revolution (or even an $n$-surface of revolution) to working on a corresponding $2$-surface of revolution.
+
+Consider a point $x$ on a $3$-manifold $U$ that is a surface of revolution and a vector $v$ in the tangent space $U_x$.
 
 Consider the component $v_0$ of $v$ along $S^2$.
 
 Consider the great circle made by extending $x$ to a geodesic in the direction of $v_0$.
 
-We can reflect across this great circle on all the spherical cross-sections of $U$.
+We can reflect the spherical coordinate across this great circle. This is an automorphism on $S^2 \times \mathbb{R}$, and is therefore an automorphism on $U$.
 
 By symmetry, the geodesic made by extending $x$ in the $v$ direction must stay on this slice of $U$.
 
-This reduces finding the geodesic on a $3$-surface of revolution to finding one on a $2$-surface.
+This reduces finding the geodesic on a $3$-surface of revolution to finding one on a $2$-surface of revolution.
+
+%In order to simplify working with $3$-surfaces of revolution, we can simplify the problem to working with a $2$-dimensional analogue.
+
+%Given two points in the $3$-surface of revolution, we can take a $2$-dimensional slice which is the $2$-dimensional analogue. Once we find the vector corresponding to the distance and direction from one point to another in the $2$-dimensional slice, we can map the vector back into the $3$-surface of revolution.
 
 \bigskip
 
@@ -18,15 +38,11 @@ This reduces finding the geodesic on a $3$-surface of revolution to finding one 
 
 \bigskip
 
-Rather than mapping a sphere to $\mathbb{R}^2$, we can embed it in $\mathbb{R}^3$.
+Rather than mapping a sphere to $\mathbb{R}^2$, we can embed it in $\mathbb{R}^3$. Given points $\textbf{x} = (\textbf{x}_1, x_2), \textbf{y} = (\textbf{y}_1, y_2) \in S^2 \times \mathbb{R}$, let $\textbf{v}$ be the unit vector in the direction of $\textbf{y}_1$ from $\textbf{x}_1$. You can find this by looking at $\textbf{x}_1$ and $\textbf{y}_1$ as vectors in $\mathbb{R}^3$, taking the projection of $\textbf{y}_1$ perpendicular to $\textbf{x}_1$, and normalizing.
 
-Given points $\textbf{x}, \textbf{y} \in S^2 \times \mathbb{R}$,
+Let $\theta$ be the angle between $\textbf{x}_1$ and $\textbf{y}_1$, so $\theta = \arccos\left<\textbf{x}_1,\textbf{y}_1\right>$.
 
-Let $\textbf{v} =$ the normalization of the projection of $\textbf{y}_1$ perpendicular to $\textbf{x}_1$.
-
-Let $\theta =$ the angle between $\textbf{x}$ and $\textbf{y} = \arccos\left<\textbf{x},\textbf{y}\right>$
-
-Now we take the points $\textbf{x}' = (0,x_4)$ and $\textbf{y}' = (\theta, y_4)$ in the two-dimensional version.
+Now we take the points $\textbf{x}' = (0,x_4)$ and $\textbf{y}' = (\theta, y_4)$ in $S^1 \times \mathbb{R}$.
 
 Let $\textbf{z}'$ be a vector between them.
 
@@ -89,7 +105,7 @@ Now I need to reflect it twice.
 
 First, I will reflect along the $t$-axis, to get $\mat{M}{0}{0}{-1}$. This doesn't change anything, since that vector was orthogonal to reality, but it does guarantee that the final orientation will have the same sign.
 
-Now I need to reflect between $(1,0,0,0)$ and $(0,v)$ where $v \in S^2$ is the position of the vector.
+Now I need to reflect between $(0,0,0,1)$ and $(v,0)$ where $v \in S^2$ is the position of the vector.
 
 Let $w$ be a vector I am moving with this, and $R$ be the reflection matrix.
 
@@ -105,8 +121,20 @@ $R = I - (v,-1)(v,-1)^T$
 
 This means that the final orientation is $R\mat{M}{0}{0}{-1}$.
 
-???
+Or rather, it would be, except that the real coordinate is the first coordinate, not the last. I just need to cycle it through with the matrix
 
+$S = \left(\begin{array}{cccc}
+		0 & 0 & 0 & 1 \\
+		1 & 0 & 0 & 0 \\
+		0 & 1 & 0 & 0 \\
+		0 & 0 & 1 & 0
+	\end{array} \right)$
+
+Giving me
+
+$SR\mat{M}{0}{0}{1}$
+
+\ignore{
 Let $\textbf{w}$ be the direction you're moving from your own point of reference.
 
 $M\textbf{w}$ is the direction you'd end up going in Euclidean geometry.
@@ -124,3 +152,4 @@ Assuming for simplicity that $M\textbf{w}$ is unit. Since we're looking at a uni
 This gives $R = I - (-1,\textbf{v})(-1,\textbf{v})^T$.
 
 Thus, the final matrix is $R\mat{\textbf{0}^T}{1}{M}{\textbf{0}}$.
+}

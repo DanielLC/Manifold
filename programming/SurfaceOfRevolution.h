@@ -25,9 +25,11 @@ class SurfaceOfRevolution : public Manifold {
 		class Point;
 		class PointOfReference;
 		class Geodesic;
+		class Portal;
 		typedef std::tr1::shared_ptr<Point> PointPtr;
 		typedef std::tr1::shared_ptr<PointOfReference> PointOfReferencePtr;
 		typedef std::tr1::shared_ptr<Geodesic> GeodesicPtr;
+		typedef std::tr1::shared_ptr<Portal> PortalPtr;
 		class Point : public Manifold::Point {
 			public:
 				SurfaceOfRevolution* getSpace();	//Gives the space this point is in
@@ -84,23 +86,32 @@ class SurfaceOfRevolution : public Manifold {
 				bool containsPoint(Manifold::Point* point);
 				double getRadiusOfCurvature();
 				double getCircumference();
+				double getDistance(Manifold::PortalPtr portal);
 			private:
 				double t;
 				Manifold::GeodesicPtr getGeodesic(IntersectionPtr intersection);
 				IntersectionPtr getIntersection(Manifold::GeodesicPtr geodesic);
 				Manifold::PointPtr getPoint(PointTransportPtr transport);
 				PointTransportPtr getTransport(Manifold::PointPtr point);
+				double getEDist(double cot);	//Is there a better way to do this? It should only be for SurfaceOfRevolution<PortalSpace2d>.
 		};
 		std::string getType();
 		//These are how you actually get geodesics.
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Vector3d vector);			//Gives the geodesic that starts at start and has the direction and distance of vector
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Manifold::PointPtr end);		//Gives a geodesic that starts at start and ends at end
+		void setK(double k);
+	private:
+		double k;
 };
 
 template <class SurfaceOfRevolution2d>
+void SurfaceOfRevolution<SurfaceOfRevolution2d>::setK(double k) {
+	this->k = k;
+}
+
+template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getK() {
-	//return 2*M_PI/log(2*M_PI);
-	return 1;
+	return k;
 }
 
 template <class SurfaceOfRevolution2d>

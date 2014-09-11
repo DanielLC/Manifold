@@ -1,11 +1,41 @@
 \subsection{Orientation}
 
-Much of this program involves orientation. For example, a camera must have an orientation.  The orientation is essentially a linear transformation between $\mathbb{R}^3$ and the tangent space of the manifold at that point which preserves magnitude and angles. In the case of $\mathbb{E}^3$, the tangent space at any point has a natural map to $\mathbb{R}^3$, so the orientation can be thought of as a rotation from $\mathbb{R}^3$ to itself.
+%From the point of view of the camera, the tangent space is $\mathbb{R}^3$.
 
-In order to store the orientation, I use a default orientation for each point. This is commonly the orientation in the map from $\mathbb{R}^3$ to the manifold. For example, in the half-plane model of $\mathbb{H}^3$, the vector $(0,0,1)$ maps to the direction of the geodesic that approaches $(0,0,\infty)$.
+The camera sees everything as $\mathbb{R}^3$, with $x,y$ and $z$ coordinates. I will refer to these as the camera coordinates. The reason that we use $\mathbb{R}^3$, and not the geometry we are inside is that the camera does not directly see how space is warped. It only knows how far away points are, and in which direction. (Realistically, the camera only knows direction, but it simplifies calculations to pretend that it also knows distance.) This is referred to as $\mathbb{R}^3$ and not $\mathbb{E}^3$ because it has an inherent coordinate system, as opposed to simply following Euclidean geometry.
 
-This is not necessarily the case. Currently the only exception is SurfaceOfRevolution, which uses a map that is not necessarily conformal, and maps from $S^2 \times \mathbb{R}$ instead of $\mathbb{R}^3$. In this case, $(0,0,0,1)$ maps along the axis, $(x,y,z,0)$ maps to the natural value, and everything else maps as necessary to make it angle-preserving.
-%???
-%I'm actually mapping from $\mathbb{R}^4$ in this case.
+A camera must have an orientation. The orientation is essentially a linear isometry between the camera coordinates and the tangent space of the manifold at that point. In the case of $\mathbb{E}^3$, we can just give the space coordinates, resulting in a natural map from the coordinate space $\mathbb{R}^3$ to the camera coordinates $\mathbb{R}^3$, so the orientation can be thought of as a rotation from $\mathbb{R}^3$ to itself. Unfortunately, this strategy does not generally work, because manifolds in general cannot be given linear coordinate systems.
 
-When a point of reference moves along a path, the final orientation is not directly comparable to the initial orientation. However, the final orientation compared to the default is directly comparable to the initial orientation compared to the default. In particular, this difference rotates by a certain amount depending on the path. I generally speak of the point of reference rotating by that amount.
+In order to store the orientation, I use an implicit default orientation for each point. If the coordinate map is conformal, a convenient default orientation is the differential of the coordinate map from $\mathbb{R}^3$ to the manifold. For example, in the half-plane model of $\mathbb{H}^3$, the vector $(0,0,1)$ maps to the direction of the geodesic that approaches $(0,0,\infty)$.
+
+Unfortunately, the coordinate map is not always conformal. Currently, the only exception is Wormhole, which maps from $S^2 \times \mathbb{R}$ instead of $\mathbb{R}^3$. In this case, $(0,0,0,1)$ maps along the $\mathbb{R}$ axis and $(x,y,z,0)$ maps to the tangents to the spherical cross-section in the obvious way. For example, $(1,0,0,0)$ maps to a vector where the $x$ component of the $S^2$ component is increasing. Everything else maps as necessary to make it angle-preserving.
+
+???
+
+For a manifold $M$ and a point $p$, $M_p$ refers to the tangent plane of $M$ at $p$. This is isomorphic to $\mathbb{R}^3$.
+
+Let $D_p:\mathbb{R}^3 \to M_p$ refer to the default orientation at point $p$ on manifold $M$. It is a linear isometry that carries an explicit vector of the form $(x,y,z)$ to the tangent plane $M_p$.
+
+Given some orientation $O:\mathbb{R}^3 \to M_p$, I can store $D_p^{-1}O:\mathbb{R}^3 \to \mathbb{R}^3$.
+
+If I want to rotate the camera by $R$, I am changing the orientation to $OR$. Since this is stored as $D_p^{-1}OR$, I can just post-multiply $D_p^{-1}O$ by $R$.
+
+%When a point of reference moves along a path from $p$ to $q$, the final orientation, $O_p:\mathbb{R}^3 \to M_p$ is not directly comparable to the initial orientation, $O_q:\mathbb{R}^3 \to M_q$. However, $D_p^{-1}O_p:\mathbb{R} \to \mathbb{R}$ is directly comparable to $D_q^{-1}O_q:\mathbb{R} \to \mathbb{R}$.???
+
+The parallel transport from $p$ to $q$ induces a transformation $P:M_p \to M_q$. When a point of reference is moved across such a path, the final orientation is $PO: \mathbb{R}^3 \to M_q$. This is stored as $D_q^{-1}PO$. Since it was originally stored as $D_p^{-1}O$, this is equivalent to premultiplying it by $D_q^{-1}PD_p$.
+
+%When a point of reference moves along a path, the final orientation is not directly comparable to the initial orientation. However, the final orientation compared to the default is directly comparable to the initial orientation compared to the default. In particular, this difference rotates by a certain amount depending on the path. I generally speak of the point of reference rotating by that amount.
+
+???
+
+Everything above is written in $3$ dimensional coordinates. As such, it doesn't quite apply for Wormhole, which uses a $4$-dimensional coordinate system.
+
+Wormhole is stored as $S^2 \times \mathbb{R} \subseteq \mathbb{R}^4$. The orientation is $\mathbb{R}^4 \to T_p$ where $p \in \mathbb{R}^4$. It also is designed to map $\left<e_1,e_2,e_3\right>$ to the subspace of $T_p$ tangent to $S^2 \times \mathbb{R}$, and $\left<e_4\right> \mapsto N_p$, where $N_p$ is the subspace of $T_p$ normal to the tangent space of $S^2 \times \mathbb{R}$. In other words, $e_4$ maps to a vector perpendicular to reality.
+
+Camera coordinates are transformed to $\mathbb{R}^4$ by adding a zero coordinate at the end. $\mathbb{R}^4$ is turned to camera coordinates by removing the trailing zero. If the trailing coordinate is not zero, the vector is not tangent along reality, and something clearly went wrong.
+
+If I want to rotate the camera by the $3 \times 3$ matrix $M$, I am only rotating the first three coordinates. Those that stay within reality, so I can just multiply by $\mat{M}{0}{0}{1}$, which rotates the first three coordinates that way and fixes the coordinate that lies perpendicular to reality.
+
+???
+
+My program does have objects besides cameras that have orientations. I have referred to the object as PointOfReference in the program itself. The orientation works the same, even if it isn't strictly speaking a camera.

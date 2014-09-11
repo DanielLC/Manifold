@@ -1,27 +1,29 @@
 \subsection{Finding the Geodesic Between Two Points Numerically}
 
+%The map $\exp:M_p \to M$ where $\exp(\textbf{v})$ is the endpoint of a geodesic starting at $p$, moving in the direction of $\textbf{v}$ of length $\|\textbf{v}\|$ is known as the exponential map. It is particularly important in this program, since $\exp^{-1}$ can be thought of as giving the images of a given point.
+
 In many manifolds, the geodesic between two points can be easily calculated symbolically. However, when two or more simple manifolds are glued together, this method quickly becomes infeasible. You would likely have to find a new equation for every combination, and it's likely that the final equation will quickly get too complicated to be solved easily.
 
-Given a point and a vector, it's still fairly easy to find the geodesic that extends that distance from that point in that direction. Simply find the geodesic in the manifold the point is in, if it intersects with another manifold find where and at what distance, extend the geodesic from there, and repeat until you run out of geodesic.
+Given a point, $p$, and a vector, $\textbf{v}$, it's still fairly easy to find the geodesic that extends distance $\|\textbf{v}\|$ from point $p$ in the direction of $\textbf{v}$, and by extension its endpoint $\exp_p(\textbf{v})$: Find the corresponding geodesic in the sub-manifold that $p$ is in. Find the nearest intersection with a wormhole, if one exists. Send the point of intersection, along with the orientation and the remaining vector, to the other side of the wormhole in another sub-manifold. Extend the geodesic from there. Repeat until you reach the end of the geodesic.
 
-There is not necessarily only one geodesic between a given pair of points. When drawing a triangle, the necessary geodesics will presumably be close to each other. This can be used to find the geodesic you're looking for.
+There is not necessarily only one geodesic between a given pair of points. However, when drawing a triangle, the necessary geodesics will presumably be close to each other. This can be used to find the geodesic you're looking for as follows:
 
-When drawing a triangle in which the geodesic reaching one of the vertices is known, it can be used for the first iteration to find the other two vertices.
+When drawing a triangle in which the geodesic reaching one of the vertices is known, the geodesic can be used for the first iteration to find the other two vertices.
 
-???
+For each iteration, we have a starting point $p$, ending point $q$, and a vector $\textbf{v}$ which is the initial vector in the first iteration, and the result of the previous iteration otherwise. We are attempting to find the value of $\exp^{-1}_p(q)$ that's close to $\textbf{v}$.
 
-Given starting point $p$, ending point $q$, and vector $\textbf{v}$ that's near the vector tangent to the geodesic with a magnitude equal to its length,
+Let $\phi:M \to \mathbb{R}^3$ be an arbitrary map that is locally continuous and injective in a neighborhood of $q$. %and $\exp_p(\textbf{v})$.
 
-Let $\psi(\textbf{u})$ be the endpoint of the geodesic starting at $p$ that is tangent to and of the same magnitude as $\textbf{u}$. We are attempting to find the value of $\psi^{-1}(q)$ that's close to $\textbf{v}$.
+%First, we make use a continuous injective map, $\phi$, from the manifold to the vector field $\mathbb{R}^3$.  %This set of vectors has little to do with the ones being mapped from in $\exp_p$. %In order to distinguish them, I will refer to them as $\textbf{x}, \textbf{y}$, etc. as opposed to $\textbf{u}, \textbf{v}$, etc.
 
-First, make a continuous injective map, $\phi$, from the manifold to the vector field $\mathbb{R}^3$. This set of vectors has little to do with the ones being mapped from in $\psi$. In order to distinguish them, I will refer to them as $\textbf{x}, \textbf{y}$, etc. as opposed to $\textbf{u}, \textbf{v}$, etc. ???
+%$S^3$ doesn't have such a map. I could get it to work if I remove a point. If I'm gluing it to another space, that isn't a problem because I could just glue it so the point at infinity is in the ball that's removed. If not, I can just stick it in a random spot and hope for the best.
 
-$S^3$ doesn't have such a map. I could get it to work if I remove a point. If I'm gluing it to another space, that isn't a problem because I could just glue it so the point at infinity is in the ball that's removed. If not, I can just stick it in a random spot and hope for the best.
+%Compound manifolds do not have such a map. Theoretically, there is no need to put a compound space inside another compound manifold. However, this will simplify programming. I can bypass this problem by making it so that passing a compound manifold as a submanifold in a compound manifold will result in the outer manifold automatically disassembling the inner manifold and building itself out of its submanifolds.
 
-Compound manifolds also don't have such a map. Theoretically, there is no need to put a compound space inside another compound manifold. However, this will simplify programming it. I can bypass this problem by making it so that passing a compound manifold as a submanifold in a compound manifold will result in the outer manifold automatically disassembling the inner manifold and building itself out of its submanifolds.
+%Let $\textbf{x}_0 = \phi\circ\exp_p(\textbf{v})$. 
 
-%Let $\textbf{x}_0 = \phi\circ\psi(\textbf{v})$. 
+Now we have $\phi\circ\exp_p: \mathbb{R}^3 \to \mathbb{R}^3$. This can be inverted with Newton's method. Then find $(\phi\circ\exp_p)^{-1}\circ\phi(q) = \exp_p^{-1}\circ\phi^{-1}\circ\phi(q) = \exp_p^{-1}(q)$. As long as the triangles are sufficiently small, $\textbf{v}$ will be sufficiently close to the preferred solution, guaranteeing that Newton's method converges on that solution.
 
-Now we have $\phi\circ\psi: \mathbb{R}^3 \mapsto \mathbb{R}^3$. This can be inverted with Newton's method. Simply find $(\phi\circ\psi)^{-1}\circ\phi(q) = \psi^{-1}\circ\phi^{-1}\circ\phi(q) = \psi^{-1}(q)$. As long as the triangles are sufficiently small, $\textbf{v}$ will be sufficiently close to the preferred solution, guaranteeing that it's the solution approached.
+There are a few special cases where the above method won't be sufficient. I have come up with methods to solve these cases, but they have not been implemented. However, one case doesn't come up with the spaces that have been implemented ($\mathbb{E}^3$ and Wormhole), and the other is only necessary to draw multiple images of each triangle. The program draws only one image, but the image drawn is still drawn correctly.
 
-There is still the problem that one vertex may have one solution, but a nearby vertex have three. I will deal with this later. I'm pretty sure it won't come up as long as I stick to $\mathbb{E}^3, \mathbb{H}^3,$ and Wormhole.
+%There is still the problem that one vertex may have one solution, but a nearby vertex have three. I will deal with this later. I'm pretty sure it won't come up as long as I stick to $\mathbb{E}^3, \mathbb{H}^3,$ and Wormhole.

@@ -9,7 +9,7 @@ all:
 	#g++ -I /usr/include/eigen2 Main2.cpp Hyperbolic2d.cpp Intersection2d.cpp -lglut -o hyperbolic2d -lGL -lGLU
 	#g++ -I /usr/include/eigen2 Main3.cpp Compound.cpp Manifold.cpp Euclidean.cpp Intersection.cpp -lglut -o compound -lGL -lGLU
 	#g++ -I /usr/include/eigen2 Main3.cpp Compound.cpp Manifold.cpp PortalSpace2d2.cpp Hyperbolic2d.cpp Intersection.cpp Intersection2d.cpp PointTransport.cpp -lglut -o compound -lGL -lGLU
-	g++ -I /usr/include/eigen2 Main3.cpp Compound.cpp Manifold.cpp PortalSpace2d2.cpp Hyperbolic2d.cpp Euclidean.cpp Intersection.cpp Intersection2d.cpp PointTransport.cpp -lglut -o compound -lGL -lGLU -ggdb
+	#g++ -I /usr/include/eigen2 Main3.cpp Compound.cpp Manifold.cpp PortalSpace2d2.cpp Hyperbolic2d.cpp Euclidean.cpp Intersection.cpp Intersection2d.cpp PointTransport.cpp -lglut -o compound -lGL -lGLU -ggdb
 	#clang -I /usr/include/eigen2 Main3.cpp Compound.cpp Hyperbolic2.cpp Hyperbolic2d.cpp -lglut -o compound -lGL -lGLU
-	#g++ -I /usr/include/eigen2 Main4.cpp Compound.cpp Manifold.cpp PortalSpace2d2.cpp Hyperbolic2d.cpp Euclidean.cpp Intersection.cpp Intersection2d.cpp PointTransport.cpp Color.cpp ImageOut.cpp -o raytracer -ggdb `libpng-config --ldflags`
+	g++ -I /usr/include/eigen2 Main4.cpp Compound.cpp Manifold.cpp PortalSpace2d2.cpp Hyperbolic2d.cpp Euclidean.cpp Intersection.cpp Intersection2d.cpp PointTransport.cpp Color.cpp ImageOut.cpp -o raytracer -ggdb `libpng-config --ldflags`
 	#g++ -I /usr/include/eigen2 Test.cpp Compound.cpp Manifold.cpp PortalSpace2d2.cpp Hyperbolic2d.cpp Euclidean.cpp Intersection.cpp Intersection2d.cpp PointTransport.cpp Color.cpp ImageOut.cpp -o test -ggdb `libpng-config --ldflags`

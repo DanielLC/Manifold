@@ -35,7 +35,7 @@ void draw(Compound::PointOfReferencePtr por, int n) {
 			
 			Vector3d dir = Vector3d(x,1.0,z).normalized();
 			
-			Compound::PointOfReferencePtr a = por->pointOfReferenceFromVector(10*dir);
+			Compound::PointOfReferencePtr a = por->pointOfReferenceFromVector(20*dir);
 			Manifold::PointOfReferencePtr b = a->getPointOfReference();
 			if(b->getSpace() != euclidean0 && b->getSpace() != euclidean1) {
 				(*image)[j][i] = Color(0.5,0.5,0.5);
@@ -88,43 +88,66 @@ int main(int argc, char* argv[]){
 	euclidean1->addPortal(euclideanPortal1);
 	euclideanPortal0->setMutualExits(euclideanPortal1.get());*/
 	
-	euclidean0 = new Euclidean();
+	/*euclidean0 = new Euclidean();
 	euclidean1 = new Euclidean();
 	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal0 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
+	Manifold::PortalPtr wormholePortal0 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
 	wormhole->addPortal(wormholePortal0);
-	SurfaceOfRevolution<PortalSpace2d>::PortalPtr wormholePortal1 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(true, wormhole));
+	Manifold::PortalPtr wormholePortal1 = SurfaceOfRevolution<PortalSpace2d>::PortalPtr(new SurfaceOfRevolution<PortalSpace2d>::Portal(true, wormhole));
 	wormholePortal1->setInvert(true);
 	wormhole->addPortal(wormholePortal1);
-	Euclidean::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2.5,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean0));
-	Euclidean::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2.5,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
+	Manifold::PortalPtr euclideanPortal0 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2.5,0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean0));
+	Manifold::PortalPtr euclideanPortal1 = Euclidean::PortalPtr(new Euclidean::Portal(Vector3d(0,2.5,0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
 	assert(fabs(wormholePortal0->getCircumference() - euclideanPortal0->getCircumference()) < EPSILON);
 	assert(fabs(wormholePortal1->getCircumference() - euclideanPortal1->getCircumference()) < EPSILON);
 	euclidean0->addPortal(euclideanPortal0);
 	euclidean1->addPortal(euclideanPortal1);
 	euclideanPortal0->setMutualExits(wormholePortal0.get());
-	euclideanPortal1->setMutualExits(wormholePortal1.get());
+	euclideanPortal1->setMutualExits(wormholePortal1.get());*/
 	
-	const double FRAMES = 16;
-	const double DISTANCE = 5-2*sqrt(2)+log(3+2*sqrt(2));
+	euclidean1 = new Euclidean();
+	SurfaceOfRevolution<PortalSpace2d>* wormhole = new SurfaceOfRevolution<PortalSpace2d>();
+	wormhole->setK(0.5);
+	Manifold::PortalPtr wormholePortal0(new SurfaceOfRevolution<PortalSpace2d>::Portal(false, wormhole));
+	wormhole->addPortal(wormholePortal0);
+	Manifold::PortalPtr wormholePortal1(new SurfaceOfRevolution<PortalSpace2d>::Portal(true, wormhole));
+	wormholePortal1->setInvert(true);
+	wormhole->addPortal(wormholePortal1);
+	double length = ((SurfaceOfRevolution<PortalSpace2d>::Portal*) wormholePortal0.get())->getDistance(wormholePortal1);
+	double circumference = fabs(wormholePortal0->getCircumference());
+	//std::cout << "Main4.cpp circumference/M_PI:\t" << circumference/M_PI << std::endl;
+	Manifold::PortalPtr euclideanPortal0(new Euclidean::Portal(Vector3d(0,1.5*circumference/(2*M_PI),0),fabs(wormholePortal0->getRadiusOfCurvature()),euclidean1));
+	Manifold::PortalPtr euclideanPortal1(new Euclidean::Portal(Vector3d(0,-1.5*circumference/(2*M_PI),0),fabs(wormholePortal1->getRadiusOfCurvature()),euclidean1));
+	assert(fabs(wormholePortal0->getCircumference() - euclideanPortal0->getCircumference()) < EPSILON);
+	assert(fabs(wormholePortal1->getCircumference() - euclideanPortal1->getCircumference()) < EPSILON);
+	euclidean1->addPortal(euclideanPortal0);
+	euclidean1->addPortal(euclideanPortal1);
+	euclideanPortal0->setMutualExits(wormholePortal0.get());
+	euclideanPortal1->setMutualExits(wormholePortal1.get(), (Matrix3d() << 1,0,0,0,-1,0,0,0,1).finished());
+	
+	const double FRAMES = 1;
+	//const double DISTANCE = 5-2*sqrt(2)+log(3+2*sqrt(2));
+	//double totalDistance = 5-2*sqrt(2)+log(3+2*sqrt(2));
+	double totalDistance = circumference/(2*M_PI) + length;
 	
 	for(int i=0; i<FRAMES; ++i) {
 		
-		double distance = i*DISTANCE/(FRAMES-1);
+		double distance = i*totalDistance/FRAMES;
+		//double distance = i*DISTANCE/(FRAMES-1);
 		//double distance = i*DISTANCE/(FRAMES-1) - DISTANCE/2;
 		
-		Compound::PointOfReferencePtr por(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean0))));
+		Compound::PointOfReferencePtr por(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new Euclidean::PointOfReference(euclidean1))));
 		//Compound::PointOfReferencePtr por(new Compound::PointOfReference(Manifold::PointOfReferencePtr(new SurfaceOfRevolution<PortalSpace2d>::PointOfReference(wormhole))));
 		por->move(Vector3d(0,distance,0));
 		//por->move(Vector3d(distance,0,0));
-		double theta = i*M_PI/(FRAMES-1);
+		//double theta = i*M_PI/(FRAMES-1);
 		//double theta = i*2*M_PI/FRAMES;
 		//double theta = 1;
 		//double theta = i*M_PI/(FRAMES-1) - M_PI/2;
-		por->rotate((Matrix3d() <<
+		/*por->rotate((Matrix3d() <<
 				cos(theta),	sin(theta),	0,
 				-sin(theta),cos(theta),	0,
-				0,			0,			1).finished());
+				0,			0,			1).finished());*/
 		/*por->rotate((Matrix3d() <<
 				cos(theta),	0,	sin(theta),
 				0,			1,			0,

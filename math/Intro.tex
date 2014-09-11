@@ -2,15 +2,39 @@
 
 \subsection{Overview}
 
-I am writing a graphics program to visualize three-dimensional non-Euclidean geometry, with emphasis on connected sums of manifolds.
+A connected sum of manifolds is made by removing a disc from each manifold and gluing the manifolds along the boundary.
 
-Currently, I have implemented $\mathbb{E}^3$, $\mathbb{H}^3$ and a space homeomorphic to $S^2 \times \mathbb{R}$.
 
-I am in the process of implementing a method to glue multiple spaces together along spherical boundaries.
+My program is designed to use an intermediate manifold to allow them to be connected smoothly.
+
+
+\begin{figure}[h]
+\subfigure[Two surfaces with discs removed]{
+	\label{fig:first}
+	\includegraphics[scale=0.17]{../images/RemovedDiscs.png}
+}
+\subfigure[Two spaces naively connected]{
+	\label{fig:second}
+	\includegraphics[scale=0.17]{../images/IntersectingSpaces.png}
+}
+\subfigure[Two spaces smoothly connected]{
+	\label{fig:third}
+	\includegraphics[scale=0.17]{../images/MergedSpaces.png}
+}
+\caption{Connecting two surfaces}
+\end{figure}
+
+???
+
+I have written a graphics program to visualize three-dimensional non-Euclidean geometry, with emphasis on connected sums of manifolds.
+
+I have implemented $\mathbb{E}^3$ and a space homeomorphic to $S^2 \times \mathbb{R}$, which I have called Wormhole.
+
+I have also implemented a method to glue multiple spaces together along spherical boundaries.
 
 Outside Euclidean geometry, gluing spaces together like this won't always be smooth. More precisely, since two spheres with the same surface area do not generally have the same curvature, gluing the spaces together by those spheres will result in them having different curvature from each side. A similar problem will occur if the insides or outsides of two spheres are glued together.
 
-In order to address this problem, I have designed and am currently in the process of implementing what I call wormhole.
+In order to address this problem, I have designed a manifold I call the wormhole.
 
 \begin{figure}[h]
 \subfigure[Two spaces naively connected]{
@@ -25,14 +49,16 @@ In order to address this problem, I have designed and am currently in the proces
 	\label{fig:third}
 	\includegraphics[scale=0.2]{../images/MergedSpaces.png}
 }
+\caption{}
 \end{figure}
 
-I define an $(n,m)$-surface of revolution as an $(n+m)$-manifold with an automorphism group that has the automorphism group of the $n$-sphere as a subgroup. An $(n,m)$-surface of revolution is also an $(n-1,m+1)$-surface of revolution for all $n \geq 1$. In addition, this definition is based entirely upon the intrinsic geometry of the space, and does not require embedding into Euclidean geometry.
+%I define an $(n,m)$-surface of revolution as an $(n+m)$-manifold which has a homeomorphism, $\phi$, to a subspace of $S^n \times \mathbb{R}^m$ which preserves??? the automorphisms that act as automorphisms on $S^n$ and preserve $\mathbb{R}^m$. An $(n,m)$-surface of revolution is also an $(n-1,m+1)$-surface of revolution for all $n \geq 1$. In addition, this definition is based entirely upon the intrinsic geometry of the space, and does not require embedding into Euclidean geometry.
 
 %A $2$-wormhole is a $(1,1)$-surface of revolution of constant negative Gaussian curvature. This makes it a quotient space on $\mathbb{H}^2$, for which it is easy to find geodesics.
 
-I define a $2$-wormhole as a quotient space on $\mathbb{H}^2$ made by identifying two ultraparallel lines. This is a $(1,1)$-surface of revolution.
+I define $2$-Wormhole as a quotient space on $\mathbb{H}^2$ made by identifying two ultraparallel lines. I have designed $3$-Wormhole as a higher-dimensional analogue of a $2$-wormhole. %This is a $(1,1)$-surface of revolution.
 
+\ignore{
 An $n$-wormhole is an $(n-1,1)$-surface of revolution. Generally, this does not have constant curvature, and is not a quotient space on $\mathbb{H}^n$. However, I have found a method to reduce finding a geodesic on an $(n,m)$-surface of revolution to a $(1,m)$-surface of revolution. In particular, I can find the geodesic on an $n$-wormhole using the method to find a geodesic on a $2$-wormhole.
 
 There are two other spaces that are similar to this wormhole that are of interest. I hope to program these, but they are not part of my main goal. If I run out of time, I will consider the project complete without them. I call one a black hole and the other a cone point space. These spaces, and the wormhole, all are built by extending to the third dimension a quotient space of $\mathbb{H}^2$ in which two lines are identified. The wormhole occurs if the two lines are ultraparallel, the black hole if they're asymptotic, and the cone point space if they intersect.
@@ -66,14 +92,18 @@ Figures 1-4 illustrate the $2$-dimensional versions of these surfaces. While onl
 }
 \end{figure}
 
-I also hope to implement $S^3$ and $S^2 \times \mathbb{E}$. I may also implement $\mathbb{H}^2 \times \mathbb{E}$, but it doesn't combine well with the wormhole, so it won't be as useful.
+I also hope to implement $S^3$ and $S^2 \times \mathbb{R}$. I may also implement $\mathbb{H}^2 \times \mathbb{E}$, but it doesn't combine well with the wormhole, so it won't be as useful.
+}
 
+One obstacle was finding geodesics between two given points when spaces are glued together. Since light follows a geodesic, this is necessary to show where you'd see the point. In $E^3$ and Wormhole, it is not difficult to construct a geodesic between two given points. However, this does not apply to their connected sums.
 
-One obstacle will be finding geodesics between two given points when spaces are glued together. In the spaces I have chosen, it is not difficult to construct a geodesic between two given points. However, this does not apply to the compound spaces made by gluing them together.
+I can easily construct a geodesic from a given point moving in a given direction. By repeatedly constructing such geodesics at set lengths and taking note of the error, I can use Newton's method to solve numerically for the geodesic between two given points.
 
-I can easily construct a geodesic from a given point moving in a given direction. By repeatedly constructing such geodesics at set lengths and taking note of the distance they are from the target point, I can use Newton's method to solve numerically for the geodesic between two given points.
+My program can be run either through rasterization or ray-tracing.
 
-Alternately, I can build a raytracer. Rather than finding the direction each point is in from the camera, I will construct geodesics corresponding to each pixel in the camera, shooting rays to see what lies in that direction. This leads to problems with light sources, since I still need to find the angle and distance of the light source from the given point. I have found three possible solution:
+When used for rasterization, the program finds a geodesic from the camera to each vertex, finds the direction the geodesic moves from the camera, and draws the vertex in that direction. Then it draws triangles between those vertices.
+
+When used for ray-tracing, it constructs geodesics corresponding to each pixel in the camera, and shoots rays to see what lies in that direction. \ignore{This leads to problems with light sources, since I still need to find the angle and distance of the light source from the given point. I have found three possible solution:
 
 \begin{itemize}
 
@@ -88,6 +118,7 @@ Alternately, I can build a raytracer. Rather than finding the direction each poi
 There is another notable detail. In Euclidean geometry, lighting falls of inversely with the square of distance. This does not apply in general. Changing the direction and distance a photon is emitted by $\varepsilon\textbf{u}$ for some unit vector $\textbf{u}$ will change where it hits by $M\varepsilon\textbf{u} + O(\varepsilon^2)$ for some matrix $M$. The brightness is inversely proportional to $|\det(M)|$.
 
 More accurately, given the list of all vectors $\textbf{v}_1, \textbf{v}_2, ...$ such that the photons moving in that direction for that distance hit the given point, the brightness at that point is proportional to $\sum\frac{1}{|\det(M_{\textbf{v}_i})|}$. This is because, in general, two points can be connected by more than one geodesic.
+}
 
 \ignore{1.  Describe 3-manifold decompositions.
   A.  Prime decomposition theorem -- see Allen Hatcher's notes for statement and references.
@@ -112,7 +143,7 @@ The prime decomposition theorem states that a compact, connected, orientable 3-m
   
 %  B.  Torus decomposition theorem -- see Allen Hatcher's notes for statement and references.
 
-The torus decomposition theorem states that there is a minimal collection of disjointly embedded incompressible tori such that cutting along the edge of each yields components that are each either atoroidal or Seifert-fibered. It also states that this collection is unique up to isomorphism \cite{JSJ3} \cite{JSJ2} \cite{JSJ1} \cite{JSJ4}.
+The torus decomposition theorem states that there is a minimal collection of disjointly embedded incompressible tori such that cutting along each yields components that are each either atoroidal or Seifert-fibered. It also states that this collection is unique up to isomorphism \cite{JSJ3} \cite{JSJ2} \cite{JSJ1} \cite{JSJ4}.
 
 %Wikipedia has four references. Which do I use?
 
@@ -122,11 +153,11 @@ The geometrization theorem states that any 3-manifold can be decomposed canonica
 
 %  [D.  Your work:  take some of 8 geometries, glue together via "smooth" prime decomposition.]
 
-I am working on a program that will allow smooth creation of a connected sum of several geometries as in the geometrization theorem, and visualization of the result. ``Smoothness'' means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path from one that barely misses.
+My program allows the smooth creation of a connected sum of Euclidean geometries as in the geometrization theorem, and visualization of the result. My program can also be easily expanded to include hyperbolic and spherical geometry. ``Smoothness'' means that the boundaries that are identified have the same curvatures in each surface. If they are not smoothly identified, then they will appear to have different curvatures from each side. As a result, a geodesic that barely intersects the border can have a very different path from one that barely misses.
 
-For example, if we glue the outside of a sphere in Euclidean geometry to the outside of another such sphere in another copy of Euclidean geometry, the result looks like the portal is a reflective sphere, but with the reflection from the other geometry. This has effects such as blocking anything behind the sphere. This is impossible in a true manifold. Any point is visible from any other. My program will avoid this by using an intermediate geometry of non-constant curvature which contains spheres that can be glued to spaces of any constant curvature.
+For example, if we glue the outside of a sphere in Euclidean geometry to the outside of another such sphere in another copy of Euclidean geometry, the result looks like the portal is a reflective sphere, but with the reflection from the other geometry. This has effects such as blocking anything behind the sphere. This is impossible in a true manifold. Any point is visible from any other. My program avoids this by using an intermediate geometry of non-constant curvature which contains spheres that can be glued to spaces of any constant curvature.
 
-My program likely will not support torus decomposition, and thus will not be able to show every manifold. However, it is still more general than anything that has been reported previously, as described next.
+My program does not support torus decompositions, and cannot show every manifold. However, it is still more general than anything that has been reported previously, as described next.
 
 %Additionally, I hope to make my program run real-time. While this is common for programs simulating spherical, Euclidean, and hyperbolic geometry, I do not believe it has been done for more sophisticated geometries, as there is not enough time to find geodesics numerically.
 
@@ -144,7 +175,7 @@ Gunn and Maxwell made a video showing the complementary spaces of knots, most of
 
 Levy, Munzner and Mark Phillips wrote a geometry viewer called Geomview. Among its features is the ability to render non-Euclidean geometry \cite{Geomview}.
 
-The main difference that will distinguish my work is the ability to create connected sums between spaces.
+The main difference that distinguishes my work is the ability to create connected sums between spaces.
 
 %  B.  Youtube movie
 
@@ -152,13 +183,13 @@ The main difference that will distinguish my work is the ability to create conne
 
 I am unaware of any previous attempts to visualize general connected sums of geometries. However, attempts have been made to visualize a connected sum of two $\mathbb{E}^3$ spaces, with curvature near zero outside of a small wormhole.
 
-Rune Johansen made a video that was designed to convey the idea of a wormhole \cite{runevision}. This video is primarily artistic in nature, and usees various tricks to make space look curved. There is no geometry that looks precisely like the video.
+Rune Johansen made a video that was designed to convey the idea of a wormhole \cite{runevision}. This video is primarily artistic in nature, and uses various tricks to make space look curved. There is no geometry that looks precisely like the video.
 
-Corvin Zahn made a computer generated video precisely illustrating a wormhole \cite{spacetimetravel}. He uses a solution to Einstein's field equations that has been found previously \cite{WormholeSolution}, and simulated the camera moving through this wormhole. He did not provide specifics about the program used. He detailed what kind of manifold was used, but not how he used it. I have emailed him with questions regarding his implementation, but he has yet to respond.
+Corvin Zahn made a computer generated video precisely illustrating a wormhole \cite{spacetimetravel}. He uses a solution to Einstein's field equations that had been found previously \cite{WormholeSolution}, and simulated the camera moving through this wormhole.
 
-Zahn's wormhole was made as one continuous geometry with everywhere negative curvature. While this is a much more interesting space than what my program will make, it's much harder to generalize. Adding a second wormhole between the spaces or a second wormhole leading to a third space would require redesigning the entire manifold. In contrast, my program will provide a compact manifold with boundary to connect spaces, so as long as the spheres they replace in Euclidean geometry do not touch, any number can be added easily to the same space.
+Zahn's wormhole was made as one continuous geometry with everywhere negative curvature. While this is a much more interesting space than what my program will make, it's much harder to generalize. Adding a second wormhole between the spaces or a second wormhole leading to a third space would require redesigning the entire manifold. In contrast, my program provides a compact manifold with boundary to connect spaces, so as long as the spheres they replace in Euclidean geometry do not touch, any number can be added easily to the same space.
 
-Apparently, he used a ray tracing method and found the geodesics numerically. I intend to use rasterization and minimal amounts of numerical calculations in order to run the program in real time.
+In adddition, Zahn seems to have used a ray-tracing method and found the geodesics numerically. My program can use rasterization to run at near real-time, or solve geodesics symbolically to speed up ray-tracing.
 
 %  C.  Other?  E.g. old references on visualizing hyperbolic geometry?
 
