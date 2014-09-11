@@ -1,0 +1,79 @@
+Distance $= \csc\theta + \cot\theta$
+
+Circumference $= k\csc\theta$
+
+Let $c = \frac{k}{2\pi}$ be the radius of the bottleneck.
+
+scale $= \frac{c\csc\theta}{r}$
+
+%$E = G = \frac{r^2}{c^2\csc^2\theta}, F = 0$
+
+$\frac{d\theta}{dr} = \frac{c\csc\theta}{r}$
+
+By Wolfram Alpha,
+
+$\theta = \cos^{-1}(k_1 - c\log r)$
+
+$\cos\theta = k_1 - c\log r$
+
+$\cos\theta - k_1 = -c\log r$
+
+$\frac{k_1 - \cos\theta}{c} = \log r$
+
+$r = e^\frac{k_1 - \cos\theta}{c}$
+
+For $k_1 = 0$:
+
+$\theta = \cos^{-1}(-c\log r)$
+
+$r = e^-\frac{\cos\theta}{c}$
+
+Scale $= \frac{c^2\csc\theta}{\cos\theta}$
+
+$= \frac{c^2}{\sin\theta\cos\theta}$
+
+Or in terms of $r$,
+
+Scale $= \frac{c\csc\theta}{r}$
+
+$= \frac{c}{r\sin\theta}$
+
+$= \frac{c}{r\sqrt{1-\cos^2\theta}}$
+
+$= \frac{c}{r\sqrt{1-c^2 \log^2 r}}$
+
+\ignore{
+$F = 0$
+
+$E = G = \frac{r^2(1-c^2 \log^2 r)}{c^2}$
+
+$= \frac{r^2}{c^2} - \log^2 r$
+
+$= \frac{x^2+y^2}{c^2} - \frac{1}{4}\log^2(x^2+y^2)$
+
+$E_u = G_u = \frac{2x}{c^2} - 2\frac{1}{4}\log(x^2+y^2)\frac{1}{2x}$
+
+$= \frac{2x}{c^2} - \frac{1}{4x}\log(x^2+y^2)$
+
+$E_v = G_v = \frac{2y}{c^2} - \frac{1}{4y}\log(x^2+y^2)$
+
+$K = -\frac{1}{2\sqrt{EG}}\left(\frac{\partial}{\partial u}\frac{G_u}{\sqrt{EG}} + \frac{\partial}{\partial v}\frac{E_v}{\sqrt{EG}}\right)$
+
+$= -\frac{1}{2E}\left(\frac{\partial}{\partial u}\frac{E_u}{E} + \frac{\partial}{\partial v}\frac{E_v}{E}\right)$
+
+%$\frac{\partial}{\partial u}\frac{E_u}{E} = \frac{\partial}{\partial u} \frac{\frac{2x}{c^2} - 2\frac{1}{4}\log(x^2+y^2)\frac{1}{2x}}{\frac{x^2+y^2}{c^2} - \frac{1}{4}\log^2(x^2+y^2)}$
+
+$= -\frac{1}{2E}\left(\frac{E E_{uu} - E_u^2}{E^2} + \frac{E E_{vv} - E_v^2}{E^2}\right)$
+
+$= \frac{E_u^2 + E_v^2}{2E^3} - \frac{E_{uu}+E_{uv}}{2E^2}$
+
+%$= -\frac{1}{2E^3}\left(E E_{uu} - E_u^2 + E E_{vv} - E_v^2\right)$
+
+$E_{uu} = \frac{\partial}{\partial u} \frac{2x}{c^2} - \frac{1}{4x}\log(x^2+y^2)$
+
+$= \frac{2}{c^2} - \frac{1}{4x}\frac{2x}{x^2+y^2} + \frac{1}{4x^2}\log(x^2+y^2)$
+
+$= \frac{2}{c^2} - \frac{1}{2(x^2+y^2)} + \frac{\log(x^2+y^2)}{4x^2}$
+
+$E_{vv} = \frac{2}{c^2} - \frac{1}{2(x^2+y^2)} + \frac{\log(x^2+y^2)}{4y^2}$
+}
