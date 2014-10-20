@@ -261,7 +261,7 @@ Manifold::PointOfReferencePtr SurfaceOfRevolution<SurfaceOfRevolution2d>::Geodes
 	m.block<2,2>(1,1) << cosine,-sine,sine,cosine;
 	assert(fabs(m.determinant()-1) < EPSILON);
 	assert((m*m.transpose()-Matrix4d::Identity()).norm() < EPSILON);
-	orientation = m.transpose()*orientation;
+	orientation = m.transpose()*orientation;		//Wouldn't m.transpose just be switching the sine and -sine?
 
 	orientation = conjugate*orientation;
 	//std::cout << "Error:\n" << (orientation*orientation.transpose()-Matrix4d::Identity()).norm() << std::endl;

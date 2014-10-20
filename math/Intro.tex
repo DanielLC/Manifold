@@ -4,10 +4,6 @@
 
 A connected sum of manifolds is made by removing a disc from each manifold and gluing the manifolds along the boundary.
 
-
-My program is designed to use an intermediate manifold to allow them to be connected smoothly.
-
-
 \begin{figure}[h]
 \subfigure[Two surfaces with discs removed]{
 	\label{fig:first}
@@ -24,17 +20,15 @@ My program is designed to use an intermediate manifold to allow them to be conne
 \caption{Connecting two surfaces}
 \end{figure}
 
-???
+We have written a graphics program to visualize three-dimensional non-Euclidean geometry, with emphasis on connected sums of manifolds. Our program is designed to use an intermediate manifold to allow them to be connected smoothly.
 
-I have written a graphics program to visualize three-dimensional non-Euclidean geometry, with emphasis on connected sums of manifolds.
+We have implemented $\mathbb{E}^3$ and a space homeomorphic to $S^2 \times \mathbb{R}$, which we have called Wormhole.
 
-I have implemented $\mathbb{E}^3$ and a space homeomorphic to $S^2 \times \mathbb{R}$, which I have called Wormhole.
-
-I have also implemented a method to glue multiple spaces together along spherical boundaries.
+We have also implemented a method to glue multiple spaces together along spherical boundaries.
 
 Outside Euclidean geometry, gluing spaces together like this won't always be smooth. More precisely, since two spheres with the same surface area do not generally have the same curvature, gluing the spaces together by those spheres will result in them having different curvature from each side. A similar problem will occur if the insides or outsides of two spheres are glued together.
 
-In order to address this problem, I have designed a manifold I call the wormhole.
+In order to address this problem, we have designed a manifold we call the wormhole.
 
 \begin{figure}[h]
 \subfigure[Two spaces naively connected]{
@@ -56,12 +50,12 @@ In order to address this problem, I have designed a manifold I call the wormhole
 
 %A $2$-wormhole is a $(1,1)$-surface of revolution of constant negative Gaussian curvature. This makes it a quotient space on $\mathbb{H}^2$, for which it is easy to find geodesics.
 
-I define $2$-Wormhole as a quotient space on $\mathbb{H}^2$ made by identifying two ultraparallel lines. I have designed $3$-Wormhole as a higher-dimensional analogue of a $2$-wormhole. %This is a $(1,1)$-surface of revolution.
+We define $2$-Wormhole as a quotient space on $\mathbb{H}^2$ made by identifying two ultraparallel lines. We have designed $3$-Wormhole as a higher-dimensional analogue of a $2$-wormhole. %This is a $(1,1)$-surface of revolution.
 
 \ignore{
-An $n$-wormhole is an $(n-1,1)$-surface of revolution. Generally, this does not have constant curvature, and is not a quotient space on $\mathbb{H}^n$. However, I have found a method to reduce finding a geodesic on an $(n,m)$-surface of revolution to a $(1,m)$-surface of revolution. In particular, I can find the geodesic on an $n$-wormhole using the method to find a geodesic on a $2$-wormhole.
+An $n$-wormhole is an $(n-1,1)$-surface of revolution. Generally, this does not have constant curvature, and is not a quotient space on $\mathbb{H}^n$. However, we have found a method to reduce finding a geodesic on an $(n,m)$-surface of revolution to a $(1,m)$-surface of revolution. In particular, I can find the geodesic on an $n$-wormhole using the method to find a geodesic on a $2$-wormhole.
 
-There are two other spaces that are similar to this wormhole that are of interest. I hope to program these, but they are not part of my main goal. If I run out of time, I will consider the project complete without them. I call one a black hole and the other a cone point space. These spaces, and the wormhole, all are built by extending to the third dimension a quotient space of $\mathbb{H}^2$ in which two lines are identified. The wormhole occurs if the two lines are ultraparallel, the black hole if they're asymptotic, and the cone point space if they intersect.
+There are two other spaces that are similar to this wormhole that are of interest. We hope to program these, but they are not part of my main goal. If I run out of time, I will consider the project complete without them. I call one a black hole and the other a cone point space. These spaces, and the wormhole, all are built by extending to the third dimension a quotient space of $\mathbb{H}^2$ in which two lines are identified. The wormhole occurs if the two lines are ultraparallel, the black hole if they're asymptotic, and the cone point space if they intersect.
 
 Black holes and cone spaces can support the connection of two spaces in a similar manner, but they're more interesting just connected to one. \ignore{Why?} An $n$-black hole is an $n$-dimensional analogue of a pseudosphere, in which the embedding into $\mathbb{E}^3$ which has spherical cross-sections instead of circular ones. An $n$-cone point space is notable for containing a cone point and still being easy to connect to $\mathbb{E}^n$ or $\mathbb{H}^n$.
 
@@ -107,11 +101,11 @@ When used for ray-tracing, it constructs geodesics corresponding to each pixel i
 
 \begin{itemize}
 
-\item I can give every point the same lighting, regardless of position. This will likely be useful for debugging, but it results in no shading, which will make it less useful or interesting.
+\item We can give every point the same lighting, regardless of position. This will likely be useful for debugging, but it results in no shading, which will make it less useful or interesting.
 
-\item I can use the camera as the light source. In this case, the geodesic that passes between the camera and a given point is the one I used to find that point to begin with. The shading will be a function only of distance, unless Phong shading is used. It will look better, but it will still be very limited.
+\item We can use the camera as the light source. In this case, the geodesic that passes between the camera and a given point is the one We used to find that point to begin with. The shading will be a function only of distance, unless Phong shading is used. It will look better, but it will still be very limited.
 
-\item I can simple fire photons in various directions from the light sources, and use them to color objects they strike. Photons can be used to give effects that are otherwise impossible, such as diffuse interreflection, where an object is illuminated by light reflected off of another object, but they generally take a very long time to calculate.
+\item We can simple fire photons in various directions from the light sources, and use them to color objects they strike. Photons can be used to give effects that are otherwise impossible, such as diffuse interreflection, where an object is illuminated by light reflected off of another object, but they generally take a very long time to calculate.
 
 \end{itemize}
 
@@ -181,7 +175,7 @@ The main difference that distinguishes my work is the ability to create connecte
 
 %http://www.spacetimetravel.org/wurmlochflug/wurmlochflug.html
 
-I am unaware of any previous attempts to visualize general connected sums of geometries. However, attempts have been made to visualize a connected sum of two $\mathbb{E}^3$ spaces, with curvature near zero outside of a small wormhole.
+We are unaware of any previous attempts to visualize general connected sums of geometries. However, attempts have been made to visualize a connected sum of two $\mathbb{E}^3$ spaces, with curvature near zero outside of a small wormhole.
 
 Rune Johansen made a video that was designed to convey the idea of a wormhole \cite{runevision}. This video is primarily artistic in nature, and uses various tricks to make space look curved. There is no geometry that looks precisely like the video.
 

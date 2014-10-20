@@ -99,11 +99,19 @@ class SurfaceOfRevolution : public Manifold {
 		//These are how you actually get geodesics.
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Vector3d vector);			//Gives the geodesic that starts at start and has the direction and distance of vector
 		Manifold::GeodesicPtr getGeodesic(Manifold::PointOfReferencePtr start, Manifold::PointPtr end);		//Gives a geodesic that starts at start and ends at end
+		void setK(double k);
+	private:
+		double k;
 };
 
 template <class SurfaceOfRevolution2d>
+void SurfaceOfRevolution<SurfaceOfRevolution2d>::setK(double k) {
+	this->k = k;
+}
+
+template <class SurfaceOfRevolution2d>
 double SurfaceOfRevolution<SurfaceOfRevolution2d>::getK() {
-	return 1;
+	return k;
 }
 
 template <class SurfaceOfRevolution2d>
