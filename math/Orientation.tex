@@ -1,4 +1,4 @@
-\subsection{Orientation}
+\section{Orientation}
 
 %From the point of view of the camera, the tangent space is $\mathbb{R}^3$.
 
@@ -36,6 +36,6 @@ Camera coordinates are transformed to $\mathbb{R}^4$ by adding a zero coordinate
 
 If I want to rotate the camera by the $3 \times 3$ matrix $M$, I am only rotating the first three coordinates. Those that stay within reality, so I can just multiply by $\mat{M}{0}{0}{1}$, which rotates the first three coordinates that way and fixes the coordinate that lies perpendicular to reality.
 
-???
+%???
 
 My program does have objects besides cameras that have orientations. I have referred to the object as PointOfReference in the program itself. The orientation works the same, even if it isn't strictly speaking a camera.
